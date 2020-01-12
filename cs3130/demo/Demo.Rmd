@@ -1,0 +1,84 @@
+---
+title: "RMarkdown basics"
+author: "Aditya Bhaskara"
+date: "1/11/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+## This first bit is just setting up options for R.
+## You can include this chunk in your documents as is.
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+```
+
+This example will show you how to format some basic math and R code to get you started on the first homework. If you ever can't remember how to do something, click on the "Help" menu in RStudio and you'll find a "Markdown Quick Reference" and also an "R Markdown Cheat Sheet" under "Help -> Cheatsheets". If you're still stuck, email a question to `teach-cs3130@list.eng.utah.edu` or post on the Canvas discussion board.
+
+# Math Notation
+First, let's do some math! Math notation in R Markdown is denoted by placing it between two dollar signs (`$`). This can happen in the middle of a sentence. For example: The probability of an event $A$ is denoted $P(A)$. It can also be used on a line all by itself. For example, the set difference between two sets $A$ and $B$ is written:
+
+$$A - B$$
+
+Here when we want math on its own line (and centered), we use double dollar signs (`$$`). Note how this looks different from "regular" text:
+
+A - B
+
+If you are writing math, always use the dollar signs to format it nicely! Don't use "regular" text for math notation.
+
+Next, there are lots of math symbols that we can use. These are always indicated by a backslash (`\`). For example, Greek letters are easy: $\alpha, \beta, \pi, \phi$. Here are some notations that will be useful for Homework 1:
+
+* Sets: $A, B, C,$ etc.
+* Sample space: $\Omega$
+* Set operations:
+
+  $A \cup B$
+
+  $A \cap B$
+
+  $A - B$
+
+  $A^c$
+
+Final math formatting trick, there are often problems where you need to show multiple steps to get to your answer. You can do this inside `\begin{align} ... \end{align}`. Let's solve an example problem:
+
+__Problem:__ Two difference between two events $A$ and $B$ has probability $P(A - B) = 0.1$. What is the probability $P(A^c \cup B)$?
+
+__Answer:__
+
+# What follows is LaTeX code. 
+
+\begin{align}
+P(A^c \cup B) &= P((A \cap B^c)^c) &\text{DeMorgan's Law}\\
+              &= P((A - B)^c)      &\text{Definition of set difference}\\
+              &= 1 - P(A - B)      &\text{Complement rule for probability}\\
+              &= 1 - 0.1           &\text{Given in the problem}\\
+              &= 0.9               &\text{Answer!}\\
+\end{align}
+
+
+In this `align` environment, we use ampersands (`&`) to denote points we want to align (they are kind of like tab stops). Each line should have the same number of `&`. A line must end in a double backslash (`\\`). Finally, the right-hand side should contain an explanation of what you are doing in this step. We need the `\text{...}` command because we are inside math mode and don't want these letters formatted as math symbols. Feel free to cut-and-paste this example to get you started on a problem (just replace my math and text with what you need to answer the problem).
+
+# R Code
+
+R code can be inserted into your document with what is called a "chunk". There is a button in RStudio on the top-right of the editor window that is a quick way to insert a new chunk, or run the code in one or more chunks. This is what an R code chunk looks like:
+
+```{r}
+1 + 1
+```
+
+Notice when you knit your document, the R code you wrote is executed, and both the original code and the result are printed in the document. If the result of an R command is to make a plot, then that shows up as a figure in the document. Here is a simple plot example:
+
+```{r}
+x = rnorm(100)
+hist(x)
+```
+
+# Inserting Figures
+
+If you need to draw a diagram to answer a question, you can do that in your favorite drawing software program and then insert it in your R markdown. Always save the image in the same directory as your .Rmd file. (In other words, don't include a file path that is specific to your machine!) Now you can include that image in your document as follows:
+
+![](res/uuLogo.jpg)
+
+Note, inside the square braces, you can put an optional caption, like so:
+
+![Go Utah!](res/uuLogo.jpg)
+
