@@ -1,0 +1,138 @@
+---
+title: "Homework 1"
+author: "Qianlang Chen"
+date: "Tue 01/14/20"
+
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+### Part (a)
+
+No, it is not possible to have $P(B) = 0.7$, given that $A$ and $B$ disjoint events and that $P(A) = 0.4$.
+
+According to the second rule in the definition of a probability function, when $A$ and $B$ are disjoint events, we have
+
+$$P(A \cup B) = P(A) + P(B)$$
+
+Therefore, in this scenario when $P(A) = 0.4$ and $P(B) = 0.7$, since $A$ and $B$ disjoint,
+$$P(A \cup B) = P(A) + P(B) = 0.4 + 0.7 = 1.1$$
+
+However, the definition also states that a probability function must assign every event in a sample space $\Omega$ a number within $[0, 1]$. Since the event $A \cup B$ has a probabilty of 1.1 > 1, it is not a valid event. Therefore, when $P(A) = 0.4$, it is not possible to have $P(B) = 0.7$.
+
+### Part (b)
+
+According to the definition of the difference between sets, we have
+
+$$A \cap B^c = A - B$$
+
+However, $A$ and $B$ are disjoint events ($A \cap B = \emptyset$), all elements in $A$ are not in $B$, meaning that
+
+$$A - B = A - (A \cap B) = A - \emptyset = A$$
+
+Therefore,
+
+$$A \cap B^c = A$$
+
+\pagebreak
+# Problem 2
+
+### Part (a)
+
+$$\Omega^3 = \{H, T\}^3 = \{(H, H, H), (H, H, T), (H, T, H), (H, T, T), (T, H, H), (T, H, T), (T, T, H), (T, T, T)\}$$
+
+### Part (b)
+
+1. $\{(H, T, T), (T, H, T), (T, T, H)\}$
+
+2. $\{(H, T, T), (T, H, T), (T, T, H), (T, T, T)\}$
+
+3. $\{(H, H, H), (H, H, T), (H, T, T), (T, T, T)\}$
+
+___
+# Problem 3
+
+a. $P(R^c)$
+
+b. $P(R \cup F)$
+
+c. $P(R^c \cup F^c)$
+
+___
+# Problem 4
+
+### Part (a)
+
+\begin{align*}
+P(R^c) &= 1 - P(R) \text{  [The 1}^\text{st}\text{ probability rule]} \\
+       &= 1 - 0.1 \\
+       &= 0.9
+\end{align*}
+
+### Part (b)
+
+\begin{align*}
+P(R \cup F) &= P(R) + P(F) - P(R \cap F) \text{  [The 2}^\text{nd}\text{ probability rule]} \\
+            &= 0.1 + 0.07 - 0.03 \\
+            &= 0.14
+\end{align*}
+
+### Part (c)
+
+\begin{align*}
+P(R^c \cup F^c) &= P(R \cap F) \text{  [De Morgan's Law]} \\
+                &= 0.03
+\end{align*}
+
+\pagebreak
+# Problem 5
+
+### Part (a)
+
+After we have chosen a bag, since we pick a ball at random from the bag, the probabily of picking a blue ball is:
+
+* $\frac{2}{2} = 1$, if we have chosen a bag with only blue balls;
+
+* $\frac{1}{2}$, if we have chosen a bag with mixed blue and red balls; or
+
+* $\frac{0}{2} = 0$, if we have chosen a bag with only red balls.
+
+Let:
+
+* $E$ be the event that we choose a blue ball at the end,
+
+* $B$ be the event that we choose a bag containing only blue balls in the beginning,
+
+* $M$ be the event that we choose a bag containing mixed blue and red balls in the beginning, and
+
+* $R$ be the event that we choose a bag containing only red balls in the beginning.
+
+Since we first choose a one bag at random, and bags are independent from each other, we have
+
+\begin{align*}
+P(E) &= P(B) \times P(E | B) + P(M) \times P(E | M) + P(R) \times P(E | R) \\
+     &= P(B) \times 1 + P(M) \times \frac{1}{2} + P(R) \times 0 \\
+     &= \frac{7}{16} \times 1 + \frac{5}{16} \times \frac{1}{2} + \frac{4}{16} \times 0 \\
+     &= \frac{19}{32}
+\end{align*}
+
+There is a $\frac{19}{32}$ (about 59%) chance that we have picked a blue ball at the end.
+
+### Part (b)
+
+Let $O$ be the event that the other ball is also blue. Since $O$ can only happen (and must happen) when we have chosen a bag containing only blue balls in the beginning, we have
+
+\begin{align*}
+P(O | E) &= \frac{P(O \cap E)}{P(E)} \\
+         &= \frac{P(B)}{P(E)} \\
+         &= \frac{7}{16} \div \frac{19}{32} \\
+         &= \frac{14}{19}
+\end{align*}
+
+There is a $\frac{14}{19}$ (about 74%) chance that the other ball in the bag is also blue.
+
