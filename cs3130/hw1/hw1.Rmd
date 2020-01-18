@@ -1,7 +1,7 @@
 ---
 title: "Homework 1"
 author: "Qianlang Chen"
-date: "Tue 01/14/20"
+date: "Fri 01/17/20"
 
 output: pdf_document
 ---
@@ -37,7 +37,7 @@ $$A - B = A - (A \cap B) = A - \emptyset = A$$
 
 Therefore,
 
-$$A \cap B^c = A$$
+$$P(A \cap B^c) = P(A) = 0.4$$
 
 \pagebreak
 # Problem 2
@@ -96,38 +96,42 @@ P(R^c \cup F^c) &= P((R \cap F)^c) &\text{De Morgan's Law} \\
 
 ### Part (a)
 
-After we have chosen a bag, since we pick a ball at random from the bag, the probabily of picking a blue ball is:
-
-* $\frac{2}{2} = 1$, if we have chosen a bag with only blue balls;
-
-* $\frac{1}{2}$, if we have chosen a bag with mixed blue and red balls; or
-
-* $\frac{0}{2} = 0$, if we have chosen a bag with only red balls.
-
 Let:
 
-* $E$ be the event that we choose a blue ball at the end,
+* $\Omega_{\text{bags}}$ be the sample space of the 16 bags,
 
-* $B$ be the event that we choose a bag containing only blue balls in the beginning,
+* $B$ be the event that we choose a bag containing only **blue** balls in the beginning,
 
-* $M$ be the event that we choose a bag containing mixed blue and red balls in the beginning, and
+* $M$ be the event that we choose a bag containing **mixed** blue and red balls in the beginning,
 
-* $R$ be the event that we choose a bag containing only red balls in the beginning.
+* $R$ be the event that we choose a bag containing only **red** balls in the beginning, and
+
+* $E$ be the event that we choose a blue ball at the **end**.
+
+After we have chosen a bag, since we pick a ball at random from the bag, the probabily of picking a blue ball is:
+
+* $\dfrac{2}{2} = 1$, if we have chosen a bag with only blue balls [$P(E | B) = 1$];
+
+* $\dfrac{1}{2}$, if we have chosen a bag with mixed blue and red balls [$P(E | M) = \dfrac{1}{2}$]; or
+
+* $\dfrac{0}{2} = 0$, if we have chosen a bag with only red balls [$P(E | R) = 0$].
 
 Since we first choose a one bag at random, and bags are independent from each other, we have
 
 \begin{align*}
 P(E) &= P(B) \times P(E | B) + P(M) \times P(E | M) + P(R) \times P(E | R) \\
-     &= P(B) \times 1 + P(M) \times \frac{1}{2} + P(R) \times 0 \\
+     &= \frac{|B|}{|\Omega_{\text{bags}}|} \times 1 + \frac{|M|}{|\Omega_{\text{bags}}|} \times \frac{1}{2} + \frac{|R|}{|\Omega_{\text{bags}}|} \times 0 \\
      &= \frac{7}{16} \times 1 + \frac{5}{16} \times \frac{1}{2} + \frac{4}{16} \times 0 \\
      &= \frac{19}{32}
 \end{align*}
 
-There is a $\frac{19}{32}$ (about 59%) chance that we have picked a blue ball at the end.
+There is a $\dfrac{19}{32}$ (about 59%) chance that we have picked a blue ball at the end.
 
 ### Part (b)
 
-Let $O$ be the event that the other ball is also blue. Since $O$ can only happen (and must happen) when we have chosen a bag containing only blue balls in the beginning, we have
+Let $O$ be the event that the **other** ball is also blue.
+
+Since $O$ can only happen (and must happen) when we have chosen a bag containing only blue balls in the beginning, meaning that $P(O \cap E) = P(B)$, we have
 
 \begin{align*}
 P(O | E) &= \frac{P(O \cap E)}{P(E)} \\
@@ -136,5 +140,5 @@ P(O | E) &= \frac{P(O \cap E)}{P(E)} \\
          &= \frac{14}{19}
 \end{align*}
 
-There is a $\frac{14}{19}$ (about 74%) chance that the other ball in the bag is also blue.
+There is a $\dfrac{14}{19}$ (about 74%) chance that the other ball in the bag is also blue.
 
