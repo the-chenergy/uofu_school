@@ -1,0 +1,210 @@
+---
+title: "Homework 2"
+author: "Qianlang Chen"
+#date: "H 01/23/2020"
+
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 2.1
+
+## 1. Exercise 11 (p97)
+
+### Part (a)
+
+Let $a, b$ be the two given odd integers. By definition of odd, we have
+$$a = 2m + 1, b = 2n+1 : m, n \in \mathbb{Z}$$
+
+By substitution,
+\begin{align*}
+ab &= (2m + 1)(2n + 1) \\
+   &= 4mn + 2m + 2n + 1 \\
+   &= 2(2mn + m + n) + 1 \\
+   &= 2k + 1, \text{ where } k = 2mn + m + n
+\end{align*}
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By definition of odd, we have that $ab$ is an odd number.
+
+### Part (b)
+
+Let $a$ be the given odd integer and $b$ be the given even integer. By definition of odd and even, we have
+$$a = 2m + 1, b = 2n : m, n \in \mathbb{Z}$$
+
+By substitution,
+\begin{align*}
+ab &= (2m + 1)2n \\
+   &= 4mn + 2n \\
+   &= 2(2mn + n) \\
+   &= 2k, \text{ where } k = 2mn + n
+\end{align*}
+
+By closure under addition and multiplication, $k \in \mathbb {Z}$. By definition of even, we have that $ab$ is an even number.
+
+\pagebreak
+### Part (c)
+
+Let $a$ be the given even integer and $b$ be the given integer that is divisible by 3.
+
+By definition of even, we have
+$$a = 2m : m \in \mathbb{Z}$$
+
+By definition of being divisible by 3, we have
+$$b = 3n : n \in \mathbb{Z}$$
+
+By substitution,
+\begin{align*}
+ab &= 2m \cdot 3n \\
+   &= 6mn \\
+   &= 6k, \text{ where } k = mn
+\end{align*}
+
+By closure under addition and multiplication, $k \in \mathbb {Z}$. By definition of being divisible by 6, we have that $ab$ is divisible by 6.
+
+### 2. Exercise 12.d (p97)
+
+This pair of statements are *not* contrapositives of one another.
+
+* Counterexample of case (i): a person that likes computers but does not like computer science.
+
+* Counterexample of case (ii): a person that does not like computers but likes computer science.
+
+### 3. Exercise 13.a (p97)
+
+Contrapositive: "if $m = 0$ and $n = 0$, then $m^2 + n^2 = 0$."
+
+Proof of the contrapositive: Since $m = 0$ and $n = 0$, by substitution, we have
+$$m^2 + n^2 = 0^2 + 0^2 = 0$$
+
+Since the contrapositive is true, the original statement "if $m^2 + n^2 \neq 0$, then $m \neq 0$ or $n \neq 0$" is true.
+
+### 4. Exercise 14.c (p98)
+
+
+
+\pagebreak
+# Section 2.2
+
+### 5. Exercise 7.e (p108)
+
+
+
+### 6. Exercise 16 (p109)
+
+
+
+### 7. Exercise 20 (p109)
+
+
+
+**8.** ***Show that the square of an integer not divisible by 5 leaves a remainder of 1 or 4 when divided by 5.***
+
+
+
+### 9. Exercise 26.c (p109)
+
+
+
+\pagebreak
+# Section 2.3
+
+## 10. Exercise 2 (p121)
+
+### Part (a)
+
+
+
+### Part (b)
+
+
+
+### Part (c)
+
+
+
+### Part (d)
+
+
+
+### 11. Exercise 3.f (p121)
+
+
+
+### 12. Exercise 4.e (p122)
+
+
+
+### 13. Exercise 8.f (p122)
+
+
+
+### 14. Exercise 13 (p122)
+
+
+
+\pagebreak
+# Section 2.4
+
+### 15. Exercise 1.d (p130)
+
+
+
+### 16. Exercise 2.d (p130)
+
+
+
+### 17. Exercise 4.b (p130)
+
+
+
+### 18. Exercise 6 (p131)
+
+
+
+\pagebreak
+# Section 2.5
+
+### 19. Exercise 12 (p147)
+
+
+
+### 20. Exercise 20 (p148)
+
+
+
+### 21. Exercise 32.b (p149)
+
+
+
+### 22. Exercise 34.b (p149)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
