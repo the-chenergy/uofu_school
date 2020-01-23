@@ -1,7 +1,9 @@
 ---
 title: "Homework 2"
 author: "Qianlang Chen"
-#date: "H 01/23/2020"
+
+# CS 2100
+# H 01/23/20
 
 output: pdf_document
 ---
