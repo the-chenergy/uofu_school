@@ -3,11 +3,14 @@ title: "Homework 3"
 author: "Qianlang Chen"
 
 # Math 2270
-# H 01/23/20
+# F 01/24/20
 
 output:
   pdf_document:
 classoption: twocolumn
+
+header-includes:
+- \usepackage{arydshln} # for dashed lines in matrices
 ---
 
 ```{r setup, include=FALSE}
@@ -17,159 +20,333 @@ knitr::opts_chunk$set(echo = TRUE)
 # Section 1.6
 
 **4. (a)**
-\begin{displaymath}
-\begin{array}{|l|l|l|l|l|}
-\hline
-\text {Agric.} & \text{Energy} & \text{Manuf.} & \text{Transp.} & \text{Bought by}   \\
-\hline
-.65            & .30           & .30           & .20            & \text{Agriculture} \\
-.10            & .10           & .15           & .10            & \text{Energy}      \\
-.25            & .35           & .15           & .30            & \text{Manufacture} \\
-.00            & .25           & .40           & .40            & \text{Transport}   \\
-\hline
+$$
+\begin{array}{|cccc|l|}
+  \hline
+  \text {Agric.} & \text{Energy} & \text{Manuf.} & \text{Transp.} & \text{Bought by} \\
+  \hline
+  .65            & .30           & .30           & .20            & \text{Agriculture} \\
+  .10            & .10           & .15           & .10            & \text{Energy} \\
+  .25            & .35           & .15           & .30            & \text{Manufacture} \\
+  .00            & .25           & .40           & .40            & \text{Transport} \\
+  \hline
 \end{array}
-\end{displaymath}
+$$
 
-**(b)** 
+**(b)** Let $x_1, x_2, x_3$, and $x_4$ be the *expenses* of the units of Agriculture, Energy, Manufacturing, and Transportation, respectively.
 
-**7.**
+Since in an equilibrium economic system, the income of a unit should equal to its expenses. Translating each row of the table from *part (a)* into a linear equation, we have the following linear system:
+$$
+\begin{cases}
+  x_1 = .65x_1 + .30x_2 + .30x_3 + .20x_4 \\
+  x_2 = .10x_1 + .10x_2 + .15x_3 + .10x_4 \\
+  x_3 = .25x_1 + .35x_2 + .15x_3 + .30x_4 \\
+  x_4 = .00x_1 + .25x_2 + .40x_3 + .40x_4 \\
+\end{cases}
+$$
+By rearranging, we have:
+$$
+\begin{cases}
+  .35x_1 - .30x_2 - .30x_3 - .20x_4 = 0 \\
+  -.10x_1 + .90x_2 - .15x_3 - .10x_4 = 0 \\
+  -.25x_1 - .35x_2 + .85x_3 - .30x_4 = 0 \\
+  .00x_1 - .25x_2 - .40x_3 + .60x_4 = 0\\
+\end{cases}
+$$
+Forming an augmented matrix:
+$$
+\left[\begin{array}{rrrr:r}
+  .35  & -.30 & -.30 & -.20  & 0 \\
+  -.10 & .90  & -.15 & -.10  & 0 \\
+  -.25 & -.35 & .85  & -.30 & 0 \\
+  .00  & -.25 & -.40 & .60 & 0
+\end{array}\right]
+$$
+By reducing it, we have:
+$$
+\left[\begin{array}{rrrr:r}
+  1 & 0 & 0 & -\frac{2184}{1077} & 0 \\
+  0 & 1 & 0 & -\frac{572}{1077}  & 0 \\
+  0 & 0 & 1 & -\frac{1258}{1077} & 0 \\
+  0 & 0 & 0 & 0                  & 0
+\end{array}\right]
+$$
+Which provides us the solution set:
+$$
+\begin{cases}
+  x_1 = \frac{2184}{1077} \cdot x_4 \\
+  x_2 = \frac{572}{1077} \cdot x_4 \\
+  x_3 = \frac{1258}{1077} \cdot x_4 \\
+  x_4 \text{ is free}
+\end{cases}
+$$
+As an example of a set of equilibrium prices, by setting $x_4 = 1,077,000,000$, we have:
+$$
+\begin{cases}
+  x_1 = \frac{2184}{1077} \cdot 1.077 \cdot 10^9 = 2.184 \cdot 10^9\\
+  x_2 = \frac{572}{1077} \cdot 1.077 \cdot 10^9 = 0.572 \cdot 10^9 \\
+  x_3 = \frac{1258}{1077} \cdot 1.077 \cdot 10^9 = 1.258 \cdot 10^9\\
+  x_4 = 1.077 \cdot 10^9
+\end{cases}
+$$
+$$\Downarrow$$
+$$
+\begin{array}{|l|r|}
+  \hline
+  \text{Unit}           & \text{Price (millions)} \\
+  \hline
+  \text{Agriculture}    & 2,184 \\
+  \text{Energy}         & 572 \\
+  \text{Manufacturing}  & 1,258 \\
+  \text{Transportation} & 1,077 \\
+  \hline
+\end{array}
+$$
 
+**7.** Let $x_1, x_2, x_3, x_4$, and $x_5$ be the numbers of each molecules needed in the balanced equation:
+$$
+\begin{aligned}
+  &x_1 \cdot \text{NaHCO}_3 + x_2 \cdot \text{H}_3\text{C}_6\text{H}_5\text{O}_7 \\ 
+  &\quad \rightarrow x_3 \cdot \text{Na}_3\text{C}_6\text{H}_5\text{O}_7 + x_4 \cdot \text{H}_2\text{O} + x_5 \cdot \text{CO}_2
+\end{aligned}
+$$
+Since the equation must be balanced at the end, meaning that the number of atoms of one element on the left hand side must equal to the number of atoms of that element on the right hand side, we can rewrite the above chemical equation as the following vector equation:
+$$
+x_1 \begin{bmatrix} 1 \\ 1 \\ 1 \\ 3 \end{bmatrix} +
+x_2 \begin{bmatrix} 0 \\ 8 \\ 6 \\ 7 \end{bmatrix} =
+x_3 \begin{bmatrix} 3 \\ 5 \\ 6 \\ 7 \end{bmatrix} +
+x_4 \begin{bmatrix} 0 \\ 2 \\ 0 \\ 1 \end{bmatrix} +
+x_5 \begin{bmatrix} 0 \\ 0 \\ 1 \\ 2 \end{bmatrix}
+$$
+Note that each vector represents one type of molecule, with each row recording the number of atoms of one element, formatted as this:
+$$
+\begin{bmatrix}
+  \text{Na} \\
+  \text{H} \\
+  \text{C} \\
+  \text{O}
+\end{bmatrix}
+$$
+After rearranging the above equation, by forming a augmented matrix and reducing it, we have:
+$$
+\begin{aligned}
+  &\left[\begin{array}{rrrrr:r}
+    1 & 0 & -3 & 0  & 0  & 0 \\
+    1 & 8 & -5 & -2 & 0  & 0 \\
+    1 & 6 & -6 & 0  & -1 & 0 \\
+    3 & 7 & -7 & -1 & -2 & 0 \\
+  \end{array}\right] \\
+  \sim
+  &\left[\begin{array}{rrrrr:r}
+    1 & 0 & 0 & 0 & -1            & 0 \\
+    0 & 1 & 0 & 0 & -\frac{1}{3}  & 0 \\
+    0 & 0 & 1 & 0 & -\frac{1}{3}  & 0 \\
+    0 & 0 & 0 & 1 & -1            & 0 \\
+  \end{array}\right]
+\end{aligned}
+$$
+Which gives us the solution set:
+$$
+\begin{cases}
+  x_1 = x_5 \\
+  x_2 = \cfrac{x_5}{3} \\
+  x_3 = \cfrac{x_5}{3} \\
+  x_4 = x_5 \\
+  x_5 \text{ is free}
+\end{cases}
+$$
+When $x_5 = 3$, the solution gives whole numbers to the chemical equation:
+$$
+\boxed{
+  \begin{aligned}
+    &3\text{NaHCO}_3 + \text{H}_3\text{C}_6\text{H}_5\text{O}_7 \\ 
+    &\quad \rightarrow \text{Na}_3\text{C}_6\text{H}_5\text{O}_7 + 3\text{H}_2\text{O} + 3\text{CO}_2
+  \end{aligned}
+}
+$$
 
+**11.** Given that, in a network, the inputs of a node must equal to the outputs, we can form the following system of equations:
+$$
+\begin{cases}
+  x_1 + x_3 = 20 \\
+  x_2 = x_3 + x_4 \\
+  0 = x_1 + x_2 + 80 \\
+\end{cases}
+$$
+After rearranging the above equation, by forming an augmented matrix and reducing it, we have:
+$$
+\begin{aligned}
+  &\left[\begin{array}{rrrr:r}
+    1  & 0  & 1  & 0  & 20 \\
+    0  & 1  & -1 & -1 & 0 \\
+    -1 & -1 & 0  & 0  & 80 \\
+  \end{array}\right] \\
+  \sim
+  &\left[\begin{array}{rrrr:r}
+    1 & 0 & 1  & 0 & 20 \\
+    0 & 1 & -1 & 0 & -100 \\
+    0 & 0 & 0  & 1 & -100 \\
+  \end{array}\right]
+\end{aligned}
+$$
+This provides us the solution set:
+$$
+\begin{cases}
+  x_1 = -x_3 - 20 \\
+  x_2 = x_3 + 100 \\
+  x_3 \text{ is free} \\
+  x_4 = 100
+\end{cases}
+$$
+According to the first equation ($x_1 = -x_3 - 20$), since all flows must be non-negative, there is not a non-negative value $x_3$ can be so that $x_1$ to also be non-negative. Therefore, *such a network is not possible.*
 
-**11.**
+**13. (a)** Similar to *problem 11*, we can set up the system of equations for this network as this:
+$$
+\begin{cases}
+  x_2 + 30 = x_1 + 80 \\
+  x_3 + x_5 = x_2 + x_4 \\
+  x_6 + 100 = x_5 + 40 \\
+  x_4 + 40 = x_6 + 90 \\
+  x_1 + 60 = x_3 + 20
+\end{cases}
+$$
+By rearranging the equations in the above system, we can form the following augmented matrix:
+$$
+\left[\begin{array}{rrrrrr:r}
+  -1 & 1  & 0  & 0  & 0  & 0  & 50 \\
+  0  & -1 & 1  & -1 & 1  & 0  & 0 \\
+  0  & 0  & 0  & 0  & -1 & 1  & -60 \\
+  0  & 0  & 0  & 1  & 0  & -1 & 50 \\
+  1  & 0  & -1 & 0  & 0  & 0  & -40
+\end{array}\right]
+$$
+By reducing this matrix, we have:
+$$
+\left[\begin{array}{rrrrrr:r}
+  1 & 0 & -1 & 0 & 0 & 0  & -40 \\
+  0 & 1 & -1 & 0 & 0 & 0  & 10 \\
+  0 & 0 & 0  & 1 & 0 & -1 & 50 \\
+  0 & 0 & 0  & 0 & 1 & -1 & 60 \\
+  0 & 0 & 0  & 0 & 0 & 0  & 0
+\end{array}\right]
+$$
+This provides us the solution set:
+$$
+\begin{cases}
+  x_1 = x_3 - 40 \\
+  x_2 = x_3 + 10 \\
+  x_3 \text{ is free} \\
+  x_4 = x_6 + 50 \\
+  x_5 = x_6 + 60 \\
+  x_6 \text{ is free} \\
+\end{cases}
+$$
+Which is equivalent to the following vector equation:
+$$
+\boxed{
+  \mathbf{x} = x_3 \begin{bmatrix} 1 \\ 1 \\ 1 \\ 0 \\ 0 \\ 0 \end{bmatrix} + x_6 \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \\ 1 \\ 1 \end{bmatrix} + \begin{bmatrix} -40 \\ 10 \\ 0 \\ 50 \\ 60 \\ 0 \end{bmatrix}
+}
+$$
 
-
-
-**13.**
-
-
+**(b)** Minimum of $x_2$: since $x_2 = x_3 + 10$ and $x_3 \ge 0$,
+$$x_2 \ge 0 + 10 \implies \boxed{x_2 \ge 10}$$
+Minimum of $x_3$: since $x_1 = x_3 - 40$ and $x_1 \ge 0$,
+$$x_3 - 40 \ge 0 \implies \boxed{x_3 \ge 40}$$
+Minimum of $x_4$: since $x_4 = x_6 + 50$ and $x_6 \ge 0$,
+$$x_4 \ge 0 + 50 \implies \boxed{x_4 \ge 50}$$
+Minimum of $x_5$: since $x_5 = x_6 + 60$ and $x_6 \ge 0$,
+$$x_5 \ge 0 + 60 \implies \boxed{x_5 \ge 60}$$
 
 _____________
 # Section 1.7
 
-**1.**
+**1.** By forming and getting the matrix into Echelon Form:
+$$
+\begin{bmatrix}
+  5 & 7 & 9 \\
+  0 & 2 & 4 \\
+  0 & 0 & 4
+\end{bmatrix}
+$$
+Since there would not be any free variables if we were to form a homogeneous system using these vectors, these vectors *are* linearly independent.
 
+**3.** The vectors are *not* linearly independent since they are scaled multiples of each other:
+$$
+-3 \cdot \begin{bmatrix} 1 \\ -3 \end{bmatrix} = \begin{bmatrix} -3 \\ 9 \end{bmatrix}
+$$
 
+**5.** By getting the matrix into Echelon Form:
+$$
+\begin{bmatrix}
+  3 & -7 & 4 \\
+  0 & -8 & 5 \\
+  0 & 0  & -1 \\
+  0 & 0  & 0
+\end{bmatrix}
+$$
+If we were to form a homogeneous system using these vectors, the system would have a free variable. Therefore, they do *not* form a linearly independent set.
 
-**3.**
+**7.** By getting the matrix into Echelon Form:
+$$
+\begin{bmatrix}
+  1 & 4 & -3 & 0 \\
+  0 & 1 & -1 & 1 \\
+  0 & 0 & 6  & -6
+\end{bmatrix}
+$$
+If we were to form a homogeneous system using these vectors, the system would not have a free variable. Therefore, they *do* form a linearly independent set.
 
+**11.** By getting the matrix into Echelon Form:
+$$
+\begin{bmatrix}
+  1 & 3  & -1 \\
+  0 & -2 & 4 \\
+  0 & 0  & h-6
+\end{bmatrix}
+$$
+Since we want the columns be a linearly dependent set, we want at least a free variable to appear if we were to form a homogeneous system using such columns. In other words, we want
+$$h - 6 = 0 \implies \boxed{h = 6}$$
 
+**13.** On the way of getting the matrix into Echelon Form, we have:
+$$
+\begin{bmatrix}
+  1 & -2 & 3 \\
+  5 & -9 & h \\
+  0 & 0  & 0
+\end{bmatrix}
+$$
+Since there is already a row full of zeros, meaning that there would be a free variable present when forming a homogeneous system using the columns of the matrix, *they form a linearly dependent set regardless of the value of $h$.*
 
-**5.**
+**15.** If we were to form a system out of these vectors, it would be under-determined, introducing two free variables. Therefore, these vectors are *not* linearly independent.
 
+**17.** One of the vectors is the origin, which can always be represented as a linear combination of any other vectors (a.k.a. dependent on any other vectors). These vectors are *not* linearly independent because of the zero vector.
 
+**19.** These two vectors *are* linearly independent because they are not scaled multiples of each other. (Their first two rows have opposite signs whereas the third rows have the same sign.)
 
-**7.**
+**21. (a)** $\boxed{\text{True.}}$ This is the definition of linear independence.
 
+**(b)** $\boxed{\text{False.}}$ The set $\{\mathbf{v}, \mathbf{0}\}$ (with $\mathbf{v} \neq \mathbf{0}$) is a linearly dependent set because of the zero vector; however, $\mathbf{v}$ cannot be a linear combination of $\mathbf{0}$.
 
+**(c)** $\boxed{\text{True.}}$ Such a system would be under-determined, meaning that a free variable must exist.
 
-**11.**
-
-
-
-**13.**
-
-
-
-**15.**
-
-
-
-**17.**
-
-
-
-**19.**
-
-
-
-**21.**
-
-
+**(d)** $\boxed{\text{True.}}$ Since $\mathbf{x}$ and $\mathbf{y}$ are linearly independent, if $\mathbf{z}$ were not in the span of $\mathbf{x}$ and $\mathbf{y}$, then there would not be a vector in $\{\mathbf{x}, \mathbf{y}, \mathbf{z}\}$ being a linear combination of the other two, which would imply, according to *Theorem 7*, that $\{\mathbf{x}, \mathbf{y}, \mathbf{z}\}$ is linearly independent.
 
 **23.**
-
-
+$$
+\begin{bmatrix}
+  \blacksquare & *            & * \\
+  0            & \blacksquare & * \\
+  0            & 0            & \blacksquare
+\end{bmatrix}
+$$
 
 **25.**
-
-
-
-_____________
-# Section 1.8
-
-**1.**
-
-
-
-**2.**
-
-
-
-**3.**
-
-
-
-**5.**
-
-
-
-**7.**
-
-
-
-**9.**
-
-
-
-**11.**
-
-
-
-**13.**
-
-
-
-**16.**
-
-
-
-**30.**
-
-
-
-**33.**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$$
+\begin{bmatrix}
+  \blacksquare & *            \\
+  0            & \blacksquare \\
+  0            & 0            \\
+  0            & 0            
+\end{bmatrix}
+$$
 
