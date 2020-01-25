@@ -198,7 +198,7 @@ $$
   x_4 = 100
 \end{cases}
 $$
-According to the first equation ($x_1 = -x_3 - 20$), since all flows must be non-negative, there is not a non-negative value $x_3$ can be so that $x_1$ to also be non-negative. Therefore, *such a network is not possible.*
+According to the first equation ($x_1 = -x_3 - 20$), since all flows must be non-negative, there is not a non-negative value $x_3$ can be so that $x_1$ is also non-negative. Therefore, *such a network is not possible.*
 
 **13. (a)** Similar to *problem 11*, we can set up the system of equations for this network as this:
 $$
