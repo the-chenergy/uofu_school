@@ -1,0 +1,447 @@
+---
+title: "Homework 2"
+author: "Qianlang Chen"
+
+# CS 2100
+# A 01/25/20
+
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 2.1
+
+## 1. Exercise 11 (p97)
+
+### Part (a)
+
+Let $a, b$ be the two given odd integers. By definition of odd, we have
+$$a = 2m + 1, b = 2n+1 : m, n \in \mathbb{Z}$$
+
+By substitution,
+$$
+\begin{aligned}
+  ab &= (2m + 1)(2n + 1) \\
+     &= 4mn + 2m + 2n + 1 \\
+     &= 2(2mn + m + n) + 1 \\
+     &= 2k + 1, \text{ where } k = 2mn + m + n
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By definition of odd, we have that $ab$ is an odd number.
+
+### Part (b)
+
+Let $a$ be the given odd integer and $b$ be the given even integer. By definition of odd and even, we have
+$$a = 2m + 1, b = 2n : m, n \in \mathbb{Z}$$
+
+By substitution,
+$$
+\begin{aligned}
+  ab &= (2m + 1)2n \\
+     &= 4mn + 2n \\
+     &= 2(2mn + n) \\
+     &= 2k, \text{ where } k = 2mn + n
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb {Z}$. By definition of even, we have that $ab$ is an even number.
+
+### Part (c)
+
+Let $a$ be the given even integer and $b$ be the given integer that is divisible by 3.
+
+By definition of even, we have
+$$a = 2m : m \in \mathbb{Z}$$
+
+By definition of being divisible by 3, we have
+$$b = 3n : n \in \mathbb{Z}$$
+
+By substitution,
+$$
+\begin{aligned}
+  ab &= 2m \cdot 3n \\
+     &= 6mn \\
+     &= 6k, \text{ where } k = mn
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb {Z}$. By definition of being divisible by 6, we have that $ab$ is divisible by 6.
+
+\pagebreak
+## 2. Exercise 12.d (p97)
+
+This pair of statements are *not* contrapositives of one another.
+
+* Counterexample of case (i): a person that likes computers but does not like computer science.
+
+* Counterexample of case (ii): a person that does not like computers but likes computer science.
+
+## 3. Exercise 13.a (p97)
+
+Contrapositive: "if $m = 0$ and $n = 0$, then $m^2 + n^2 = 0$."
+
+Proof of the contrapositive: Since $m = 0$ and $n = 0$, by substitution, we have
+$$m^2 + n^2 = 0^2 + 0^2 = 0$$
+
+Since the contrapositive is true, the original statement "if $m^2 + n^2 \neq 0$, then $m \neq 0$ or $n \neq 0$" is true.
+
+## 4. Exercise 14.c (p98)
+
+Let $n$ be a number preceding a perfect cube. Since any perfect cube is in the form of $x^3$ where $x$ is an integer, we have that $n = x^3 - 1$.
+
+The expression $x^3 - 1$ is equivalent to $(x - 1)(x^2 + x + 1)$:
+$$
+\begin{aligned}
+  (x - 1)(x^2 + x + 1) &= x(x^2 + x + 1) - 1(x^2 + x + 1) \\
+                       &= (x \cdot x^2 + x \cdot x + x \cdot 1) - (1 \cdot x^2 + 1 \cdot x + 1 \cdot 1) \\
+                       &= x^3 + x^2 + x - x^2 - x - 1 \\
+                       &= x^3 - 1
+\end{aligned}
+$$
+
+Now, since $n = x^3 - 1$, $n$ can always be factorized into $(x - 1)$ and $(x^2 + x + 1)$.
+
+* When $x$ is zero or negative, $n$ is negative, which can never be prime.
+
+* When $x$ is 1, $n = 1^3 - 1 = 0$, which is not prime.
+
+* When $x$ is 2, $n = 2^3 - 1 = 7$, which is prime.
+
+* When $x$ is 3 or higher, since $n$ can always be factorized into $(x - 1)$ and $(x^2 + x + 1)$, but $(x - 1)$ is not 1 or n, $n$ is divisible by some other integer that is not 1 or n. Therefore, $n$ is not prime.
+
+* When $x$ is not an integer, $n$ is not an integer, which is not prime.
+
+Since the above cases cover all possibilities of $x$, 7 is indeed the only prime preceding a perfect cube.
+
+\pagebreak
+# Section 2.2
+
+## 5. Exercise 7.e (p108)
+
+Let $m$ be the given $10^{n - 1} - 1$ that is divisible by 9. Since $m$ is divisible by 9, $m = 9k : k \in \mathbb{Z}$.
+
+Since $10^n = 10 \cdot 10^{n - 1}$, we have
+$$
+\begin{aligned}
+  10^n - 1 &= 10 \cdot 10^{n - 1} - 1 \\
+           &= 10 \cdot (10^{n - 1} - 1 + 1) - 1 \\
+           &= 10 \cdot (m + 1) - 1 &\text{Substituting }m = 10^{n - 1} - 1 \\
+           &= 10 \cdot (9k + 1) - 1 &\text{Substituting }9k = m \\
+           &= 90k + 10 - 1 &\text{Distributing 10} \\
+           &= 90k + 9 \\
+           &= 9 \cdot (10k + 1) &\text{Factoring out 9} \\
+           &= 9c &\text{ Where } c = 10k + 1
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $c \in \mathbb{Z}$. By definition of being divisible by 9, $10^n - 1$ is divisible by 9.
+
+\pagebreak
+## 6. Exercise 16 (p109)
+
+Since $n$ is not divisible by 3, by the division theorem, $n = 3q + r : q, r \in \mathbb{Z}, 0 < r < 3$. In other words, one of the following cases about $r$ must be true:
+
+**Case I,** when r = 1, meaning that n = 3q + 1:
+
+$$
+\begin{aligned}
+  n^2 + 2 &= (3q + 1)^2 + 2 &\text{Substituting }3q + 1 = n \\
+          &= 9q^2 + 6q + 1 + 2 \\
+          &= 9q^2 + 6q + 3 \\
+          &= 3 \cdot (3q^2 + 2q + 1) &\text{Factoring out 3} \\
+          &= 3k &\text{ Where }k = 3q^2 + 2q + 1
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By definition of being divisible by 3, $n^2 + 2$ is divisible by 3.
+
+**Case II,** when r = 2, meaning that n = 3q + 2:
+
+$$
+\begin{aligned}
+  n^2 + 2 &= (3q + 2)^2 + 2 &\text{Substituting }3q + 2 = n \\
+          &= 9q^2 + 12q + 4 + 2 \\
+          &= 9q^2 + 12q + 6 \\
+          &= 3 \cdot (3q^2 + 4q + 2) &\text{Factoring out 3} \\
+          &= 3k &\text{ Where }k = 3q^2 + 4q + 2
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By definition of being divisible by 3, $n^2 + 2$ is divisible by 3.
+
+Therefore, $n^2 + 2$ is divisible by 3 in every possible case.
+
+\pagebreak
+## 7. Exercise 20 (p109)
+
+Let $n$ be any integer. Let $s = (n - 1)^3 + n^3 + (n + 1)^3$, which is the sum of three consecutive perfect cubes mentioned in the problem. After simplifying the expression of $s$, we have
+$$
+\begin{aligned}
+  s &= (n - 1)^3 + n^3 + (n + 1)^3 \\
+    &= (n^3 - 3n^2 + 3n - 1) + n^3 + (n^3 + 3n^2 + 3n + 1) \\
+    &= 3n^3 + 6n \\
+    &= 3n \cdot (n^2 + 2) &\text{Factoring out }3n
+\end{aligned}
+$$
+
+Now, one of the following cases about $n$ must be true:
+
+**Case I,** when $n$ is divisible by 3:
+
+Since $n$ is divisible by 3, meaning that $n = 3k : k \in \mathbb{Z}$, we have
+$$
+\begin{aligned}
+  s &= 3n \cdot (n^2 + 2) \\
+    &= 3 \cdot 3k \cdot (n^2 + 2) &\text{Substituting }3k = n \\
+    &= 9k \cdot (n^2 + 2) \\
+    &= 9c &\text{Where }c = k \cdot (n^2 + 2)
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $c \in \mathbb{Z}$. By definition of being divisible by 9, $s$ is divisible by 9.
+
+**Case II,** when $n$ is not divisible by 3:
+
+Since $n$ is not divisible by 3, according to what is proven by *Exercise 16,* $(n^2 + 2)$ is divisible by 3. This means that $n^2 + 2 = 3k : k \in \mathbb{Z}$, and we have
+$$
+\begin{aligned}
+  s &= 3n \cdot (n^2 + 2) \\
+    &= 3n \cdot 3k &\text{Substituting }3k = n^2 + 2 \\
+    &= 9nk \\
+    &= 9c &\text{Where }c = nk
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $c \in \mathbb{Z}$. By definition of being divisible by 9, $s$ is divisible by 9.
+
+Therefore, $s$ is divisible by 9 is every possible case.
+
+\pagebreak
+## 8. *Show that the square of an integer not divisible by 5 leaves a remainder of 1 or 4 when divided by 5.*
+
+Let $n$ be the given integer that is not divisible by 5. By the division theorem, since $n$ is not divisible by 5, $n = 5q + r : q, r \in \mathbb{Z}, 0 < r < 5$. In other words, one of the following cases about $r$ must be true:
+
+**Case I, ** when r = 1, meaning that $n = 5q + 1$:
+$$
+\begin{aligned}
+  n^2 &= (5q + 1)^2 &\text{Substituting }5q + 1 = n \\
+      &= (25q^2 + 10q) + 1 \\
+      &= 5 \cdot (5q^2 + 2q) + 1 &\text{Factoring out 5} \\
+      &= 5k + 1 &\text{ Where }k = 5q^2 + 2q
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By the division theorem, $n^2$ leaves a remainder of 1 when divided by 5.
+
+**Case II, ** when r = 2, meaning that $n = 5q + 2$:
+$$
+\begin{aligned}
+  n^2 &= (5q + 2)^2 &\text{Substituting }5q + 2 = n \\
+      &= (25q^2 + 20q) + 4 \\
+      &= 5 \cdot (5q^2 + 4q) + 4 &\text{Factoring out 5} \\
+      &= 5k + 4 &\text{ Where }k = 5q^2 + 4q
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By the division theorem, $n^2$ leaves a remainder of 4 when divided by 5.
+
+**Case III, ** when r = 3, meaning that $n = 5q + 3$:
+$$
+\begin{aligned}
+  n^2 &= (5q + 3)^2 &\text{Substituting }5q + 3 = n \\
+      &= 25q^2 + 30q + 9 \\
+      &= (25q^2 + 30q + 5) + 4 \\
+      &= 5 \cdot (5q^2 + 6q + 1) + 4 &\text{Factoring out 5} \\
+      &= 5k + 4 &\text{ Where }k = 5q^2 + 6q + 1
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By the division theorem, $n^2$ leaves a remainder of 4 when divided by 5.
+
+**Case IV, ** when r = 4, meaning that $n = 5q + 4$:
+$$
+\begin{aligned}
+  n^2 &= (5q + 4)^2 &\text{Substituting }5q + 4 = n \\
+      &= 25q^2 + 40q + 16 \\
+      &= (25q^2 + 40q + 15) + 1 \\
+      &= 5 \cdot (5q^2 + 8q + 3) + 1 &\text{Factoring out 5} \\
+      &= 5k + 1 &\text{ Where }k = 5q^2 + 8q + 3
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $k \in \mathbb{Z}$. By the division theorem, $n^2$ leaves a remainder of 1 when divided by 5.
+
+Therefore, the $n^2$ leaves a remainder of 1 or 4 when divided by 5 in every possible case.
+
+\pagebreak
+## 9. Exercise 26.c (p109)
+
+First, let us prove that a perfect square $k^2$ is divisible by 4 if and only if $k$ is even.
+
+Let $n$ be a perfect square, and by definition, $n = k^2 : k \in \mathbb{Z}$. Since $k$ must be either even or odd, one of the following cases must be true:
+
+**Case I,** when $k$ is even:
+
+Since $k$ is even, $k = 2c : c \in \mathbb{Z}$. By substitution, we have
+$$n = k^2 = (2c)^2 = 4c^2 = 4m \text{ where }m = c^2$$
+
+By closure under addition and multiplication, $m \in \mathbb{Z}$. By definition of being divisible by 4, $n$ is divisible by 4.
+
+**Case II,** when $k$ is odd:
+
+Since $k$ is odd, $k = 2c + 1 : c \in \mathbb{Z}$. By substitution, we have
+$$
+\begin{aligned}
+  n = k^2 &= (2c + 1)^2 \\
+          &= 4c^2 + 4c + 1 \\
+          &= 4 \cdot (c^2 + c) + 1 \\
+          &= 4m + 1 \text{ where }m = c^2 + c
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $m \in \mathbb{Z}$. By the division theorem, $n$ leaves a remainder of 1 when divided by 4, implying that $n$ is not divisible by 4.
+
+Therefore, *every perfect square $k^2$ is divisible by 4 if and only if $k$ is even.*
+
+Now, let us prove the contrapositive of the original problem statement: "for every three integers $a, b$, and $c$ where $c^2 = a^2 + b^2$, if not both $a$ and $b$ are even, then $c$ is not even."
+
+Since every integer is either even or odd, at least one of $\{a, b\}$ must be odd for the above condition to be true. Therefore, we can let $j$ be one of $\{a, b\}$ that is odd and $k$ be the other (which can be either even or odd). Since $j$ is odd, $j = 2p + 1 : p \in \mathbb{Z}$, and this leads us into one of the following:
+
+**Case I,** when $k$ is even:
+
+By definition of even, $k = 2q : q \in \mathbb{Z}$. By substitution, we have
+$$
+\begin{aligned}
+  c^2 &= j^2 + k^2 \\
+      &= (2p + 1)^2 + (2q)^2 &\text{Substituting }2p + 1 = j \text{ and }2q = k \\
+      &= 4p^2 + 4p + 1 + 4p^2 \\
+      &= 4 \cdot (p^2 + p + q^2) + 1 &\text{Factoring out 4} \\
+      &= 4m + 1 &\text{ Where }m = p^2 + p + q^2
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $m \in \mathbb{Z}$. By the division theorem, $c^2$ is not divisible by 4, which means that $c$ is not even, according to what we have proved earlier.
+
+
+**Case II,** when $k$ is odd:
+
+By definition of odd, $k = 2q + 1 : q \in \mathbb{Z}$. By substitution, we have
+$$
+\begin{aligned}
+  c^2 &= j^2 + k^2 \\
+      &= (2p + 1)^2 + (2q + 1)^2 &\text{Substituting }2p + 1 = j \text{ and }2q + 1 = k \\
+      &= 4p^2 + 4p + 1 + 4q^2 + 4q + 1 \\
+      &= 4p^2 + 4p + 4q^2 + 4q + 2 \\
+      &= 4 \cdot (p^2 + p + q^2 + q) + 2 &\text{Factoring out 4} \\
+      &= 4m + 2 &\text{ Where }m = p^2 + p + q^2 + q
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $m \in \mathbb{Z}$. By the division theorem, $c^2$ is not divisible by 4, which means that $c$ is not even, according to what we have proved earlier.
+
+Therefore, $c$ is not even in every possible case. Also, since the contrapositive is true, the original statement is true.
+
+\pagebreak
+# Section 2.3
+
+## 10. Exercise 2 (p121)
+
+### Part (a)
+
+
+
+### Part (b)
+
+
+
+### Part (c)
+
+
+
+### Part (d)
+
+
+
+## 11. Exercise 3.f (p121)
+
+
+
+## 12. Exercise 4.e (p122)
+
+
+
+## 13. Exercise 8.f (p122)
+
+
+
+## 14. Exercise 13 (p122)
+
+
+
+\pagebreak
+# Section 2.4
+
+## 15. Exercise 1.d (p130)
+
+
+
+## 16. Exercise 2.d (p130)
+
+
+
+## 17. Exercise 4.b (p130)
+
+
+
+## 18. Exercise 6 (p131)
+
+
+
+\pagebreak
+# Section 2.5
+
+## 19. Exercise 12 (p147)
+
+
+
+## 20. Exercise 20 (p148)
+
+
+
+## 21. Exercise 32.b (p149)
+
+
+
+## 22. Exercise 34.b (p149)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
