@@ -284,7 +284,7 @@ $$
   0 & 0  & 0
 \end{bmatrix}
 $$
-If we were to form a homogeneous system using these vectors, the system would have a free variable. Therefore, they do *not* form a linearly independent set.
+If we were to form a homogeneous system using these vectors, the system would not have a free variable. Therefore, they form a linearly independent set.
 
 **7.** By getting the matrix into Echelon Form:
 $$
@@ -294,7 +294,7 @@ $$
   0 & 0 & 6  & -6
 \end{bmatrix}
 $$
-If we were to form a homogeneous system using these vectors, the system would not have a free variable. Therefore, they *do* form a linearly independent set.
+If we were to form a homogeneous system using these vectors, the system would not have a free variable. Therefore, they form a linearly independent set.
 
 **11.** By getting the matrix into Echelon Form:
 $$
@@ -323,7 +323,7 @@ Since there is already a row full of zeros, meaning that there would be a free v
 
 **19.** These two vectors *are* linearly independent because they are not scaled multiples of each other. (Their first two rows have opposite signs whereas the third rows have the same sign.)
 
-**21. (a)** $\boxed{\text{True.}}$ This is the definition of linear independence.
+**21. (a)** $\boxed{\text{False.}}$ Every equation $A\mathbf{x} = \mathbf{0}$ has the trivial solution $\mathbf{x} = \mathbf{0}$. Therefore, it is not enough to say that the columns of such a matrix $A$ are linearly independent.
 
 **(b)** $\boxed{\text{False.}}$ The set $\{\mathbf{v}, \mathbf{0}\}$ (with $\mathbf{v} \neq \mathbf{0}$) is a linearly dependent set because of the zero vector; however, $\mathbf{v}$ cannot be a linear combination of $\mathbf{0}$.
 
@@ -345,6 +345,13 @@ $$
 \begin{bmatrix}
   \blacksquare & *            \\
   0            & \blacksquare \\
+  0            & 0            \\
+  0            & 0            
+\end{bmatrix}
+\text{ or }
+\begin{bmatrix}
+  0            & \blacksquare \\
+  0            & 0            \\
   0            & 0            \\
   0            & 0            
 \end{bmatrix}
