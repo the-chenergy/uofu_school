@@ -248,10 +248,10 @@ $$
 }
 $$
 
-**(b)** Minimum of $x_2$: since $x_2 = x_3 + 10$ and $x_3 \ge 0$,
-$$x_2 \ge 0 + 10 \implies \boxed{x_2 \ge 10}$$
-Minimum of $x_3$: since $x_1 = x_3 - 40$ and $x_1 \ge 0$,
+**(b)**  Minimum of $x_3$: since $x_1 = x_3 - 40$ and $x_1 \ge 0$,
 $$x_3 - 40 \ge 0 \implies \boxed{x_3 \ge 40}$$
+Minimum of $x_2$: since $x_2 = x_3 + 10$ and $x_3 \ge 40$,
+$$x_2 \ge 40 + 10 \implies \boxed{x_2 \ge 50}$$
 Minimum of $x_4$: since $x_4 = x_6 + 50$ and $x_6 \ge 0$,
 $$x_4 \ge 0 + 50 \implies \boxed{x_4 \ge 50}$$
 Minimum of $x_5$: since $x_5 = x_6 + 60$ and $x_6 \ge 0$,
