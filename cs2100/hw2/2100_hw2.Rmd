@@ -3,7 +3,7 @@ title: "Homework 2"
 author: "Qianlang Chen"
 
 # CS 2100
-# A 01/25/20
+# W 01/29/20
 
 output: pdf_document
 ---
@@ -352,54 +352,252 @@ Therefore, $c$ is not even in every possible case. Also, since the contrapositiv
 
 ### Part (a)
 
+* $R(1)$: $a_1 = 2^{1 - 1} + 3 = 4$
 
+* $R(2)$: $a_2 = 2^{2 - 1} + 3 = 5 = 2a_1 - 3$
+
+* $R(3)$: $a_3 = 2^{3 - 1} + 3 = 7 = 2a_2 - 3$
+
+* $R(4)$: $a_4 = 2^{4 - 1} + 3 = 11 = 2a_3 - 3$
+
+According to the above, $R(1), R(2), R(3)$, and $R(4)$ are all true.
 
 ### Part (b)
 
+* $R(8)$: $a_8 = 2^{8 - 1} + 3 = 131$
 
+* $R(9)$: $a_9 = 2^{9 - 1} + 3 = 259$
 
 ### Part (c)
 
+Since $R(8)$ is verified to be true, meaning that $a_n = a_k$ for $n = k = 8$, we have
+$$
+\begin{aligned}
+  a_{n + 1} &= 2^{(n - 1) + 1} + 3 \\
+            &= 2 \cdot 2^{n - 1} + 3 \\
+            &= 2 \cdot (2^{n - 1} + 3 - 3) + 3 \\
+            &= 2 \cdot (2^{n - 1} + 3) - 6 + 3 \\
+            &= 2a_n - 3 \\
+            &= 2a_k - 3 \\
+            &= a_{k + 1}
+\end{aligned}
+$$
 
+Since $a_{n + 1} = a_{k + 1}$ and $n + 1 = k + 1 = 9$, $R(9)$ is now verified to be true.
 
-### Part (d)
-
-
-
+\pagebreak
 ## 11. Exercise 3.f (p121)
 
+**Statement:** show that $a_n = a_k$, where $a_n = 2^{n - 1} + 3$ and $a_k = 2a_{k - 1} - 3$.
 
+**Base case:** when $n = k = 1$, $a_n = 2^{1 - 1} + 3 = 4 = a_k$.
+
+**Induction hypothesis:** assume that $a_n = a_k$ when $n = k = m$, $m \in \mathbb{Z} : m \ge 1$.
+
+**Induction step:** when $n = k = m + 1$,
+$$
+\begin{aligned}
+  a_n &= 2^{(m + 1) - 1} + 3 \\
+      &= 2 \cdot 2^{m - 1} + 3 \\
+      &= 2 \cdot (2^{m - 1} + 3 - 3) + 3 \\
+      &= 2 \cdot (2^{m - 1} + 3) - 6 + 3 \\
+      &= 2a_m - 3 \\
+      &= a_{m + 1} \\
+      &= a_k
+\end{aligned}
+$$
+
+Verifying the first four terms:
+
+* $a_1 = 2^{1 - 1} + 3 = 4$
+
+* $a_2 = 2^{2 - 1} + 3 = 5 = 2a_1 - 3$
+
+* $a_3 = 2^{3 - 1} + 3 = 7 = 2a_2 - 3$
+
+* $a_4 = 2^{4 - 1} + 3 = 11 = 2a_3 - 3$
 
 ## 12. Exercise 4.e (p122)
 
+**Statement:** show that $b_n = b_k$, where $b_n = 3 \cdot 2^n - n - 2$ and $b_k = 2b_{k - 1} + k$.
 
+**Base case:** when $n = k = 1$, $b_n = 3 \cdot 2^1 - 1 - 2 = 3 = b_k$.
 
+**Induction hypothesis:** assume that $a_n = a_k$ when $n = k = m - 1$, $m \in \mathbb{Z} : m > 1$.
+
+**Induction step:** when $n = k = m$,
+$$
+\begin{aligned}
+  a_n &= 3 \cdot 2^m - m - 2 \\
+      &= 3 \cdot (2 \cdot 2^{m - 1}) - m + m - m - 2 \\
+      &= 2 \cdot (3 \cdot 2^{m - 1}) - 2m - 2 + m \\
+      &= 2 \cdot (3 \cdot 2^{m - 1} - m - 1) + m \\
+      &= 2 \cdot (3 \cdot 2^{m - 1} - m + 1 - 1 - 1) + m \\
+      &= 2 \cdot (3 \cdot 2^{m - 1} - (m - 1) - 2) + m \\
+      &= 2a_{m - 1} + m \\
+      &= 2a_{k - 1} + k \\
+      &= a_k
+\end{aligned}
+$$
+
+\pagebreak
 ## 13. Exercise 8.f (p122)
 
+**Statement:** show that $a_n = b_n$, where $a_n = \sum_{i = 1}^n \frac{1}{i(i + 1)}$ and $b_n = \frac{n}{n + 1}$.
 
+**Base case:**
+$$
+\begin{aligned}
+  a_1 &= \sum_{i = 1}^1 \frac{1}{i(i + 1)} = \frac{1}{1(1 + 1)} = \frac{1}{2} \\
+      &= \frac{1}{1 + 1} = b_1
+\end{aligned}
+$$
 
+**Induction hypothesis:** assume that $a_{k - 1} = b_{k - 1}$, $k \in \mathbb{Z} : k > 1$.
+
+**Induction step:**
+$$
+\begin{aligned}
+  a_k &= \sum_{i = 1}^k \frac{1}{i(i + 1)} \\
+      &= (\sum_{i = 1}^{k - 1} \frac{1}{i(i + 1)}) + \frac{1}{k(k + 1)} \\
+      &= a_{k - 1} + \frac{1}{k(k + 1)} \\
+      &= b_{k - 1} + \frac{1}{k(k + 1)} \\
+      &= \frac{k - 1}{(k - 1) + 1} + \frac{1}{k(k + 1)} \\
+      &= \frac{(k - 1)(k + 1)}{k(k + 1)} + \frac{1}{k(k + 1)} \\
+      &= \frac{k^2 - 1 + 1}{k(k + 1)} \\
+      &= \frac{k}{k + 1} \\
+      &= b_k
+\end{aligned}
+$$
+
+Verifying the first four terms:
+
+$$
+\begin{aligned}
+  a_1 &= \sum_{i = 1}^1 \frac{1}{i(i + 1)} = \frac{1}{2} = \frac{1}{1 + 1} = b_1; \\
+  a_2 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{2} + \frac{1}{6} = \frac{1}{3} = \frac{1}{2 + 1} = b_2; \\
+  a_3 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{3} + \frac{1}{12} = \frac{1}{4} = \frac{1}{3 + 1} = b_3; \\
+  a_4 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{4} + \frac{1}{20} = \frac{1}{5} = \frac{1}{4 + 1} = b_4; \\
+\end{aligned}
+$$
+
+\pagebreak
 ## 14. Exercise 13 (p122)
 
+**Statement:** show that $a_n = b_n$, where
+$$
+\begin{aligned}
+&a_n = \sum_{i = 0}^n x^i, \\
+&b_n = \frac{x^{n + 1} - 1}{x - 1}, \\
+&x \in \mathbb{R} : x \neq 1
+\end{aligned}
+$$
 
+**Base case:**
+$$
+\begin{aligned}
+  a_0 &= \sum_{i = 0}^0 x^i = x^0 = 1 \\
+      &= \frac{x - 1}{x - 1} = \frac{x^{0 + 1} - 1}{x - 1} = b_0
+\end{aligned}
+$$
+
+**Induction hypothesis:** assume that $a_{k - 1} = b_{k - 1}$, $k \in \mathbb{Z} : k > 0$.
+
+**Induction step:**
+$$
+\begin{aligned}
+  a_k &= \sum_{i = 0}^k x^i \\
+      &= (\sum_{i = 0}^{k - 1} x^i) + x^k \\
+      &= a_{k - 1} + x^k \\
+      &= b_{k - 1} + x^k \\
+      &= \frac{x^{(k - 1) + 1} - 1}{x - 1} + x^k \\
+      &= \frac{x^k - 1}{x - 1} + \frac{x^k(x - 1)}{x - 1} \\
+      &= \frac{x^k - 1 + x^k \cdot x - x^k}{x - 1} \\
+      &= \frac{x^{k + 1} - 1}{x - 1} \\
+      &= b_k
+\end{aligned}
+$$
 
 \pagebreak
 # Section 2.4
 
 ## 15. Exercise 1.d (p130)
 
-
+$$d_n = d_{n - 1} + \frac{1}{(2n - 1)(2n + 1)}, d_1 = \frac{1}{3}$$
 
 ## 16. Exercise 2.d (p130)
 
+**Statement:** show that $a_n = d_n$, where $a_n = a_{n - 1} + \frac{1}{(2n - 1)(2n + 1)}, a_1 = \frac{1}{3}$, and $d_n = \frac{n}{2n + 1}$.
 
+**Base case:**
+$$a_1 = \frac{1}{3} = \frac{1}{2 \cdot 1 + 1} = d_1$$
 
+**Induction hypothesis:** assume that $a_{k - 1} = d_{k - 1}$, $k \in \mathbb{Z} : k > 1$.
+
+**Induction step:**
+$$
+\begin{aligned}
+  a_k &= a_{k - 1} + \frac{1}{(2k - 1)(2k + 1)} \\
+      &= d_{k - 1} + \frac{1}{(2k - 1)(2k + 1)} \\
+      &= \frac{k - 1}{2(k - 1) + 1} + \frac{1}{(2k - 1)(2k + 1)} \\
+      &= \frac{k - 1}{2k - 1} + \frac{1}{(2k - 1)(2k + 1)} \\
+      &= \frac{(k - 1)(2k + 1) + 1}{(2k - 1)(2k + 1)} \\
+      &= \frac{2k^2 + k - 2k - 1 + 1}{(2k - 1)(2k + 1)} \\
+      &= \frac{2k^2 - k}{(2k - 1)(2k + 1)} \\
+      &= \frac{k(2k - 1)}{(2k - 1)(2k + 1)} \\
+      &= \frac{k}{2k + 1} \\
+      &= d_k
+\end{aligned}
+$$
+
+\pagebreak
 ## 17. Exercise 4.b (p130)
 
+**Statement:** let $D(n)$ be the statement "$n^3 - n$ is divisible by 3." Show that $D(n)$ is true for each integer $n$, where $n \ge 1$.
 
+**Base Case:** when $n = 1$, $D(n)$ states that $1^3 - 1 = 0$ is divisible by 3, which is true.
+
+**Induction hypothesis:** assume that $D(n)$ is true for $n = k - 1$, $k \in \mathbb{Z} : k > 1$.
+
+**Induction step:** since $D(k - 1)$ is true, meaning that $(k - 1)^3 - (k - 1)$ is divisible by 3, we have $(k - 1)^3 - (k - 1) = 3q : q \in \mathbb{Z}$, by definition of being divisible by 3.
+
+Now, to show that $D(k)$ is true, we have
+$$
+\begin{aligned}
+  k^3 - k &= (k^3 - 3k^2 + 2k) + 3k^2 - 3k \\
+          &= (k^3 - 3k^2 - 3k - 1) - (k - 1) + 3k^2 - 3k \\
+          &= (k - 1)^3 - (k - 1) + 3k^2 - 3k \\
+          &= 3q + 3k^2 - 3k &\text{Substituting }3q = (k - 1)^3 - (k - 1) \\
+          &= 3(q + k^2 - k)\\
+          &= 3c &\text{Where }c = q + k^2 - k
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $c \in \mathbb{Z}$. By definition of being divisible by 3, $k^3 - k$ is divisible by 3, meaning that $D(k)$ is true.
 
 ## 18. Exercise 6 (p131)
 
+**Statement:** let $D(n)$ be the statement "$2^{3n} - 1$ is divisible by 7." Show that $D(n)$ is true for each integer $n$, where $n \ge 2$.
 
+**Base Case:** when $n = 2$, $D(n)$ states that $2^{3 \cdot 2} - 1 = 63 = 7 \cdot 9$ is divisible by 7, which is true.
+
+**Induction hypothesis:** assume that $D(n)$ is true for $n = k - 1$, $k \in \mathbb{Z} : k > 1$.
+
+**Induction step:** since $D(k - 1)$ is true, meaning that $2^{3(k - 1)} - 1$ is divisible by 7, we have $2^{3(k - 1)} - 1 = 7q : q \in \mathbb{Z}$, by definition of being divisible by 7.
+
+Now, to show that $D(k)$ is true, we have
+$$
+\begin{aligned}
+  2^{3k} - 1 &= 2^3 \cdot 2^{3(k - 1)} - 1 \\
+             &= 8 \cdot 2^{3(k - 1)} - 8 + 7 \\
+             &= 8 \cdot (2^{3(k - 1)} - 1) + 7 \\
+             &= 8 \cdot 7q + 7 &\text{Substituting }7q = 2^{3(k - 1)} - 1 \\
+             &= 7 \cdot (8q + 1) \\
+             &= 7c &\text{Where }c = 8q + 1
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $c \in \mathbb{Z}$. By definition of being divisible by 7, $2^{3k} - 1$ is divisible by 7, meaning that $D(k)$ is true. Now, since $2^{3n} - 1 > 7$ when $n \ge 2$, but $2^{3n} - 1$ is divisible by 7, $2^{3n} - 1$ is not prime for all $n \ge 2$.
 
 \pagebreak
 # Section 2.5
