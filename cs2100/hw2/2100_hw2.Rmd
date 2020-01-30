@@ -475,9 +475,9 @@ Verifying the first four terms:
 $$
 \begin{aligned}
   a_1 &= \sum_{i = 1}^1 \frac{1}{i(i + 1)} = \frac{1}{2} = \frac{1}{1 + 1} = b_1; \\
-  a_2 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{2} + \frac{1}{6} = \frac{1}{3} = \frac{1}{2 + 1} = b_2; \\
-  a_3 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{3} + \frac{1}{12} = \frac{1}{4} = \frac{1}{3 + 1} = b_3; \\
-  a_4 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{4} + \frac{1}{20} = \frac{1}{5} = \frac{1}{4 + 1} = b_4; \\
+  a_2 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{1}{2} + \frac{1}{6} = \frac{2}{3} = \frac{2}{2 + 1} = b_2; \\
+  a_3 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{2}{3} + \frac{1}{12} = \frac{3}{4} = \frac{3}{3 + 1} = b_3; \\
+  a_4 &= \sum_{i = 1}^2 \frac{1}{i(i + 1)} = \frac{3}{4} + \frac{1}{20} = \frac{4}{5} = \frac{4}{4 + 1} = b_4; \\
 \end{aligned}
 $$
 
