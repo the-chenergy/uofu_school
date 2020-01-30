@@ -604,42 +604,148 @@ By closure under addition and multiplication, $c \in \mathbb{Z}$. By definition 
 
 ## 19. Exercise 12 (p147)
 
+Let us assume that $a + b$ is rational. By definition of rational, $a + b = \frac{m}{n} : m, n \in \mathbb{Z}, n \neq 0$.
 
+Since $a \in \mathbb{Q}$, by definitional of rational, $a = \frac{p}{q} : p, q \in \mathbb{Z}, q \neq 0$.
+
+By substitution,
+$$
+\begin{aligned}
+  b &= (a + b) - a \\
+    &= \frac{m}{n} - \frac{p}{q} \\
+    &= \frac{mq - np}{nq} \\
+    &= \frac{j}{k} \text{ where }j = mq - np\text{ and }k = nq
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $j, k \in \mathbb{Z}$. Also, since $n \neq 0$ and $q \neq 0$, $k = nq \neq 0$.
+
+Since we showed that $b = \frac{j}{k}$, meaning that $b$ must be rational, but the problem states that $b$ is irrational, we have arrived at a contradiction. This indicates that our assumption in the beginning must be incorrect, meaning that $a + b$ cannot be rational. Therefore, $a + b$ is irrational.
 
 ## 20. Exercise 20 (p148)
 
+Contrapositive: "for all real numbers $x$ and $y$, if $x = 0$ and $y = 0$, then $x^2 + y^2 = 0$."
 
+Proof of the contrapositive: Since $x = 0$ and $y = 0$, by substitution, we have
+$$x^2 + y^2 = 0^2 + 0^2 = 0$$
 
+Since the contrapositive is true, the original statement "for all real numbers $x$ and $y$, if $x^2 + y^2 \neq 0$, then $x \neq 0$ or $y \neq 0$" is true.
+
+\pagebreak
 ## 21. Exercise 32.b (p149)
 
+Let five integers be given. Place these numbers into boxes labeled 0, 1, 2, and 3 according to the rule: a number $x$ goes into the box labeled $i$ if $i$ or $(7 - i)$ is the remainder when $x$ is divided by 7. By the basic pigeonhole principle, some box (call its label $r$) contains at least two numbers. Call these numbers $a$ and $b$. Since $a$ and $b$ are in the box labeled $r$, by the division theorem, one of the following cases must be true:
 
+**Case I,** when $a = 7p + r$ and $b = 7q + r$, $p, q \in \mathbb{Z}$:
 
+$$
+\begin{aligned}
+  a - b &= (7p + r) - (7q + r) \\
+        &= 7p - 7q \\
+        &= 7 \cdot (p - q) \\
+        &= 7k \text{ where }k = p - q
+\end{aligned}
+$$
+
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 7, $a - b$ is divisible by 7.
+
+**Case II,** when $a = 7p + (7 - r)$ and $b = 7q + r$, $p, q \in \mathbb{Z}$:
+
+$$
+\begin{aligned}
+  a + b &= (7p + 7 - r) + (7q + r) \\
+        &= 7p + 7q + 7 \\
+        &= 7 \cdot (p + q + 1) \\
+        &= 7k \text{ where }k = p + q + 1
+\end{aligned}
+$$
+
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 7, $a + b$ is divisible by 7.
+
+**Case III,** when $a = 7p + r$ and $b = 7q + (7 - r)$, $p, q \in \mathbb{Z}$:
+
+$$
+\begin{aligned}
+  a + b &= (7p + r) + (7q + 7 - r) \\
+        &= 7p + 7q + 7 \\
+        &= 7 \cdot (p + q + 1) \\
+        &= 7k \text{ where }k = p + q + 1
+\end{aligned}
+$$
+
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 7, $a + b$ is divisible by 7.
+
+**Case IV,** when $a = 7p + (7 - r)$ and $b = 7q + (7 - r)$, $p, q \in \mathbb{Z}$:
+
+$$
+\begin{aligned}
+  a - b &= (7p + 7 - r) - (7q + 7 - r) \\
+        &= 7p - 7q \\
+        &= 7 \cdot (p - q) \\
+        &= 7k \text{ where }k = p - q
+\end{aligned}
+$$
+
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 7, $a - b$ is divisible by 7.
+
+Therefore, $a + b$ or $a - b$ is divisible by 7 in every possible case.
+
+\pagebreak
 ## 22. Exercise 34.b (p149)
 
+Let fifty-two integers be given. Place these numbers into boxes labeled using integers $[0..50]$ according to the rule: a number $x$ goes into the box labeled $i$ if $i$ or $(100 - i)$ is the remainder when $x$ is divided by 100. By the basic pigeonhole principle, some box (call its label $r$) contains at least two numbers. Call these numbers $a$ and $b$. Since $a$ and $b$ are in the box labeled $r$, by the division theorem, one of the following cases must be true:
 
+**Case I,** when $a = 100p + r$ and $b = 100q + r$, $p, q \in \mathbb{Z}$:
 
+$$
+\begin{aligned}
+  a - b &= (100p + r) - (100q + r) \\
+        &= 100p - 100q \\
+        &= 100 \cdot (p - q) \\
+        &= 100k \text{ where }k = p - q
+\end{aligned}
+$$
 
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 100, $a - b$ is divisible by 100.
 
+**Case II,** when $a = 100p + (100 - r)$ and $b = 100q + r$, $p, q \in \mathbb{Z}$:
 
+$$
+\begin{aligned}
+  a + b &= (100p + 100 - r) + (100q + r) \\
+        &= 100p + 100q + 100 \\
+        &= 100 \cdot (p + q + 1) \\
+        &= 100k \text{ where }k = p + q + 1
+\end{aligned}
+$$
 
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 100, $a + b$ is divisible by 100.
 
+**Case III,** when $a = 100p + r$ and $b = 100q + (100 - r)$, $p, q \in \mathbb{Z}$:
 
+$$
+\begin{aligned}
+  a + b &= (100p + r) + (100q + 100 - r) \\
+        &= 100p + 100q + 100 \\
+        &= 100 \cdot (p + q + 1) \\
+        &= 100k \text{ where }k = p + q + 1
+\end{aligned}
+$$
 
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 100, $a + b$ is divisible by 100.
 
+**Case IV,** when $a = 100p + (100 - r)$ and $b = 100q + (100 - r)$, $p, q \in \mathbb{Z}$:
 
+$$
+\begin{aligned}
+  a - b &= (100p + 100 - r) - (100q + 100 - r) \\
+        &= 100p - 100q \\
+        &= 100 \cdot (p - q) \\
+        &= 100k \text{ where }k = p - q
+\end{aligned}
+$$
 
+By closure under addition, $k \in \mathbb{Z}$. By definition of being divisible by 100, $a - b$ is divisible by 100.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Therefore, $a + b$ or $a - b$ is divisible by 100 in every possible case.
 
