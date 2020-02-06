@@ -1,0 +1,316 @@
+---
+title: "Homework 3"
+author: "Qianlang Chen"
+
+# CS 2100
+# W 02/05/20
+
+output: pdf_document
+
+header-includes:
+- \usepackage{venndiagram} # for dashed lines in matrices
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 3.1 (p193)
+
+## 1. Exercise 2
+
+### Part (a)
+
+4, 8, 12, 16, 20.
+
+### Part (c)
+
+4, 8, 12, 16, 20.
+
+## 2. Exercise 16
+
+### Part (b)
+
+\begin{align*}
+  \begin{venndiagram2sets}[labelNotAB = U]
+    \fillNotAorB
+  \end{venndiagram2sets} \\
+  \text{The Left-hand side: }(A \cup B)'
+\end{align*}
+
+\begin{align*}
+  \begin{venndiagram2sets}[labelNotAB = U]
+    \fillNotAorB
+  \end{venndiagram2sets} \\
+  \text{The Right-hand side: }A' \cap B'
+\end{align*}
+
+Therefore, since the Venn diagrams for both sides are the same, $(A \cup B)' = A' \cap B'$.
+
+### Part (d)
+
+\begin{align*}
+  \begin{venndiagram2sets}[labelNotAB = U]
+    \fillA
+  \end{venndiagram2sets} \\
+  \text{The Left-hand side: }A \cap (A \cup B)
+\end{align*}
+
+\begin{align*}
+  \begin{venndiagram2sets}[labelNotAB = U]
+    \fillA
+  \end{venndiagram2sets} \\
+  \text{The Right-hand side: }A
+\end{align*}
+
+Therefore, since the Venn diagrams for both sides are the same, $A \cap (A \cup B) = A$.
+
+\pagebreak
+## 3. Exercise 17
+
+### Part (b)
+
+\begin{align*}
+  \begin{venndiagram3sets}[labelNotABC = U]
+    \fillBNotA
+    \fillCNotA
+  \end{venndiagram3sets} \\
+  \text{The Left-hand side: }(B \cup C) - A
+\end{align*}
+
+\begin{align*}
+  \begin{venndiagram3sets}[labelNotABC = U]
+    \fillBNotA
+    \fillCNotA
+  \end{venndiagram3sets} \\
+  \text{The Right-hand side: }(B - A) \cup (C - A)
+\end{align*}
+
+Therefore, since the Venn diagrams for both sides are the same, $(B \cup C) - A = (B - A) \cup (C - A)$.
+
+### Part (d)
+
+\begin{align*}
+  \begin{venndiagram3sets}[labelNotABC = U]
+    \fillANotB
+    \fillBNotC
+  \end{venndiagram3sets} \\
+  \text{The Left-hand side: }(A - B) \cup (B - C)
+\end{align*}
+
+\begin{align*}
+  \begin{venndiagram3sets}[labelNotABC = U]
+    \fillANotC
+  \end{venndiagram3sets} \\
+  \text{The Right-hand side: }A - C
+\end{align*}
+
+As seen from the Venn diagrams, there are some areas covered by the left-hand side but not the right-hand side. Specifically, these are the mentioned areas:
+
+\begin{align*}
+  \begin{venndiagram3sets}[labelNotABC = U]
+    \fillACapCNotB
+    \fillOnlyB
+  \end{venndiagram3sets}
+\end{align*}
+
+Therefore, the left-hand side may not be a subset of the right-hand side. $(A - B) \cup (B - C) \nsubseteq A - C$. As an example, if
+$$
+\begin{aligned}
+  A &= \{1, 2, 3\}, \\
+  B &= \{4, 5, 6\}, \\
+  C &= \{7, 8, 9\}, \\
+\end{aligned}
+$$
+
+then
+$$
+\begin{aligned}
+  (A - B) \cup (B - C) &= \{1, 2, 3, 4, 5, 6\}, \\
+                 A - C &= \{1, 2, 3\}; \\
+                 \{1, 2, 3, 4, 5, 6\} &\nsubseteq \{1, 2, 3\}
+\end{aligned}
+$$
+
+## 4. Exercise 18
+
+### Part (b)
+
+$$A - B = \{k : k \in \mathbb{Z}, k \bmod 6 \neq 0\}$$
+
+### Part (e)
+
+$$\mathbb{Z} - A = \{2k + 1 : k \in \mathbb{Z}\}$$
+
+\pagebreak
+# Section 3.2 (p208)
+
+## 5. Exercise 1
+
+### Part (b)
+
+$$
+\begin{aligned}
+  (A \times B) - (A \times A) &= \{2, 4\} \times \{1, 2, 8\} - \{2, 4\} \times \{2, 4\} \\
+                              &= \{(2, 1), (2, 2), (2, 8), (4, 1), (4, 2), (4, 8)\} - \{(2, 2), (2, 4), (4, 2), (4, 4)\} \\
+                              &= \boxed{\{(2, 1), (2, 8), (4, 1), (4, 8)\}}
+\end{aligned}
+$$
+
+### Part (d)
+
+$$
+\begin{aligned}
+  \wp(B \cap C) &= \wp(\{1, 2, 8\} \cap \{1, 2, 5, 6, 10\}) \\
+                &= \wp(\{1, 2\}) \\
+                &= \boxed{\{\ \{\}, \{1\}, \{2\}, \{1, 2\}\ \}}
+\end{aligned}
+$$
+
+## 6. Exercise 9
+
+According to the division theorem, every integer falls into one of the following categories:
+
+* $4q$,
+
+* $4q + 1$,
+
+* $4q + 2$,
+
+* $4q + 3$,
+
+where $q \in \mathbb{Z}$. In other words, $\mathbb{Z} = B \cup C \cup S \cup T$, where
+
+* $B = \{4q + 1 : q \in \mathbb{Z}\}$ (given by the problem statement),
+
+* $C = \{4q + 3 : q \in \mathbb{Z}\}$ (given by the problem statement),
+
+* $S = \{4q : q \in \mathbb{Z}\}$,
+
+* $T = \{4q + 2 : q \in \mathbb{Z}\}$.
+
+Also, to show that $A = \{2k : k \in \mathbb{Z}\} = S \cup T$, since every integer is either even or odd,
+
+* when k is even, $2k = 2(2q) = 4q$, where $q$ is an integer by definition of even;
+
+* when k is odd, $2k = 2(2q + 1) = 4q + 2$, where $q$ is an integer by definition of odd.
+
+Therefore, we showed that $A = S \cup T$. Now, we have $\mathbb{Z} = B \cup C \cup S \cup T = A \cup B \cup C$.
+
+According to the definition of a partition, and
+
+* $A \ne B \ne C \ne \emptyset$,
+
+* $A \cap B = A \cap C = B \cap C = \emptyset$,
+
+* $A \cup B \cup C = \mathbb{Z}$,
+
+$\{A, B, C\}$ is a partition of $\mathbb{Z}$.
+
+
+## 7. Exercise 11
+
+### Part (a)
+
+True.
+
+### Part (b)
+
+False. One counter-example: if $A = \{1\}$ and $B = \{2\}$,
+$$
+\begin{aligned}
+  (A \cup B) \times (A - B) &= \{1, 2\} \times \{1\} \\
+                            &= \{(1, 1), (2, 1)\}; \\
+                  A^2 - B^2 &= \{(1, 1)\} - \{(2, 2)\} \\
+                            &= \{(1, 1)\}; \\
+  (A \cup B) \times (A - B) &\ne A^2 - B^2
+\end{aligned}
+$$
+
+
+### Part (c)
+
+True.
+
+## 8. Exercise 22
+
+According to *Theorem 1*, $|A \times B| = |A| \  |B|$. Therefore,
+$$
+\begin{aligned}
+  |S_1 \times S_2 \times \cdots \times S_{k-1} \times S_k|
+  &= |S_1| \  |S_2| \  \cdots \  |S_{k-1}| \  |S_k| \\
+  &= (|S_1| \  |S_2| \  \cdots \  |S_{k-1}|) \  |S_k| \\
+  &= |S_1 \times S_2 \times \cdots \times S_{k-1}| \  |S_k| \\
+  &= \boxed{|(S_1 \times S_2 \times \cdots \times S_{k-1}) \times S_k|}
+\end{aligned}
+$$
+
+\pagebreak
+# Section 3.3 (p219)
+
+## 9. Exercise 2.e
+
+
+
+## 10. Exercise 3.b
+
+
+
+## 11. Exercise 11.d
+
+
+
+## 12. Exercise 13.c
+
+
+
+## 13. Exercises 14.e and 15.e
+
+### Exercise 14.e
+
+
+
+### Exercise 15.e
+
+
+
+## 14. Exercise 19.b
+
+
+
+## 15. Exercies 22.a
+
+
+
+\pagebreak
+# Section 3.4 (p227)
+
+## 16. Exercise 1.d
+
+
+
+## 17. Exercise 2.f
+
+
+
+## 18. Exercise 6.b
+
+
+
+## 19. Exercise 14
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
