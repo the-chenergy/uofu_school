@@ -230,7 +230,18 @@ $$
 
 ### Part (c)
 
-True.
+False. One counter-example: if $A = \{1\}, B = \{2\}$ and $C = \{3\}$,
+$$
+\begin{aligned}
+  A \times (B \times C) &= \{1\} \times (\{2\} \times \{3\}) \\
+                        &= \{1\} \times \{(2, 3)\} \\
+                        &= \{(1, (2, 3))\}; \\
+  (A \times B) \times C &= (\{1\} \times \{2\}) \times \{3\} \\
+                        &= \{(1, 2)\} \times \{3\} \\
+                        &= \{((1, 2), 3)\}; \\
+  A \times (B \times C) &\ne (A \times B) \times C
+\end{aligned}
+$$
 
 ## 8. Exercise 22
 
@@ -250,67 +261,159 @@ $$
 
 ## 9. Exercise 2.e
 
+Let an element $x : x \in (\{2n + 1 : n \in \mathbb{Z}\} \cap \{5m + 4 : m \in \mathbb{Z}\})$ be given. By definition of set union, we have that $\exists n \in \mathbb{Z} : x = 2n + 1$ and that $\exists m \in \mathbb{Z} : x = 5m + 4$. Since every integer is either even or odd, one of the following cases about $m$ must be true:
 
+**Case I,** when $m$ is even: by definition of even, $\exists k \in \mathbb{Z} : 2k = m$. By substitution, $x = 5m + 4 = 5 \cdot (2k) + 4 = 10k + 4 = 2 \cdot (5k + 2) = 2c$ for some $c$. Since $x$ has to be in the form of $2n + 1$, this is not a possibility for $x$.
+
+**Case II,** when $m$ is odd: by definition of odd, $\exists k \in \mathbb{Z} : 2k + 1 = m$. By substitution, $x = 5m + 4 = 5 \cdot (2k + 1) + 4 = 10k + 9 = 2 \cdot (5k + 4) + 1 = 2c + 1$ for some $c$. By closure under addition, $c \in \mathbb{Z}$. Since this fits the definition of $x$ and $x$ can be written in the form of $10k + 9$, by definition of a subset, $(\{2n + 1 : n \in \mathbb{Z}\} \cap \{5m + 4 : m \in \mathbb{Z}\}) \subseteq \{10k + 9 : k \in \mathbb{Z}\}$.
 
 ## 10. Exercise 3.b
 
+Let an element $x : x \in (\{n^2 - 1 : n \in \mathbb{Z}\} \cap \{2k : k \in \mathbb{Z}\})$ be given. By definition of set union, we have that $\exists n \in \mathbb{Z} : x = n^2 - 1$ and that $\exists k \in \mathbb{Z} : k = 2k$. Since every integer is either even or odd, one of the following cases about $n$ must be true:
 
+**Case I,** when $n$ is even: by definition of even, $\exists m \in \mathbb{Z} : 2m = n$. By substitution, $x = n^2 - 1 = (2m)^2 - 1 = 4m^2 - 1 = 2 \cdot (2m^2 - 1) + 1 = 2c + 1$ for some $c$. Since $x$ has to be in the form of $2k$, this is not a possibility for $x$.
+
+**Case II,** when $n$ is odd: by definition of odd, $\exists m \in \mathbb{Z} : 2m + 1 = n$. By substitution, $x = n^2 - 1 = (2m + 1)^2 - 1 = 4m^2 + 4m + 1 - 1 = 2 \cdot (2m^2 + 2m) = 2c$ for some $c$, and by closure under addition, $c \in \mathbb{Z}$. Also, $4m^2 + 4m = 4(m^2 + m) = 4d$ for some $d$, and by closure under addition, $d \in \mathbb{Z}$. Since this fits the definition of $x$ and $x$ can be written in the form of $4m$, by definition of a subset, $(\{n^2 - 1 : n \in \mathbb{Z}\} \cap \{2k : k \in \mathbb{Z}\}) \subseteq \{4m : m \in \mathbb{Z}\}$.
 
 ## 11. Exercise 11.d
 
+First, we have that $C \subseteq (A \cup C)$ because $C \subseteq C$ already.
 
+Now, let us show that $(A \cup C) \subseteq C$.
+
+Let an element $x : x \in (A \cup C)$ be given. By definition of set union, one of the following cases about $x$ must be true:
+
+**Case I,** when $x \in A$: since $A \cup B = B$, we have that $x \in B$. Since $B \cup C = C$, we have that $x \in C$.
+
+**Case II,** when $x \in C$ already.
+
+Therefore, $x \in C$ in every possible case. By definition of a subset, $(A \cup C) \subseteq C$.
+
+Finally, since $C \subseteq (A \cup C)$ and $(A \cup C) \subseteq C$, we have that $(A \cup C) = C$.
 
 ## 12. Exercise 13.c
 
+First, let us show that $(A \cup (B - A)) \subseteq B$. Let an element $x : x \in (A \cup (B - A))$ be given. By definition of set union, one of the following cases about $x$ must be true:
 
+**Case I,** when $x \in A$: since $A \subseteq B$, $x \in B$.
+
+**Case II,** when $x \in (B - A)$: by definition of set difference, we have that $x \in B$.
+
+Therefore, $x \in B$ in every possible case. By definition of a subset, $(A \cup (B - A)) \subseteq B$.
+
+Now, to show that $B \subseteq (A \cup (B - A))$, let an element $x : x \in B$ be given. Since $A \subseteq B$, one of the following cases about $x$ must be true:
+
+**Case I,** when $x \in A$ already, meaning that $x \in (A \cup (B - A))$.
+
+**Case II,** when $x \in B$ but $x \notin A$: by definition of set difference, $x \in (B - A)$, also meaning that $x \in (A \cup (B - A))$.
+
+Therefore, $x \in (A \cup (B - A))$ in every possible case. By definition of a subset, $B \subseteq (A \cup (B - A))$.
+
+Finally, since $(A \cup (B - A)) \subseteq B$ and $x \in (A \cup (B - A))$, we have that $(A \cup (B - A)) = B$.
 
 ## 13. Exercises 14.e and 15.e
 
 ### Exercise 14.e
 
-
+$$
+\begin{aligned}
+  (A \cup B) \cap (A' \cap C)' &= (A \cup B) \cap (A \cup C') &\text{De Morgan's} \\
+                               &= A \cup (B \cap C')          &\text{Inverse Distributive}
+\end{aligned}
+$$
 
 ### Exercise 15.e
 
-
+$$(A \cap B) \cup (A' \cup C)' = (A \cap (B \cup C'))$$
 
 ## 14. Exercise 19.b
 
-
+$$
+\begin{aligned}
+  A \cup (B \cap A') &= (A \cup B) \cap (A \cup A') &\text{Distributive} \\
+                     &= B \cap (A \cup A')          &\text{Substituting }B = A \cup B \\
+                     &= B \cap U                    &\text{Negation} \\
+                     &= B                           &\text{Identity}
+\end{aligned}
+$$
 
 ## 15. Exercies 22.a
 
+First, let us show that $(A \cup B) \times C \subseteq (A \times C) \cup (B \times C)$.
 
+Let a tuple $(x, c) \in (A \cup B) \times C$ be given. By definition of a Cartisian Product and set union, one of the following cases about $x$ must be true:
+
+**Case I,** when $x \in A$, meaning that $(x, c) \in (A \times C)$. This also means that $(x, c) \in (A \times C) \cup (B \times C)$.
+
+**Case II,** when $x \in B$, meaning that $(x, c) \in (B \times C)$. This also means that $(x, c) \in (A \times C) \cup (B \times C)$.
+
+Therefore, $(x, c) \in (A \times C) \cup (B \times C)$ in every possible case. By definition of a subset, $(A \cup B) \times C \subseteq (A \times C) \cup (B \times C)$.
+
+Next, let us show that $(A \times C) \cup (B \times C) \subseteq (A \cup B) \times C$.
+
+Let a tuple $(x, c) \in (A \times C) \cup (B \times C)$ be given. By definition of a Cartisian Produt and set union, one of the following cases about $x$ must be true:
+
+**Case I,** when $(x, c) \in (A \times C)$, meaning that $x \in A$.
+
+**Case II,** when $(x, c) \in (B \times C)$, meaning that $x \in B$.
+
+Therefore, $x \in A$ or $x \in B$ in every possible case, and by definition of set union, we have that $x \in (A \cup B)$, meaning that $(x, c) \in (A \cup B) \times C$. Also, by definition of a subset, $(A \times C) \cup (B \times C) \subseteq (A \cup B) \times C$.
+
+Finally, since $(A \cup B) \times C \subseteq (A \times C) \cup (B \times C)$ and $(A \times C) \cup (B \times C) \subseteq (A \cup B) \times C$, we have that $(A \cup B) \times C = (A \times C) \cup (B \times C)$.
 
 \pagebreak
 # Section 3.4 (p227)
 
 ## 16. Exercise 1.d
 
-
+$$(p + p'q)' = p'q'$$
 
 ## 17. Exercise 2.f
 
-
+$$(ab) \cdot (bc)' = (ab) \cdot c'$$
 
 ## 18. Exercise 6.b
 
-
+$$
+\begin{aligned}
+  a' + b &= (ab)' + b     &\text{Substituting }ab = a \\
+         &= (a' + b') + b &\text{De Morgan's} \\
+         &= a' + (b' + b) &\text{Associative} \\
+         &= a' + 1        &\text{Negation} \\
+         &= 1             &\text{Universal Bound}
+\end{aligned}
+$$
 
 ## 19. Exercise 14
 
+$$
+\begin{aligned}
+  ab + (a' + b') &= (ab + a') + b'        &\text{Associative} \\
+                 &= (a' + ab) + b'        &\text{Commutative} \\
+                 &= (a' + a)(a' + b) + b' &\text{Distributive} \\
+                 &= (a + a')(a' + b) + b' &\text{Commutative} \\
+                 &= 1 \cdot (a' + b) + b' &\text{Negation} \\
+                 &= (a' + b) \cdot 1 + b' &\text{Commutative} \\
+                 &= (a' + b) + b'         &\text{Identity} \\
+                 &= a' + (b + b')         &\text{Associative} \\
+                 &= a' + 1                &\text{Negation} \\
+                 &= 1                     &\text{Universal Bound} \\
+\end{aligned}
+$$
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+$$
+\begin{aligned}
+  ab \cdot (a' + b') &= (ab) \cdot a' + (ab) \cdot b' &\text{Distributive} \\
+                     &= a' \cdot (ab) + (ab) \cdot b' &\text{Commutative} \\
+                     &= (a'a) \cdot b + (ab) \cdot b' &\text{Associative} \\
+                     &= (aa') \cdot b + (ab) \cdot b' &\text{Commutative} \\
+                     &= 0 \cdot b + (ab) \cdot b'     &\text{Negation} \\
+                     &= b \cdot 0 + (ab) \cdot b'     &\text{Commutative} \\
+                     &= 0 + (ab) \cdot b'             &\text{Universal Bound} \\
+                     &= 0 + a \cdot (bb')             &\text{Associative} \\
+                     &= 0 + a \cdot 0                 &\text{Negation} \\
+                     &= 0 + 0                         &\text{Universal Bound} \\
+                     &= 0                             &\text{Idempotent}
+\end{aligned}
+$$
 
