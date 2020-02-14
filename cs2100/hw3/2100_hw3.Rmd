@@ -3,12 +3,12 @@ title: "Homework 3"
 author: "Qianlang Chen"
 
 # CS 2100
-# W 02/05/20
+# W 02/12/20
 
 output: pdf_document
 
 header-includes:
-- \usepackage{venndiagram} # for dashed lines in matrices
+- \usepackage{venndiagram} # for quickly drawing venn diagrams
 ---
 
 ```{r setup, include=FALSE}
