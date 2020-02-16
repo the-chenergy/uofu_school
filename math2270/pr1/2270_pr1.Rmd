@@ -1,0 +1,30 @@
+---
+title: "Project 1"
+author: "Qianlang Chen"
+
+# Math 2270
+# A 02/15/20
+
+output: pdf_document
+fontsize: 12pt
+indent: true
+
+bibliography: "2270_pr1_refs.bib" # auto-inserted at end of paper; default style is apa
+nocite: "@*" # include unmentioned references
+
+header-includes:
+  - \usepackage{setspace}
+  - \linespread{1.5}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Linear Algebra is mainly the study in solving systems of linear equations and linear functions. In the modern world, Linear Algebra is used in many aspects of computing. As an example, Linear Programming uses Linear Algebra to analyze a system of some situation and tries to optimize it under a set of conditions. Linear Programming is the base of the study in optimization techniques, and it is used to solve problems from different areas, including engineering, science, and economics.
+
+
+
+\pagebreak
+# Works Cited
+
