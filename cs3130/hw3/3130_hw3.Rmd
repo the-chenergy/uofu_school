@@ -1,0 +1,102 @@
+---
+title: "Homework 3"
+author: "Qianlang Chen"
+
+# CS 3130
+# W 02/19/20
+
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+## Part (a)
+
+  * **Upper bound:** when all four coins land with heads up: $4\text{ heads} - 0\text{ tails} = \boxed{4}$;
+  
+  * **Lower bound:** when all four coins land with tails up: $0\text{ heads} - 4\text{ tails} = \boxed{-4}$.
+
+## Part (b)
+
+$$
+\text{pmf}(X = k) = \begin{cases}
+  \binom{4}{0} \cdot (1 - \frac{1}{2})^4 = \frac{1}{16}, k = -4 \\
+  \binom{4}{1} \cdot \frac{1}{2} \cdot (1 - \frac{1}{2})^3 = \frac{1}{4}, k = -2 \\
+  \binom{4}{2} \cdot (\frac{1}{2})^2 \cdot (1 - \frac{1}{2})^2 = \frac{3}{8}, k = 0 \\
+  \binom{4}{3} \cdot (\frac{1}{2})^3 \cdot (1 - \frac{1}{2}) = \frac{1}{4}, k = 2 \\
+  \binom{4}{4} \cdot (\frac{1}{2})^4 = \frac{1}{16}, k = 4 \\
+  0, k \notin \{-4, -2, 0, 2, 4\}
+\end{cases}
+$$
+
+## Part (c)
+
+$$
+\text{cdf}(X \le k) = \begin{cases}
+  0, k < -4 \\
+  \text{pmf}(X = -4) = \frac{1}{16}, -4 \le k < -2 \\
+  \text{pmf}(X = -4) + \text{pmf}(X = -2) = \frac{5}{16}, -2 \le k < 0 \\
+  \text{pmf}(X = -4) + \text{pmf}(X = -2) + \text{pmf}(X = 0) = \frac{11}{16}, 0 \le k < 2 \\
+  \text{pmf}(X = -4) + \text{pmf}(X = -2) + \text{pmf}(X = 0) + \text{pmf}(X = 2) = \frac{15}{16}, 2 \le k < 4 \\
+  1, k \ge 4
+\end{cases}
+$$
+
+\pagebreak
+# Problem 2
+
+todo haha
+
+\pagebreak
+# Problem 3
+
+## Part (a)
+
+  * **Upper bound:** all $n$ coins land with heads up: $\boxed{n}$;
+  
+  * **Lower bound:** all $n$ coins land with tails up; tossing them all again, all tails up again: $\boxed{0}$.
+
+## Part (b)
+
+Let us consider the outcome $X$ for just a single coin. There are two possibilities:
+
+  * The coin lands with heads up. This can happen in one of two ways: landing heads on the first toss (probability $\frac{1}{2}$), or landing tails on the first toss but heads on the second toss (probability $\frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$). Total probability for heads: $\dfrac{1}{2} + \dfrac{1}{4} = \boxed{\frac{3}{4}}$.
+  
+  * The coin lands with tails up. This can only happen in one way: landing tails on both the first and second tosses. Total probability for tails: $\dfrac{1}{2} \cdot \dfrac{1}{2} = \boxed{\frac{1}{4}}$.
+
+Now, when there are $n$ coins, since each coin has a certain chance of producing heads -- incrementing the random variable $X$, we have
+
+$$
+\begin{aligned}
+  \text{pmf}(X = k) &= \text{Prob of }k\text{ heads and }(n - k)\text{ tails} \times \text{Number of ways this can happen} \\
+                    &= (\frac{3}{4})^k \cdot (\frac{1}{4})^{(n-k)} \cdot \binom{n}{k}
+\end{aligned}
+$$
+
+This fits the form of a **binomial distribution.**
+
+\pagebreak
+# Problem 4
+
+Since the recognition system can only either pass or fail and the pass rate is $\frac{9}{10}$, it means that the probability of failing is $1 - \frac{9}{10} = \frac{1}{10}$.
+
+## Mathematical Expressions:
+
+  a. $\binom{40}{6} \cdot (\frac{1}{10})^6 \cdot (\frac{9}{10})^{(40-6)} \approx 11\%$
+  
+  b. $\sum_{n=0}^2 \binom{40}{n} \cdot (\frac{1}{10})^n \cdot (\frac{9}{10})^{(40-n)} \approx 22\%$
+  
+  c. $\sum_{n=8}^{40} \binom{40}{n} \cdot (\frac{1}{10})^n \cdot (\frac{9}{10})^{(40-n)} \approx 4.2\%$
+
+## R Expressions:
+
+  a. `dbinom(6, 40, 1/10)`
+  
+  b. `pbinom(2, 40, 1/10)`
+  
+  c. `pbinom(8, 40, 1/10, FALSE) + dbinom(8, 40, 1/10)`
+
