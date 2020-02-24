@@ -1,0 +1,205 @@
+---
+title: "Homework 4"
+author: "Qianlang Chen"
+
+# CS 2100
+# U 02/23/20
+
+output: pdf_document
+
+header-includes:
+- \usepackage{venndiagram} # for quickly drawing venn diagrams
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 4.1 (p266)
+
+## 1. Exercise 9.c
+
+![](res/q1.png)
+
+## 2. Exercise 13
+
+(a).
+
+## 3. Exercise 18.b
+
+The inverse function $f^{-1}(x) = g(x) = \frac{x}{3} - \frac{5}{3}$.
+
+**Proof:** let an element $x \in \mathbb{R}$ be given.
+
+$$
+\begin{aligned}
+  g(f(x)) &= g(3x + 5) \\
+          &= \frac{3x + 5}{3} - \frac{5}{3} \\
+          &= x - \frac{5}{3} + \frac{5}{3} \\
+          &= x
+\end{aligned}
+$$
+
+By definition of an inverse function, $g(x)$ is the inverse of $f(x)$.
+
+## 4. For each of the following Java methods, state whether or not it meets the definition of a function with domain and codomain `Color`. If not, state the reason why.
+
+### Part (a)
+
+Yes.
+
+### Part (b)
+
+No. Colors with `red` values different than `green` values is not covered by the output, since the outputting colors always have the same `red` and `green` values.
+
+### Part (c)
+
+Yes.
+
+## 5. Implement a method that is the inverse of the *grayscale* method above, i.e. *grayscale*^*-1*^, or state why *grayscale* is not invertible:
+
+This function is not invertible because its input space is bigger than its output space, meaning that the function is not one-to-one. The input space is all colors with RGB values that can each be distinct, whereas the function only outputs colors with the same values for RGB.
+
+\pagebreak
+# Section 4.2 (p277)
+
+## 6. Exercise 2.a
+
+
+
+## 7. Exercise 4
+
+
+
+## 8. Exercise 23
+
+
+
+## 9. Implement a method that is the *grayscale* method composed with the negative method, i.e. *grayscale* $\circ$ *negative*, or state why it is not possible.
+
+
+
+\pagebreak
+# Section 4.3 (p298)
+
+## 10. Exercise 4.b
+
+
+
+## 11. Exercise 9
+
+
+
+## 12. Exercise 13
+
+
+
+## 13. Exercise 20
+
+### Part (a)
+
+
+
+### Part (b)
+
+
+
+### Part (c)
+
+
+
+### Part (d)
+
+
+
+\pagebreak
+# Section 4.4 (p311)
+
+## 14. Exercise 6
+
+### Part (a)
+
+
+
+### Part (b)
+
+
+
+### Part (c)
+
+
+
+### Part (d)
+
+
+
+## 15. Exercise 14
+
+### Part (a)
+
+
+
+### Part (b)
+
+
+
+### Part (c)
+
+
+
+### Part (d)
+
+
+
+## 16. Exercise 18
+
+### Part (a)
+
+
+
+### Part (b)
+
+
+
+### Part (c)
+
+
+
+### Part (d)
+
+
+
+## 17. Exercise 22
+
+
+
+\pagebreak
+# Section 4.5 (p322)
+
+## 18. Exercise 9.b
+
+
+
+## 19. Exercise 11
+
+
+
+## 20. Exercise 21
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
