@@ -171,19 +171,21 @@ Therefore, $z = y$ in every possible case, meaning that the function $g$ is one-
 
 ### Part (a)
 
-
+Let elements $a, b, c, d \in A$ be given such that $f(a, b) = f(c, d)$, meaning that $2^a \cdot 3^b$ and $2^c \cdot 3^d$ are the same factor of 144. According to the Fundamental Theorem of Arithmetic, $a = c$ and $b = d$. Therefore, the function $f$ is one-to-one.
 
 ### Part (b)
 
-
+Let an element $n \in B$ be given, meaning that $n$ is a factor of 144. Since $144 = 2^4 \cdot 3^2$, according to the Fundamental Theorem of Arithmetic, that is the only way to write 144 as a product of primes. Therefore, there must exist $a \in \{0, 1, 2, 3, 4\}$ and $b \in \{0, 1, 2\}$ such that $n = 2^a \cdot 3^b$, meaning that the function $f$ is onto.
 
 ### Part (c)
 
-
+Theorem 7: "Let $f : A \to B$ be a fucntion, where $A$ and $B$ are finite sets of sizes $m$ a $n$, respectively. If $f$ is a one-to-one correspondence (both one-to-one and onto), then $m = n$."
 
 ### Part (d)
 
+Set $A$'s cardinality is easy to determine. Since 144 has a prime factorization of $2^4 \cdot 3^2$, the set $A$ in this case has a cardinality of $(4 + 1) \cdot (2 + 1) = 15$. More generally, if a positive integer has a prime factorization of $p_1^{k_1} \cdot p_2^{k_2} \cdots p_n^{k_n}$ where $p_1$ through $p_n$ are unique primes and $k_1$ through $k_n$ are their powers, then the set $A$ for that particular integer has a cardinality of $(k_1 + 1) \cdot (k_2 + 1) \cdots (k_n + 1)$.
 
+However, while set $A$'s cardinality is easier to explain, since set $B$ always has the same cardinality as $A$, its cardinality is just as easy to determine.
 
 \pagebreak
 # Section 4.4 (p311)
@@ -192,87 +194,96 @@ Therefore, $z = y$ in every possible case, meaning that the function $g$ is one-
 
 ### Part (a)
 
-
+Irreflexive and antisymmetric.
 
 ### Part (b)
 
-
-
-### Part (c)
-
-
-
-### Part (d)
-
-
+Irreflexive, transitive, and antisymmetric.
 
 ## 15. Exercise 14
 
 ### Part (a)
 
-
+$$R = \{(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)\}$$
 
 ### Part (b)
 
-
+$$R = \{(1, 1), (1, 2), (2, 2), (2, 3), (3, 3)\}$$
 
 ### Part (c)
 
-
-
-### Part (d)
-
-
+$$R = \{(1, 2), (1, 3), (2, 3)\}$$
 
 ## 16. Exercise 18
 
 ### Part (a)
 
+True.
 
+Since $R$ is reflexive, $(a, a) \in R$ for all $a \in A$. By definition of an inverse relation, the inverse of every $(a, a) \in R$ is still $(a, a)$, for all $a \in A$. Therefore, the inverse is also a reflexive relation.
 
 ### Part (b)
 
+True.
 
+Since $R$ is antisymmetric, for all $a, b \in A$ where $(a, b) \in R$, we have that $(b, a) \notin R$. By definition of an inverse relation, the inverse of every $(a, b) \in R$ is $(b, a)$. However, since $(b, a) \notin R$, $(a, b) \notin R^{-1}$. Therefore, the inverse is also a antisymmetric relation.
 
 ### Part (c)
 
+True.
 
-
-### Part (d)
-
-
+Since $R$ is transitive, for all $a, b, c \in A$ where $(a, b), (b, c) \in R$, we have that $(a, c) \in R$. By definition of an inverse relation, the inverse of every $(a, b), (b, c), (a, c) \in R$ is $(b, a), (c, b), (c, a) \in R^{-1}$. Since for every $(c, b), (b, a) \in R^{-1}$, we have $(c, a) \in R^{-1}$, the inverse is also a transitive relation.
 
 ## 17. Exercise 22
 
-
+Let elements $a, c \in A$ be given such that $(a, c) \in (R \circ R)$. By definition of a composed relation, $(a, c) \in (R \circ R)$ because $(a, b)$ and $(b, c)$ exist in $R$ for some $b \in A$. Since $R$ is transitive, $(a, c)$ must also exist in $R$. Therefore, by definition of a subset, $(R \circ R)$ is a subset of $R$. $\square$
 
 \pagebreak
 # Section 4.5 (p322)
 
 ## 18. Exercise 9.b
 
+By definition of being transitive that if $(a, b), (b, c) \in R$ then $(a, c) \in R$, in the context of the problem, it means "for all $a, b, c \in \mathbb{Z}$, if $a^2 - b^2$ and $b^2 - c^2$ are both divisible by 5, then $a^2 - c^2$ is also divisible by 5."
 
+To show that the above statement is true, let integers $a, b, c$ be given such that $a^2 - b^2$ and $b^2 - c^2$ are both divisible by 5. Since $a^2 - b^2$ is divisible by 5, by definition, $a^2 - b^2 = 5m$ for some $m \in \mathbb{Z}$. Since $b^2 - c^2$ is divisible by 5, by definition, $b^2 - c^2 = 5n$ for some $n \in \mathbb{Z}$. Now, we have
+$$
+\begin{aligned}
+  a^2 - c^2 &= a^2 - b^2 + b^2 - c^2 \\
+            &= 5m + 5n \\
+            &= 5 \cdot (m + n) \\
+            &= 5q &\text{where }q = m + n
+\end{aligned}
+$$
+
+By closure under addition and multiplication, $q \in \mathbb{Z}$, and by definition of being divisible by 5, $a^2 - c^2$ is divisible by 5. Now, since we showed that if $(a, b), (b, c) \in T_2$ then $(a, c) \in T_2$, by definition of being transitive, the relation $T_2$ is transitive. $\square$
 
 ## 19. Exercise 11
 
+### Part (a)
 
+Let an element $x \in A$ be given. Since $x - x = 0$ which is divisible by 3, $(x, x) \in R$. By definition of being reflexive, $R$ is reflexive.
+
+### Part (b)
+
+Let elements $x, y \in A$ be given such that $(x, y) \in R$, meaning that $x - y$ is divisible by 3. By definition of being divisible by 3, $\exists k \in \mathbb{Z} : 3k = x - y$. Now, $y - x = -(x - y) = -3k = 3 \cdot (-k) = 3n$ for some $n$. By closure under addition and multiplication, $n \in \mathbb{Z}$, and by definition of being divisible by 3, $y - x$ is divisible by 3. Since $(y, x) \in R$, by definition of being symmetric, $R$ is symmetric.
+
+### Part (c)
+
+Let elements $x, y, z \in A$ be given such that $(x, y), (y, z) \in R$, meaning that $x - y$ and $y - z$ are both divisible by 3. Similar to the logic used in *Exercise 9.b*, we can show that if $x - y$ and $y - z$ are both divisible by 3, then $x - z$ is divisible by 3. This means that $(x, z) \in R$, and by definition of being transitive, $R$ is transitive.
+
+### Part (d)
+
+$$\{\{0, 3, 6\}, \{1, 4\}, \{2, 5\}\}$$
 
 ## 20. Exercise 21
 
+**Part I,** show that $R \subseteq R^{-1}$.
 
+Let elements $a, b \in A$ be given such that $(a, b) \in R$. Since $R$ is symmetric, we have that $(b, a) \in R$. Now, because of this, by definition of an inverse relation, $(a, b) \in R^{-1}$. Therefore, by definition of a subset, $R \subseteq R^{-1}$.
 
+**Part II,** show that $R^{-1} \subseteq R$.
 
+Let elements $a, b \in A$ be given such that $(a, b) \in R^{-1}$. By definition of an inverse relation, $(b, a) \in R$. Since $R$ is symmetric, we have that $(a, b) \in R$.Therefore, by definition of a subset, $R^{-1} \subseteq R$.
 
-
-
-
-
-
-
-
-
-
-
-
-
+Therefore, since $R \subseteq R^{-1}$ and $R^{-1} \subseteq R$, we have that $R = R^{-1}$. $\square$
 

@@ -1,0 +1,173 @@
+---
+title: "Homework 4"
+author: "Qianlang Chen"
+
+# CS 3130
+# H 03/05/20
+
+output: pdf_document
+
+header-includes:
+  - \usepackage{setspace}
+  - \linespread{1.5}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+According to the properties of probability mass functions, the total probabality of all possible cases combined should equal to 1. We can form the following equation using this feature:
+$$
+\begin{aligned}
+                                                                           \sum_{i=1}^4 p_i &= 1\\
+                                                          \sum_{i=1}^4 \alpha \cdot (i + 1) &= 1\\
+  \alpha \cdot (1 + 1) + \alpha \cdot (2 + 1) + \alpha \cdot (3 + 1) + \alpha \cdot (4 + 1) &= 1\\
+                                                                                   14\alpha &= 1\\
+                                                                                     \alpha &= \boxed{\frac{1}{14}}
+\end{aligned}
+$$
+
+\pagebreak
+# Problem 2
+
+First, let us find the probability density function of $X$:
+$$
+f(x) = \begin{cases}
+  0, &x < 0\text{ or }x > 2\\
+  \dfrac{1}{b - a} = \dfrac{1}{2-0} = \dfrac{1}{2}, &0 \le x \le 2
+\end{cases}
+$$
+
+According to the *Change-of-variable formula*, we have
+$$
+\begin{aligned}
+  \mathbb{E}(g(X)) &= \int_{-\infty}^{\infty} g(x)\ f(x)\ \text{d}x\\
+                   &= \int_{-\infty}^0 (x^3 + x^2) \cdot 0\ \text{d}x + \int_0^2 (x^3 + x^2) \cdot \frac{1}{2}\ \text{d}x + \int_2^{\infty} (x^3 + x^2) \cdot 0\ \text{d}x\\
+                   &= 0 + \frac{10}{3} + 0\\
+                   &= \boxed{\frac{10}{3}}
+\end{aligned}
+$$
+
+\pagebreak
+# Problem 3
+
+## Part (a)
+
+$$
+P(X = k) = \begin{cases}
+  0, &k \le 0\\
+  (1 - \dfrac{1}{2})^{k-1} \cdot (\dfrac{1}{2})^1 = \dfrac{1}{2^k}, &k > 0
+\end{cases}
+$$
+
+## Part (b)
+
+$$
+\begin{aligned}
+  \mathbb{E}(X) &= \sum_k k \cdot P(X = k)\\
+                &= \sum_{k=1}^{\infty} k \cdot \frac{1}{2^k}\\
+                &= \frac{1}{2} + \frac{2}{4} + \frac{3}{8} + \cdots\\
+                &= \boxed{2}
+\end{aligned}
+$$
+
+\pagebreak
+# Problem 4
+
+**Probability Density Functions**
+
+PDF of $X$:
+$$
+f(x) = \begin{cases}
+  0, &x < -1\text{ or }x > 1\\
+  \dfrac{1}{b - a} = \dfrac{1}{1-(-1)} = \dfrac{1}{2}, &-1 \le x \le 1
+\end{cases}
+$$
+
+PDF of $Y$:
+$$
+f(y) = \begin{cases}
+  0, &y < -4\text{ or }y > 4\\
+  \dfrac{1}{b - a} = \dfrac{1}{4-(-4)} = \dfrac{1}{8}, &-4 \le y \le 4
+\end{cases}
+$$
+
+PDF of $Z$:
+$$
+f(z) = \begin{cases}
+  0, &z < 4\text{ or }z > 6\\
+  \dfrac{1}{b - a} = \dfrac{1}{6-4} = \dfrac{1}{2}, &4 \le z \le 6
+\end{cases}
+$$
+
+**Expected Values**
+
+Expected Value of $X$:
+$$\mathbb{E}(X) = \int_{-\infty}^{\infty} x \cdot f(x)\ \text{d}x = \int_{-1}^1 x \cdot \frac{1}{2}\ \text{d}x = 0$$
+
+Expected Value of $Y$:
+$$\mathbb{E}(Y) = \int_{-\infty}^{\infty} y \cdot f(y)\ \text{d}y = \int_{-4}^4 y \cdot \frac{1}{8}\ \text{d}y = 0$$
+
+Expected Value of $Z$:
+$$\mathbb{E}(Z) = \int_{-\infty}^{\infty} z \cdot f(z)\ \text{d}z = \int_4^6 z \cdot \frac{1}{2}\ \text{d}z = 5$$
+
+**Variances**
+
+Let us use the shortcut formula described in the textbook:
+$$\text{Var}(X) = \mathbb{E}(X^2) - \mathbb{E}^2(X)$$
+
+Variance of $X$:
+$$
+\begin{aligned}
+  \text{Var}(X) &= \mathbb{E}(X^2) - \mathbb{E}^2(X)\\
+                &= \int_{-1}^1 x^2 \cdot \frac{1}{2}\ \text{d}x - 0^2\\
+                &= \frac{1}{3} - 0\\
+                &= \boxed{\frac{1}{3}}
+\end{aligned}
+$$
+
+Variance of $Y$:
+$$
+\begin{aligned}
+  \text{Var}(Y) &= \mathbb{E}(Y^2) - \mathbb{E}^2(Y)\\
+                &= \int_{-4}^4 y^2 \cdot \frac{1}{8}\ \text{d}y - 0^2\\
+                &= \frac{16}{3} - 0\\
+                &= \boxed{\frac{16}{3}}
+\end{aligned}
+$$
+
+Variance of $Z$:
+$$
+\begin{aligned}
+  \text{Var}(Z) &= \mathbb{E}(Z^2) - \mathbb{E}^2(Z)\\
+                &= \int_4^6 z^2 \cdot \frac{1}{2}\ \text{d}z - 5^2\\
+                &= \frac{76}{3} - 25\\
+                &= \boxed{\frac{1}{3}}
+\end{aligned}
+$$
+
+**Observations**
+
+The variances of $X$ and $Z$ are the same because their random variables come from regions with the same size (2) and are both uniform.
+
+\pagebreak
+# Problem 5
+
+## Part (a)
+
+
+
+## Part (b)
+
+
+
+
+
+
+
+
+
+
+
