@@ -160,22 +160,18 @@ $$C(100, 6) = \frac{100!}{(100 - 6)! \times 6!} = \boxed{1,192,052,400}$$
 
 ### Part (b)
 
-  * Number of samples:
-
+Number of samples:
 $$C(100 - 4, 6 - 4) = \frac{96!}{(96 - 2)! \times 2!} = \boxed{4,560}$$
 
-  * Percentage:
-
+Percentage:
 $$\frac{4,560}{1,192,052,400} \approx \boxed{0.000\ 383\%}$$
 
 ### Part (c)
 
-* Number of samples:
-
+Number of samples:
 $$C(100, 6) - C(100 - 4, 6) = 1,192,052,400 - \frac{96!}{(96 - 6)! \times 6!} = \boxed{265,004,096}$$
 
-  * Percentage:
-
+Percentage:
 $$\frac{265,004,096}{1,192,052,400} \approx \boxed{22.2\%}$$
 
 ## 7. Exercise 22
@@ -186,7 +182,7 @@ $$C(20 - 2, 7) = \frac{18!}{(18 - 7)! \times 7!} = \boxed{31,824}$$
 
 $$
 \begin{aligned}
-  C(7 + 5, 5) - C(7, 5) - C(5, 5) &= \frac{12!}{(12 - 5)! \times 5!} \times \frac{7!}{(7 - 5)! \times 5!} \times \frac{5!}{(5 - 5)! \times 5!}\\
+  C(7 + 5, 5) - C(7, 5) - C(5, 5) &= \frac{12!}{(12 - 5)! \times 5!} - \frac{7!}{(7 - 5)! \times 5!} - \frac{5!}{(5 - 5)! \times 5!}\\
                                   &= \boxed{770}
 \end{aligned}
 $$
@@ -236,32 +232,31 @@ $$C(6, 4) = \frac{6!}{(6 - 4)! \times 4!} = \boxed{15}$$
 
 ### Part (c)
 
-
+***// TODO!!!***
 
 ## 11. Exercise 11
 
-
+$$|\{C, H, E, N\}|! = 4! = \boxed{24}$$
 
 ## 12. Exercise 22
 
+  * 4 types of items in total: $n = 4$.
+  
+  * 15 items in total, but with at least 1 of each type: $r = 15 - 4 \times 1 = 11$.
 
+By *Theorem 3*, the total number of ways to buy is
+$$C(n + r - 1, r) = C(4 + 11 - 1, 11) = \frac{14!}{(14 - 11)! \times 11!} = \boxed{364}$$
 
 ## 13. Exercise 26
 
+  * Rewriting the problem: "how many unordered lists of length 2 can be made from the set {Andrew, Bob, Carly, Diane}, with repetitions allowed?"
+  
+  * Answer to the above problem (using *Theorem 3*):
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$$
+\begin{aligned}
+  &n = |\text{\{Andrew, Bob, Carly, Diane\}}| = 4, r = 2;\\
+  &C(n + r - 1, r) = C(4 + 2 - 1, 2) = \frac{5!}{(5 - 2)! \times 2!} = \boxed{10}
+\end{aligned}
+$$
 
