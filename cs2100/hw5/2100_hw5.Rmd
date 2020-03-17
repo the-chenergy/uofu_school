@@ -232,7 +232,11 @@ $$C(6, 4) = \frac{6!}{(6 - 4)! \times 4!} = \boxed{15}$$
 
 ### Part (c)
 
-***// TODO!!!***
+Let a binary sequence of length at most 5 with exactly three "1"s be given. Take the sequence and add another "1" at the end, followed by just enough "0"s to make the sequence 6 bits long. What ends up will be a 6-bit binary sequence with exactly four "1"s.
+
+Similarly, let a binary sequence of length 6 with exactly four "1"s be given. Take the sequence and simply delete the last "1" and everything after it. What ends up will be a binary sequence with exactly three "1"s while being 5-bit or shorter.
+
+Now, since there is a one-to-one correspondence between those two types of binary sequences, there must be the same number of them.
 
 ## 11. Exercise 11
 
