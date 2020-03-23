@@ -155,7 +155,36 @@ The variances of $X$ and $Z$ are the same because their random variables come fr
 \pagebreak
 # Problem 5
 
-not feeling like doing this.
+## Part (a)
+
+```{r}
+# histogram the distribution of 10 thousand random gaussian samples
+hist(rnorm(10000, 0, 1))
+
+# the plot of the probability density function for the above random varibale
+plot(dnorm(seq(-4, 4, length = 10000)))
+```
+
+## Part (b)
+
+```{r}
+# calculates the expected values of (x^4) empirically out of n samples
+calc.e.x4 = function (n)
+{
+  x = 0
+  for (i in 1:n)
+    x = x + rnorm(1, 0, 1)^4
+  
+  return (x / n)
+}
+
+# 10 thousand samples
+print(calc.e.x4(10000))
+
+# 50 thousand samples
+print(calc.e.x4(50000))
+```
+
 
 
 
