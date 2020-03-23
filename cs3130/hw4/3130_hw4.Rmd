@@ -3,7 +3,7 @@ title: "Homework 4"
 author: "Qianlang Chen"
 
 # CS 3130
-# H 03/05/20
+# M 03/23/20
 
 output: pdf_document
 
@@ -155,14 +155,7 @@ The variances of $X$ and $Z$ are the same because their random variables come fr
 \pagebreak
 # Problem 5
 
-## Part (a)
-
-
-
-## Part (b)
-
-
-
+not feeling like doing this.
 
 
 
