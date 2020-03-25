@@ -3,7 +3,7 @@ title: "Homework 5"
 author: "Qianlang Chen"
 
 # CS 2100
-# A 03/14/20
+# M 03/16/20
 
 output: pdf_document
 
