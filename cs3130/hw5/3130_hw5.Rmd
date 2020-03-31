@@ -74,7 +74,7 @@ $$
 
 ## Part (b)
 
-Intuitively, $p_{X}(0) > p_{X}(1)$. The reason is if $X = 1$, then the only value $Y$ can be is 0 for the point to still be inside the unit disk; the probability of $Y = 0$ for a continuous random variable $Y$ is infinitely small. On the other hand, when $X = 0$, $Y$ can be anything between -1 and 1, which happens 100% of the time. Therefore, $p_{X}(0)$ should be greater.
+Intuitively, $p_{X}(0) > p_{X}(1)$. The reason is, if $X = 1$, then the only value $Y$ can be is 0 for the point to still be inside the unit disk; the probability of $Y = 0$ for a continuous random variable $Y$ is infinitely small. On the other hand, when $X = 0$, $Y$ can be anything between -1 and 1, which happens 100% of the time. Therefore, $p_{X}(0)$ should be greater.
 
 ## Part (c)
 
@@ -89,21 +89,39 @@ This is not a valid way to sample uniformly. For example, as described in *Part 
 
 ## Part (a)
 
+By definition of a binomial distribution, the probability of $i$ heads occurring out of $n$ tosses is
+$$P(Y = i) = \binom{n}{i} \cdot p^i \cdot (1 - p)^{n-i}$$
+where $p$ is the probability of heads occurring for a single toss.
 
+Therefore, by definition of an expected value,
+$$
+\begin{aligned}
+  \mathbb{E}[Y] &= \sum_i i \cdot P(Y = i)\\
+                &= \boxed{\sum_{i=0}^n i \cdot \binom{n}{i} \cdot p^i \cdot (1 - p)^{n-i}}
+\end{aligned}
+$$
 
 ## Part (b)
 
-
+Since each toss can be viewed as independent to other tosses, the probability of heads occurring on any toss is $p$. Therefore, by definition of an expected value,
+$$
+\begin{aligned}
+  \mathbb{E}[X_i] &= \sum_i i \cdot P(X_i = i)\\
+                &= 1 \cdot p + 0 \cdot (1 - p)\\
+                &= \boxed{p}
+\end{aligned}
+$$
 
 ## Part (c)
 
-
-
-
-
-
-
-
-
-
+Since the total number heads is equal to the sum of "whether each toss is heads":
+$$Y = \sum_{i=0}^n X_i$$
+we have
+$$
+\begin{aligned}
+  \mathbb{E}[Y] &= \sum_{i=0}^n \mathbb{E}[X_i]\\
+                &= \sum_{i=0}^n p\\
+                &= \boxed{np}
+\end{aligned}
+$$
 
