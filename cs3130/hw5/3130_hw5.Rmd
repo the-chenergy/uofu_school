@@ -1,0 +1,109 @@
+---
+title: "Homework 5"
+author: "Qianlang Chen"
+
+# CS 3130
+# M 03/30/20
+
+output: pdf_document
+
+header-includes:
+  - \usepackage{setspace}
+  - \linespread{1.5}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+## Part (a)
+
+Since a person can only either have a heart attack or not have one,
+$$
+\begin{aligned}
+  P(S = 0) &= P(S = 0 \cap P = 0) + P(S = 0 \cap P = 1)\\
+           &= 0.50 + 0.03\\
+           &= \boxed{0.53}
+\end{aligned}
+$$
+
+## Part (b)
+
+Similarly, since a person is either a smoker or a non-smoker,
+$$
+\begin{aligned}
+  P(H = 0) &= P(H = 0 \cap S = 0) + P(H = 0 \cap S = 1)\\
+           &= 0.50 + 0.44\\
+           &= \boxed{0.94}
+\end{aligned}
+$$
+
+## Part (c)
+
+$$
+\begin{aligned}
+  P(H = 1 | S = 0) &= \frac{P(H = 1 \cap S = 0)}{P(S = 0)}\\
+                   &= \frac{0.03}{0.53}\\
+                   &\approx \boxed{0.057}\\
+  \\
+  P(H = 1 | S = 1) &= \frac{P(H = 1 \cap S = 1)}{P(S = 1)}\\
+                   &= \frac{0.03}{1 - 0.53}\\
+                   &\approx \boxed{0.064}\\
+\end{aligned}
+$$
+
+These two numbers indicate the probability of drawing a non-smoker having heart attack and drawing a smoker having heart attack, respectively. The probability of the latter is higher, which matches our intuition.
+
+## Part (d)
+
+No. According to the results of the calculations done above, $P(H = 1) \ne P(H = 1 | S = 1)$. By definition of independence, the variables $H$ and $S$ are not independent.
+
+\pagebreak
+# Problem 2
+
+## Part (a)
+
+$$
+p_{X, Y}(s, t) = \begin{cases}
+  \dfrac{1}{\pi}, &s^2 + t^2 \le 1\\
+  0,              &s^2 + t^2 > 1
+\end{cases}
+$$
+
+## Part (b)
+
+Intuitively, $p_{X}(0) > p_{X}(1)$. The reason is if $X = 1$, then the only value $Y$ can be is 0 for the point to still be inside the unit disk; the probability of $Y = 0$ for a continuous random variable $Y$ is infinitely small. On the other hand, when $X = 0$, $Y$ can be anything between -1 and 1, which happens 100% of the time. Therefore, $p_{X}(0)$ should be greater.
+
+## Part (c)
+
+$\mathbb{E}[X + Y] = 0$ since $X$ and $Y$ are both symmetric about the origin.
+
+## Part (d)
+
+This is not a valid way to sample uniformly. For example, as described in *Part (b)*, we have $p_{X}(0) > p_{X}(1)$, meaning that $X$ is "denser" around 0 and it is more likely to have an $X$ value close to 0 than one close to 1. Therefore, $X$ cannot be sampled uniformly between [-1, 1] in the first step.
+
+\pagebreak
+# Problem 3
+
+## Part (a)
+
+
+
+## Part (b)
+
+
+
+## Part (c)
+
+
+
+
+
+
+
+
+
+
+
