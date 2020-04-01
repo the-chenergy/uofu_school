@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Since a person can only either have a heart attack or not have one,
 $$
 \begin{aligned}
-  P(S = 0) &= P(S = 0 \cap P = 0) + P(S = 0 \cap P = 1)\\
+  P(S = 0) &= P(S = 0 \cap H = 0) + P(S = 0 \cap H = 1)\\
            &= 0.50 + 0.03\\
            &= \boxed{0.53}
 \end{aligned}
@@ -119,7 +119,8 @@ $$Y = \sum_{i=0}^n X_i$$
 we have
 $$
 \begin{aligned}
-  \mathbb{E}[Y] &= \sum_{i=0}^n \mathbb{E}[X_i]\\
+  \mathbb{E}[Y] &= \mathbb{E}[\sum_{i=0}^n X_i]\\
+                &= \sum_{i=0}^n \mathbb{E}[X_i]\\
                 &= \sum_{i=0}^n p\\
                 &= \boxed{np}
 \end{aligned}
