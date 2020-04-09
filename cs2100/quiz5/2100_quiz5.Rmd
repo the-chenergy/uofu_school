@@ -1,0 +1,223 @@
+---
+title: "Quiz 5 Solutions"
+author: "Qianlang Chen"
+
+# CS 2100
+# H 04/29/20
+
+output: pdf_document
+fontsize: 12pt
+
+header-includes:
+  - \usepackage{setspace}
+  - \linespread{1.125}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+## Part (a)
+
+Ways to have 3 uppercase letters: $26^3$
+
+Ways to have 4 digits: $10^4$
+
+Total ways to have 3 uppercase letters followed by 4 digits: $\boxed{26^3 \times 10^4}$
+
+## Part (b)
+
+Number of outcomes when selecting a single-digit even positive integer: $|\{2, 4, 6, 8\}| = 4$
+
+Number of outcomes of a coin flip: 2
+
+Number of outcomes of drawing a card from a standard deck: 52
+
+Total number of outcomes: $\boxed{4 \times 2 \times 52}$
+
+\pagebreak
+# Problem 2
+
+## Part (a)
+
+Same as the number of ways to get a 10-item permutation out of 200 items:
+$$P(200, 10) = \frac{200!}{(200 - 10)!} = \boxed{\frac{200!}{190!}}$$
+
+## Part (b)
+
+Since given four distinct digits, there is only one way to write them in strictly decreasing order, the answer is the same as the number of ways to get a set of 4 digits out of 10 digits:
+$$C(10, 4) = \frac{10!}{(10 - 4)! \times 4!} = \boxed{\frac{10!}{6! \times 4!}}$$
+
+\pagebreak
+# Problem 3
+
+Ways to arrange the 5 math books: $P(5, 5) = \dfrac{5!}{(5 - 5)!} = 5!$
+
+Ways to arrange the 4 history books: $P(4, 4) = \dfrac{4!}{(4 - 4)!} = 4!$
+
+Ways to arrange the 3 chemistry books: $P(3, 3) = \dfrac{3!}{(3 - 3)!} = 3!$
+
+Ways to arrange the 2 sociology books: $P(2, 2) = \dfrac{2!}{(2 - 2)!} = 2!$
+
+Ways to arrange those 4 subjects: $P(4, 4) = \dfrac{4!}{(4 - 4)!} = 4!$
+
+Total ways to arrange: $\boxed{5! \times 4! \times 3! \times 2! \times 4!}$
+
+\pagebreak
+# Problem 4
+
+## Part (a)
+
+The answer is the same as the number of ways of putting 2 "R"s, 2 "A"s, and 1 "D" into 5 slots.
+
+  * Ways to select 2 slots for the 2 "R"s: $C(5, 2) = \dfrac{5!}{(5 - 2)! \times 2!} = 10$
+  
+  * Ways to select 2 slots for the 2 "A"s from the remaining 3 slots:
+  $$C(3, 2) = \dfrac{3!}{(3 - 2)! \times 2!} = 3$$
+  
+  * The "D" goes into the remaining 1 slot.
+
+Number of total ways: $10 \times 3 = \boxed{30}$
+
+## Part (b)
+
+The answer is the same as the number of ways of putting 3 "U"s, 1 "N", 1 "S", 1 "A", and 1 "L" into 7 slots.
+
+  * Ways to select 3 slots for the 3 "U"s: $C(7, 3) = \dfrac{7!}{(7 - 3)! \times 3!} = \dfrac{7!}{4! \times 3!}$
+  
+  * Ways to select a slot for the "N" from the remaining 4 slots: $C(4, 1) = \dfrac{4!}{(4 - 1)! \times 1!} = \dfrac{4!}{3!} = 4$
+  
+  * Ways to select a slot for the "S" from the remaining 3 slots: $C(3, 1) = \dfrac{3!}{(3 - 1)! \times 1!} = \dfrac{3!}{2!} = 3$
+  
+  * Ways to select a slot for the "A" from the remaining 2 slots: $C(2, 1) = \dfrac{2!}{(2 - 1)! \times 1!} = \dfrac{2!}{1!} = 2$
+  
+  * The "L" goes into the remaining 1 slot.
+
+Number of total ways: $\boxed{\dfrac{7!}{4! \times 3!} \times 4 \times 3 \times 2}$
+
+\pagebreak
+# Problem 5
+
+The answer is the same as the total number of subsets of 12 people, but excluding the subsets with only 0, 1, or 2 people.
+
+  * Total number of subsets formed out of 12 people: $2^{12}$
+  
+  * Number of subsets with 0 people: $C(12, 0) = \dfrac{12!}{(12 - 0)! \times 0!} = 1$
+  
+  * Number of subsets with 1 person: $C(12, 1) = \dfrac{12!}{(12 - 1)! \times 1!} = 12$
+  
+  * Number of subsets with 2 people: $C(12, 2) = \dfrac{12!}{(12 - 2)! \times 2!} = \dfrac{12!}{10! \times 2}$
+
+Final answer: $\boxed{2^{12} - 1 - 12 - \dfrac{12!}{10! \times 2}}$
+
+\pagebreak
+# Problem 6
+
+Total number of ways to promote 2 people out of (8 + 4) people: $C(8 + 4, 2) = \dfrac{12!}{(12 - 2)! \times 2!} = \dfrac{12!}{10! \times 2}$
+
+Total number of ways to promote 2 men out of 8 men: $C(8, 2) = \dfrac{8!}{(8 - 2)! \times 2!} = \dfrac{8!}{6! \times 2}$
+
+Assuming that each person in the office has an equal chance of getting promoted, the probability that 2 promotions being men is
+$$\frac{8!}{6! \times 2} \div \frac{12!}{10! \times 2} = \boxed{\frac{8! \times 10!}{6! \times 12!}}$$
+
+\pagebreak
+# Problem 7
+
+Total number of possible codes: $10^4$
+
+Total number of codes having two "6"s and one "3": same as the number of ways of putting two "6"s, one "3", and one other digit into 4 slots.
+
+  * Ways to select 2 slots for the 2 "6"s: $C(4, 2) = \dfrac{4!}{(4 - 2)! \times 2!} = 6$
+  
+  * Ways to select 1 slot for the "3" from the remaining 2 slots: $C(2, 1) = \dfrac{2!}{(2 - 1)! \times 1!} = 2$
+  
+  * Ways to select a digit (other than "3" or "6") for the remaining slot: $10 - 2 = 8$
+  
+  * Total: $6 \times 2 \times 8 = 96$
+
+Probability of a code having two "6"s and one "3": $\boxed{\dfrac{96}{10^4}}$
+
+\pagebreak
+# Problem 8
+
+Let $E$ be the event that the prize winner comes from the winning team and $F$ be the event that the prize winner is a boy.
+
+Now, the event $(E \cap F)$ means that the prize winner is a boy from the winning team. There are 4 ways for this event to happen since there are 4 boys in the winning team.
+
+Meanwhile, there are 10 ways the event $F$ can happen since there are 10 boys (4 + 6) in total.
+
+Therefore,
+$$P(E|F) = \frac{P(E \cap F)}{P(F)} = \frac{|E \cap F|}{|F|} = \boxed{\frac{4}{10}}$$
+
+\pagebreak
+# Problem 9
+
+## Part (a)
+
+  (1) 0010100001000
+  
+  (2) 0001001000001
+  
+  (3) 1110000000000
+
+## Part (b)
+
+Four types of fruit: $n = 4$
+
+Ten total pieces of fruit: $r = 10$
+
+Total number of ways to buy: $C(r + n - 1, r) = C(10 + 4 - 1, 10) = \dfrac{13!}{(13 - 10)! \times 10!} = \boxed{\frac{13!}{3! \times 10!}}$
+
+## Part (c)
+
+Ways to buy only apples and pears (no oranges or lemons): $n = 2, r = 10$
+$$C(r + n - 1, r) = C(10 + 2 - 1, 10) = \dfrac{11!}{(11 - 10)! \times 10!} = 11$$
+
+Ways to buy apples, pears, and one or more oranges: $n = 3, r = 10 - 1 = 9$
+$$C(r + n - 1, r) = C(9 + 3 - 1, 9) = \dfrac{11!}{(11 - 9)! \times 9!} = \dfrac{11!}{2 \times 9!}$$
+
+Ways to buy apples, pears, and one or more lemons: $n = 3, r = 10 - 1 = 9$
+$$C(r + n - 1, r) = C(9 + 3 - 1, 9) = \dfrac{11!}{(11 - 9)! \times 9!} = \dfrac{11!}{2 \times 9!}$$
+
+Total number of ways to buy:
+$$11 + \dfrac{11!}{2 \times 9!} + \dfrac{11!}{2 \times 9!} = \boxed{11 + \dfrac{11!}{9!}}$$
+
+\pagebreak
+# Problem 10
+
+## Part (a)
+
+Chance of getting a King in one draw: $\dfrac{1}{13}$
+
+Expected number of Kings in one draw: $1 \times \dfrac{1}{13} + 0 \times (1 - \dfrac{1}{13}) = \dfrac{1}{13}$
+
+Expected number of Kings in six draws: $6 \times \dfrac{1}{13} = \boxed{\dfrac{6}{13}}$
+
+## Part (b)
+
+Probability that team A wins with 3-to-0:
+$$C(3 + 0 - 1, 0) \times (\dfrac{6}{10})^3 = \dfrac{2!}{(2 - 0)! \times 0!} \times \dfrac{6^3}{10^3} = \dfrac{6^3}{10^3}$$
+
+Probability that team A wins with 3-to-1:
+$$C(3 + 1 - 1, 1) \times (\dfrac{6}{10})^3 \times (1 - \dfrac{6}{10}) = \dfrac{3!}{(3 - 1)! \times 1!} \times \dfrac{6^3}{10^3} \times \dfrac{4}{10} = \dfrac{3 \times 6^3 \times 4}{10^4}$$
+
+Probability that team A wins with 3-to-2:
+$$C(3 + 2 - 1, 2) \times (\dfrac{6}{10})^3 \times (1 - \dfrac{6}{10})^2 = \dfrac{4!}{(4 - 2)! \times 2!} \times \dfrac{6^3}{10^3} \times \dfrac{4^2}{10^2} = \dfrac{4 \times 6^3 \times 4^2}{10^5}$$
+
+Total probability that team A wins:
+$$\boxed{\dfrac{6^3}{10^3} + \dfrac{3 \times 6^3 \times 4}{10^4} + \dfrac{4 \times 6^3 \times 4^2}{10^5}}$$
+
+
+
+
+
+
+
+
+
+
+
+
+
