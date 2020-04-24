@@ -3,7 +3,7 @@ title: "Quiz 5 Solutions"
 author: "Qianlang Chen"
 
 # CS 2100
-# H 04/29/20
+# H 03/29/20
 
 output: pdf_document
 fontsize: 12pt
