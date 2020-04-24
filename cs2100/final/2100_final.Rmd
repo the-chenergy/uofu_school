@@ -199,13 +199,13 @@ Therefore, by definition of an event's complement, the probability of getting at
 
 ## Part (b)
 
-Since each team in each round have a $\dfrac{1}{2}$ chance of beating the other team and there are 3 rounds, it means that each team has a $(\dfrac{1}{2})^3 = \dfrac{1}{8}$ chance of winning the entire tournament.
+Since each team in each round have a $\dfrac{1}{2}$ chance of beating the other team and there are 3 rounds, it means that each person playing the guessing game has a $(\dfrac{1}{2})^4 \times (\dfrac{1}{2})^2 \times \dfrac{1}{2} = \dfrac{1}{128}$ chance of guessing every outcome correctly.
 
-This also means that a person predicting the result has a $\dfrac{1}{8}$ chance to win $20 - 2 = 18$ dollars and has a $\dfrac{7}{8}$ chance of losing 2 dollars.
+This also means that a person playing the guessing game has a $\dfrac{1}{127}$ chance to win $20 - 2 = 18$ dollars and has a $\dfrac{127}{128}$ chance of losing 2 dollars.
 
 Therefore, each person is expected to win
-$$\frac{1}{8} \times 18 + \frac{7}{8} \times (-2) = \boxed{0.5}$$
-dollars when playing this predicting game.
+$$\boxed{\frac{1}{128} \times 18 + \frac{127}{128} \times (-2)}$$
+dollars when playing this guessing game.
 
 \pagebreak
 # Problem 9
