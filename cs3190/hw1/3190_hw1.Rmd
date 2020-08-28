@@ -1,0 +1,132 @@
+---
+title: "Homework 1"
+author: "Qianlang Chen"
+
+# CS 3190
+# H 08/27/20
+
+output: pdf_document
+fontsize: 12pt
+
+header-includes:
+  - \usepackage{setspace}
+  - \linespread{1.25}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+## Part (a)
+
+$$
+\begin{aligned}
+  P(Y \ne 1) &= P(Y = 0)\\
+             &= P(Y = 0 \cap X = 0) + P(Y = 0 \cap X = 1)\\
+             &= 0.4 + 0.1\\
+             &= \boxed{0.5}
+\end{aligned}
+$$
+
+## Part (b)
+
+$$P(X = 1 \cap Y = 0) = \boxed{0.1}$$
+
+## Part (c)
+
+$$
+\begin{aligned}
+  P(X = 1 | Y = 0) &= P(X = 1 \cap Y = 0) \div P(Y = 0)\\
+                   &= 0.1 \div 0.5\\
+                   &= \boxed{0.2}
+\end{aligned}
+$$
+
+## Part (d)
+
+Yes since the probability of X being some value does not depend on the value of Y, which is the definition of independence. For example,
+$$P(X = 1) = 0.1 + 0.1 = 0.2 = P(X = 1 | Y = 0) = P(X = 1 | Y = 1)$$
+
+\pagebreak
+# Problem 2
+
+## Part (a)
+
+For $i \in \{1, 2, \cdots, 8\}$, by linearity of expectation, we have
+$$
+\begin{aligned}
+  E(C_i) &= E[A_i \times E(M_{ji})]\\
+         &= E(A_i) \times E(M_{ji})\\
+         &= [2P(A_i = 2) + 1P(A_i = 1)] \times [1P(M_{ji} = 1) + 0P(M_ji = 0)]\\
+         &= (2 \times 0.5 + 1 \times 0.5) \times (1 \times 0.7)\\
+         &= \boxed{1.05}
+\end{aligned}
+$$
+
+## Part (b)
+
+Since $C_i$ is the same for every $i \in \{1, 2, \cdots, 8\}$, the answer is
+$$8 \times E(C_i) = 8 \times 1.05 = \boxed{8.4}$$
+
+## Part (c)
+
+For $i \in \{9, 10, 11, 12\}$, by linearity of expectation, we have
+$$
+\begin{aligned}
+  E(C_i) &= E[A_i \times E(M_{ji})]\\
+         &= E(A_i) \times E(M_{ji})\\
+         &= [2P(A_i = 2) + 1P(A_i = 1)] \times [1P(M_{ji} = 1) + 0P(M_ji = 0)]\\
+         &= (2 \times 0.5 + 1 \times 0.5) \times (1 \times 0.6)\\
+         &= \boxed{0.9}
+\end{aligned}
+$$
+
+## Part (d)
+
+Since $C_i$ is the same for every $i \in \{9, 10, 11, 12\}$, the answer is
+$$4 \times E(C_i) = 4 \times 0.9 = \boxed{3.6}$$
+
+## Part (e)
+
+$$C_1 + C_2 + ... + C_{12} = 8.4 + 3.6 = \boxed{12}$$
+
+## Part (f)
+
+By linearity of expectation,
+$$
+\begin{aligned}
+  E(\text{Points}) &= E(3 \times \text{Field goals made})\\
+                   &= 3 \times E(\text{Field goals made})\\
+                   &= 3 \times 12\\
+                   &= \boxed{36}
+\end{aligned}
+  $$
+
+
+\pagebreak
+# Problem 3
+
+## Part (a)
+
+
+
+## Part (b)
+
+
+
+\pagebreak
+# Problem 4
+
+
+
+
+
+
+
+
+
+
+
+
