@@ -30,20 +30,20 @@
 
 \vspace{3em}
 
-\makebox[4.3cm]{Name:} Qianlang Chen
+\makebox[4.3cm]{Name: Qianlang Chen}
 \par
-\makebox[4.3cm]{uID:} u1172983
+\makebox[4.3cm]{uID: u1172983}
 \par
 
 \vfill
 
 \subsubsection*{Submission notes}
 \begin{itemize}
-	\item Due at 11:59 pm on Friday, September 11.
-	\item Solutions must be typeset using one of the template files. For each problem, your answer must fit in the space provided (e.g. not spill onto the next page) *without* space-saving tricks like font/margin/line spacing changes.
-	\item Upload a PDF version of your completed problem set to Gradescope.
-	\item Teaching staff reserve the right to request original source/tex files during the grading process, so please retain these until an assignment has been returned.
-	\item Please remember that for problem sets, collaboration with other students must be limited to a high-level discussion of solution strategies. If you do collaborate with other students in this way, you must identify the students and describe the nature of the collaboration. You are not allowed to create a group solution, and all work that you hand in must be written in your own words. Do not base your solution on any other written solution, regardless of the source.
+  \item Due at 11:59 pm on Friday, September 11.
+  \item Solutions must be typeset using one of the template files. For each problem, your answer must fit in the space provided (e.g. not spill onto the next page) *without* space-saving tricks like font/margin/line spacing changes.
+  \item Upload a PDF version of your completed problem set to Gradescope.
+  \item Teaching staff reserve the right to request original source/tex files during the grading process, so please retain these until an assignment has been returned.
+  \item Please remember that for problem sets, collaboration with other students must be limited to a high-level discussion of solution strategies. If you do collaborate with other students in this way, you must identify the students and describe the nature of the collaboration. You are not allowed to create a group solution, and all work that you hand in must be written in your own words. Do not base your solution on any other written solution, regardless of the source.
 \end{itemize}
 
 \pagebreak
@@ -51,33 +51,71 @@
 
 \begin{enumerate}
 
-	\item (Big-$\Theta$)
+  \item (Big-$\Theta$) Proof: to use the definition of Big-$\Theta$, we need to show both $\log(n!) = O[n\log(n)]$ and $\log(n!) = \Omega[n\log(n)]$.
 
-	      % answer question 1 here
+    \begin{itemize}
+      \item \textbf{Part I:} show that $\log(n!) = O[n\log(n)]$, that is, there exist constants $c, k > 0$ such that $\log(n!) \le c \cdot n\log(n)$ for all $n \ge k$.
 
-	      \pagebreak
+        Proof: let $c = 1$ and $k = 100$. Now, for all $n \ge 100$, we have
+        \begin{displaymath}
+          \begin{aligned}
+            \log(n!)      & \le 1 \cdot n\log(n)                                        \\
+            \log(n!)      & \le \log(n^n)                                               \\
+            10^{\log(n!)} & \le 10^{\log(n^n)}                                          \\
+            n!            & \le n^n                                                     \\
+            \underbrace{n \cdot (n-1) \cdot (n-2) \cdots 1}_{n\text{ items}}
+                          & \le \underbrace{n \cdot n \cdot n\cdots n}_{n\text{ items}}
+          \end{aligned}
+        \end{displaymath}
+        (Since each factor gets smaller on the left-hand side whereas it stays constant on the right-hand side.)
 
-	\item (Party Planning)
+        Therefore, by definition of Big-O, $\log(n!) = O[n\log(n)]$.
 
-	      % answer question 2 here
+      \item \textbf{Part II:} show that $\log(n!) = \Omega[n\log(n)]$, that is, there exist constants $c, k > 0$ such that $\log(n!) \ge c \cdot n\log(n)$ for all $n \ge k$.
 
-	      \pagebreak
+        Proof: let $c = \frac{1}{4}$ and $k = 100$. Now, for all $n \ge 100$, we have
+        \begin{displaymath}
+          \begin{aligned}
+            \log(n!)      & \ge \frac{1}{4} \cdot n\log(n)                                                      \\
+            \log(n!)      & \ge \log(n^{\frac{n}{4}})                                                           \\
+            10^{\log(n!)} & \ge 10^{\log(n^{n/4})}                                                              \\
+            n!            & \ge n^\frac{n}{4}                                                                   \\
+            n!            & \ge (\sqrt{n})^{\frac{n}{2}}                                                        \\
+            \underbrace{n \cdot (n-1) \cdots (\frac{n}{2}+1)}_{\frac{n}{2}\text{ items}}
+            \cdot \frac{n}{2} \cdots 1
+                          & \ge \underbrace{\sqrt{n} \cdot \sqrt{n} \cdots \sqrt{n}}_{\frac{n}{2}\text{ items}}
+          \end{aligned}
+        \end{displaymath}
+        (Since $\frac{n}{2} > \sqrt{n}$ for all $n \ge 100$, meaning that the first $\frac{n}{2}$ factors on the left-hand side are all greater than $\sqrt{n}$.)
 
-	\item (Amortized ArrayList)
+        Therefore, by definition of Big-$\Omega$, $\log(n!) = \Omega[n\log(n)]$.
+    \end{itemize}
 
-	      % answer question 3 here
+    Since we have managed to show both $\log(n!) = O[n\log(n)]$ and $\log(n!) = \Omega[n\log(n)]$, by definition of Big-$\Theta$, $\log(n!) = \Theta[n\log(n)]$. $\square$
 
-	      \pagebreak
+    \pagebreak
 
-	\item (Sorting)
+  \item (Party Planning)
 
-	      % answer question 4 here
+    % answer question 2 here
 
-	      \pagebreak
+    \pagebreak
 
-	\item (Erickson 1.37)
+  \item (Amortized ArrayList)
 
-	      % answer question 5 here
+    % answer question 3 here
+
+    \pagebreak
+
+  \item (Sorting)
+
+    % answer question 4 here
+
+    \pagebreak
+
+  \item (Erickson 1.37)
+
+    % answer question 5 here
 
 \end{enumerate}
 
