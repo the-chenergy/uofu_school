@@ -16,6 +16,7 @@
 \cfoot{\small \thepage/\pageref*{LastPage}}
 \rfoot{}
 
+\usepackage{graphicx}
 
 \newcommand{\pname}[1]{\textnormal{\textsc{#1}}}
 
@@ -69,7 +70,7 @@
         \end{displaymath}
         (Since each factor gets smaller on the left-hand side whereas it stays constant on the right-hand side.)
 
-        Therefore, by definition of Big-O, $\log(n!) = O[n\log(n)]$.
+        Therefore, by definition of Big-Oh, $\log(n!) = O[n\log(n)]$.
 
       \item \textbf{Part II:} show that $\log(n!) = \Omega[n\log(n)]$, that is, there exist constants $c, k > 0$ such that $\log(n!) \ge c \cdot n\log(n)$ for all $n \ge k$.
 
@@ -101,15 +102,62 @@
 
     \pagebreak
 
-  \item (Amortized ArrayList)
+  \item (Amortized ArrayList) Proof: the {\tt ArrayList} needs to resize once the number of contained elements reaches $n$; so does it once it reaches $(n + c), (n + 2c)$, and so on. During $k$ {\tt add\_end()} calls, the {\tt ArrayList} has to resize approximately $\frac{k-n}{c}$ times, since each resize gives it the space for $c$ additional elements. (The error in the number of times it needs to resize due to $(k - n)$ not being a multiple of $c$ will get smaller as $k$ gets large.) Since the {\tt ArrayList} needs to resize so many times when $k$ is large, the run time of $k$ {\tt add\_end()} function calls is dominated by the time spent resizing and copying the elements:
+    $$T(k) \approx \underbrace{n + (n + c) + (n + 2c) + \cdots}_{\sim (k-n) / c\text{ items}}$$
 
-    % answer question 3 here
+    We can evaluate/approximate the above sum by visualizing it with the following triangle:
+    $$
+      \sim \frac{k-n}{c}\text{ items} \begin{cases}
+         & n                                                               \\
+         & n + c                                                           \\
+         & n + c + c                                                       \\
+         & \vdots                                                          \\
+         & \underbrace{n + c + c + \cdots + c}_{\sim (k-n)/c\text{ items}}
+      \end{cases}
+      \begin{aligned}
+        \implies T(k) & \approx \text{The area of the triangle}                                             \\
+                      & \approx (\frac{k-n}{c}) \cdot n + \frac{1}{2}(\frac{k-n}{c})(\frac{k-n}{c}) \cdot c \\
+                      & \approx \boxed{\frac{kn-n}{c} + \frac{k^2 - 2kn + n^2}{2c}}
+      \end{aligned}
+    $$
+
+    Since $T(k) \ge \frac{1}{2c} \cdot k^2$ for all $k \ge 2n$, by definition of Big-$\Omega$, $T(k) = \Omega(k^2)$. Therefore, $T(k)$ is not $O(k)$. $\square$
 
     \pagebreak
 
-  \item (Sorting)
+  \item (Sorting) Proof: the first thing to observe is that the run time of the {\tt sorted()} function is $O(r)$ in the worst case, where $r$ is the value of the {\tt right} input.
 
-    % answer question 4 here
+    Now, let us consider the worse-case scenario for the entire algorithm.
+
+      {\tt mergesort2()} is mostly the same as a regular merge-sort, and the only difference is that this new algorithm calls the {\tt sorted()} function at each recursion level before the regular routine. In the worse-case, the {\tt sorted()} function returns {\tt false} every time, forcing the algorithm to do the regular merge-sort. Following this idea, let $T(n, l, r)$ represent the run time of {\tt mergesort2()} with data size $n$ and values of the arguments {\tt left} and {\tt right} being $l$ and $r$, and we have
+    $$
+      \begin{aligned}
+        T(n, l, r) & = T_{\text{sorted}}(r) + T(\frac{n}{2}, l, \frac{l+r}{2})
+        + T(\frac{n}{2}, \frac{l+r}{2}, r) + T_{\text{merge}}(n)                                          \\
+                   & = O(r) + T(\frac{n}{2}, l, \frac{l+r}{2}) + T(\frac{n}{2}, \frac{l+r}{2}, r) + O(n); \\
+        T(n)       & = T(n, 0, n)
+      \end{aligned}
+    $$
+    This is better visualized with the following recursion tree, where the values in each node is formatted as $\boxed{T_{\text{sorted}}(r) + T_{\text{merge}}(n)}$:
+
+    \includegraphics[width=\linewidth]{./images/q4_1.png}
+
+    The total run time of {\tt mergesort2()} is the sum of the run times for all levels, the values to the right of the tree:
+    $$
+      \begin{aligned}
+        T(n) & = \overbrace{2n + \frac{5n}{2} + \frac{7n}{2} + \frac{11n}{2} + \cdots}^{\log_2(n)\text{ items}}      \\
+             & = 2n + (2n + \frac{n}{2}) + (2n + \frac{3n}{2}) + (2n + \frac{7n}{2})
+        + \cdots + (2n + (2^{\log_2(n)}-1)\frac{n}{2})                                                               \\
+             & = \log_2(n) \cdot 2n + (\frac{n}{2} + \frac{3n}{2} + \frac{7n}{2}
+        + \cdots + (n - 1)\frac{n}{2})                                                                               \\
+             & = 2n\log_2(n) + (\frac{2n}{2} - \frac{n}{2} + \frac{4n}{2} - \frac{n}{2} + \frac{8n}{2} - \frac{n}{2}
+        + \cdots+ n\frac{n}{2} - \frac{n}{2})                                                                        \\
+             & = 2n\log_2(n) + \frac{n}{2} \cdot (2 + 4 + 8 + \cdots + n) - \frac{n}{2} \cdot \log_2(n)              \\
+             & = \frac{3n\log_2(n)}{2} + n(n - 1) = \boxed{\frac{3n\log_2(n)}{2} + n^2 - n}
+      \end{aligned}
+    $$
+
+    Now, since we have $T(n) \le 2n^2$ for all $n \ge 1$, by definition of Big-Oh, $T(n) = O(n^2)$. $\square$
 
     \pagebreak
 
