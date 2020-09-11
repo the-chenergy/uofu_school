@@ -98,18 +98,18 @@
 
   \item (Party Planning) \textbf{(a)} Proof: first, this algorithm's result is guaranteed to not contain a single lonely person, because the algorithm would've uninvited that person from the \texttt{while} loop which constantly checks for lonely people.
 
-    Moreover, this algorithm's result is guaranteed to be the \textit{largest} correct subset. The algorithm starts with the complete set of friends and uninvites a person only if it's necessary, that is, only if that person does not have enough friends. It then stops at the first moment when everyone in the invite-list has enough friends, meaning that the subset cannot possibly have a single extra person that is not lonely because the algorithm would've stopped by then.
+    Moreover, this algorithm's result is guaranteed to be the \textit{largest} correct subset. The algorithm starts with the complete set of friends and uninvites a person only if it's necessary, that is, only if that person does not have enough friends. It then stops at the first moment when everyone in the invite-list has enough friends, meaning that the subset cannot possibly have a single extra person that is not lonely because the algorithm would've halted by then.
 
     Combining the above two points, the algorithm is correct as it always returns the largest subset of friends in which no one is lonely. $\square$
 
-    \textbf{(b)} The basic idea is to use a Depth-First Search. Using Java's terminologies, let us set up the local variables and helper functions as follows:
+    \textbf{(b)} The basic idea is to use a Depth-First Search. Using Java's terminologies, we can set up the local variables and helper functions as follows:
     \begin{itemize}
       \item \texttt{invited} is a \texttt{LinkedHashMap<String, Vertex>}, representing a graph of friendships with each person being a vertex and each friendship being an edge.
         \begin{itemize}
           \item The \texttt{Vertex} class has the following fields:\\
             \texttt{bool visited, int indegree, ArrayList<Vertex> adjVertices}.
-          \item We assume that the input of the program gives a list of names, and the \texttt{String} here keeps track of them.
-          \item A \texttt{LinkedHashMap} allows $O(1)$-time insertion and lookup, and it's more friendly for traversal than a regular hash-map.
+          \item We assume that the input of the program gives a list of names, and the \texttt{String} here maps them to the people's representative vertices.
+          \item A \texttt{LinkedHashMap} allows $O(1)$-time insertion and lookup, and it's more friendly for traversals than a regular hash-map.
         \end{itemize}
       \item \texttt{initialize()} takes in a list of edges as the friendships. It sets up the \texttt{invited} graph so that each vertex has the friends of that person being in the \texttt{adjVertices} and the number of friends being the \texttt{indegree}. (Time complexity: $O(n)$ with $n$ being the number of edges/friendships.)
       \item Before the \texttt{while} loop, setup a \texttt{Stack<Vertex>} for the Depth-First Search. It initially contains vertices with \texttt{indegree} of four or less. (Time complexity for adding initial values: $O(n)$ since the number of vertices is at most $2n$ for this problem.)
@@ -178,68 +178,67 @@
 
     \pagebreak
 
-  \item (Erickson 1.37) \textbf{(a)} As follows:
+  \item (Erickson 1.37) \textbf{(a)} As follows: (note: I've added an extra return value to make the algorithm work. The first two return values are as required, and \texttt{curr\_depth} records the depth of the largest complete subtree rooted at the input node \texttt{curr}.)
     \begin{center}
-      \begin{minipage}{0.875\linewidth}
+      \begin{minipage}{0.9375\linewidth}
+        \renewcommand{\thealgocf}{}
         \begin{algorithm}[H]
           \caption{\tt largest\_complete\_subtree}
           \KwIn{\tt BinaryNode curr}
-          \KwOut{\tt (BinaryNode root, int depth)}
+          \KwOut{\tt (BinaryNode root, int depth, int curr\_depth)}
 
           \texttt{\\}
 
-          \If{\texttt{curr} is null}
+          \If {\texttt{curr} is null}
           {
-            \Return{\tt (null, -1)}
+            \Return{\tt (null, -1, -1)}
           }
 
-          \texttt{\\}
+          \texttt{left\_result} $\gets$ \texttt{largest\_complete\_subtree(curr.left)}
 
-          $\texttt{left\_result} \gets \texttt{largest\_complete\_subtree(curr.left)}$
+          \texttt{right\_result} $\gets$ \texttt{largest\_complete\_subtree(curr.right)}
 
-          $\texttt{right\_result} \gets \texttt{largest\_complete\_subtree(curr.right)}$
-
-          \texttt{\\}
-
-          \If{the two resulting depths are equal}
+          \If{\texttt{left\_result.curr\_depth} $=$ \texttt{right\_result.curr\_depth}}
           {
-            \If{the two resulting roots are \texttt{curr}'s two children}
-            {
-              \Return{\tt (curr, left\_result.depth + 1)}
-            }
-            \Else
-            {
-              \Return{\tt left\_result}
-            }
-          }
-
-          \texttt{\\}
-
-          \If{\texttt{left\_result.depth} is greater than \texttt{right\_result.depth}}
-          {
-            \Return{\tt left\_result}
+            \texttt{new\_curr\_depth} $\gets$ (\texttt{left\_result.curr\_depth + 1)}
           }
           \Else
           {
-            \Return{\tt right\_result}
+            \texttt{new\_curr\_depth} $\gets$ (1 \textbf{if} \texttt{curr} has two non-null children; \textbf{else} 0)
           }
+
+          \If{\texttt{new\_curr\_depth} $>$ both children's depth}
+          {
+            \Return{\tt (curr, new\_curr\_depth, new\_curr\_depth)}
+          }
+          \If{\texttt{left\_result.depth} $>$ \texttt{right\_result.depth}}
+          {
+            \Return{\tt (left\_result.root, left\_result.depth, new\_curr\_depth)}
+          }
+
+          \Return{\tt (right\_result.root, right\_result.depth, new\_curr\_depth)}
         \end{algorithm}
       \end{minipage}
     \end{center}
 
     \textbf{(b)} Proof: Let's define that, when the input is \texttt{null}, its largest complete subtree (LCS) has a \texttt{null} root and a depth of -1. This doesn't make much sense, but based on the algorithm, this implies that the LCS for a node with no children is rooted at itself with a depth of 0, which is correct for a base case.
 
-    Imagine a node $N$ with at least one child. For an inductive hypothesis, let's assume that the algorithm always returns correct results when called with either of its children $L$ and $R$. Now, there are several possible scenarios:
+    Imagine a node $N$ with children $L$ and $R$ (which may or may not be \texttt{null}). For an inductive hypothesis, let's assume that the algorithm always returns correct results when called with both $L$ and $R$. That is, the algorithms correctly returns the roots ($L_r,R_r$) and depths ($L_d,R_d$) of the LCS \textit{within} subtrees $L$ and $R$, as well as the depths ($L_c,R_c$) of the LCS \textit{rooted at} $L$ and $R$. Now, based on these values, let's check if the algorithm produces correct results for $N$.
     \begin{itemize}
-      \item If the LCS for both children have the same depth $d$ and are rooted at $L$ and $R$, then $N$ is complete. Thus, the LCS for $N$ is rooted at $N$ with depth $(d + 1)$, which is correct for the algorithm.
-      \item If the LCS for both children have the same depth but are not both rooted at the children, then $N$ is incomplete. Thus, both of the resulting LCS are valid answers for the LCS for $N$, which is correct for the algorithm.
-      \item If the LCS for both children don't have the same depth, then $N$ is incomplete. The answer here should be whichever resulting LCS with the largest depth, which is correct for the algorithm.
+      \item The algorithm first checks what depth the LCS \textit{rooted at} $N$ can possibly have ($N_c$). If $L_c=R_c$, then $N$ can join its children to make a complete subtree with depth $N_c=L_c+1$. Otherwise, $N_c$ can only be either 1 (if $N$ has two non-null children) or 0 (where $N$ can only make an LCS by itself). The algorithm always produces the correct value.
+
+      \item The algorithm then works out what the LCS is \textit{within} the subtree $N$. It compares the depths of the LCS found by $N$'s children ($L_d$ and $R_d$) along with $N_c$. Out of these three candidates, the algorithm returns the LCS with the greatest depth, which is correct.
     \end{itemize}
     Therefore, the algorithm always returns the correct results when called with $N$, completing the inductive step. $\square$
 
-    \textbf{(c)} The worst-case input for this algorithm is a tree with all nodes only having a left-child, except for the one leaf. If the input size was $n$, the algorithm would be forced to call itself $n$ times for the left children alone, each time with an input-size-decrease of only one:
-    $$T(n) = T(n - 1) + O(1)$$
-    Which simplifies to $T(n) = O(n)$ (algebra work omitted). $\square$
+    \textbf{(c)} The two possible worst-case inputs are (1) a tree with all nodes only having a left-child (or right-child), except for the one leaf, and (2) a completely balanced binary tree. If the input size was $n$, this is how the algorithm's run time would behave in each of the extreme cases:
+    $$
+      \begin{aligned}
+        \text{Case (1): } & T(n) = T(n - 1) + O(1); \\
+        \text{Case (2): } & T(n) = 2T(n/2) + O(1)
+      \end{aligned}
+    $$
+    Which simplifies to $T(n) = O(n)$ in both cases (algebra work omitted). $\square$
 
 \end{enumerate}
 
