@@ -17,11 +17,21 @@ class Tree
   constructor(json)
   {
     for (let data of json)
-      this.nodes.set(data.name, new Node(data.name, data.parent));
+    {
+      let node = new Node(data.name, data.parent);
+      this.nodeArray.push(node);
+      this.nodes.set(data.name, node);
+    }
     // each map entry now has node_name -> node_ref.
   }
 
   ////// FIELDS ////////////////////////////////////////////////////////////////
+
+  /**
+   * The array of nodes, as required to be created by the constructor. (Why use
+   * an array when a map fits better for this problem?)
+   */
+  nodeArray = [];
 
   /**
    * The collection of nodes, with each node's name mapped to a reference to a
