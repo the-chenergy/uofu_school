@@ -1,0 +1,150 @@
+Creating a user_status object:
+------------------------------
+      ==> status::status
+      <-- status::status
+    ==> observable::observable
+    <-- observable::observable
+    ==> remote::remote
+    <-- remote::remote
+  ==> user_status::user_status
+  <-- user_status::user_status
+
+Setting the user status to "active" (through a user_status *):
+--------------------------------------------------------------
+  ==> user_status::set
+    ==> observable::set
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+      ==> status::set
+      <-- status::set
+    ==> observable::notify_observers
+    <-- observable::notify_observers
+    <-- observable::set
+    ==> remote::set
+    ==> remote::set_remote_status
+    <-- remote::set_remote_status
+      ==> status::set
+      <-- status::set
+    <-- remote::set
+  <-- user_status::set
+
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+
+User status is now active.
+
+Setting the user status to "afk" (through a remote *):
+------------------------------------------------------
+  ==> user_status::set
+    ==> observable::set
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+      ==> status::set
+      <-- status::set
+    ==> observable::notify_observers
+    <-- observable::notify_observers
+    <-- observable::set
+    ==> remote::set
+    ==> remote::set_remote_status
+    <-- remote::set_remote_status
+      ==> status::set
+      <-- status::set
+    <-- remote::set
+  <-- user_status::set
+
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+
+User status is now afk.
+
+Setting the user status to "online" (through an observable *):
+--------------------------------------------------------------
+  ==> user_status::set
+    ==> observable::set
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+      ==> status::set
+      <-- status::set
+    ==> observable::notify_observers
+    <-- observable::notify_observers
+    <-- observable::set
+    ==> remote::set
+    ==> remote::set_remote_status
+    <-- remote::set_remote_status
+      ==> status::set
+      <-- status::set
+    <-- remote::set
+  <-- user_status::set
+
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+
+User status is now online.
+
+Setting the user status to "ready" (through a status *):
+------------------------------------------------------------
+  ==> user_status::set
+    ==> observable::set
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+      ==> status::set
+      <-- status::set
+    ==> observable::notify_observers
+    <-- observable::notify_observers
+    <-- observable::set
+    ==> remote::set
+    ==> remote::set_remote_status
+    <-- remote::set_remote_status
+      ==> status::set
+      <-- status::set
+    <-- remote::set
+  <-- user_status::set
+
+    ==> remote::get
+    ==> remote::has_remote_changed
+    <-- remote::has_remote_changed
+      ==> status::get
+      <-- status::get
+    <-- remote::get
+
+User status is now ready.
+
+Cleaning up:
+------------
+  ==> user_status::~user_status
+  <-- user_status::~user_status
+    ==> remote::~remote
+    <-- remote::~remote
+    ==> observable::~observable
+    <-- observable::~observable
+      ==> status::~status
+      <-- status::~status
+

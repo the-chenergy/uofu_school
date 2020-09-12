@@ -1,0 +1,13 @@
+BasedOnStyle: LLVM
+Language: Cpp
+
+
+AllowShortFunctionsOnASingleLine: None
+BreakBeforeBraces: Allman
+IndentCaseLabels: true
+IndentWidth: 2
+KeepEmptyLinesAtTheStartOfBlocks: false
+NamespaceIndentation: All
+TabWidth: 2
+UseTab: Never
+

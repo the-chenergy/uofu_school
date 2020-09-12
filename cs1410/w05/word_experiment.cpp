@@ -1,0 +1,136 @@
+/**
+ * 
+ * Given a string (without spaces), this program will count the number
+ * of vowels the string has, the reversed version of the string, and
+ * whether the string is a palindrome (identical forward and backward).
+ * 
+ * ========
+ * 
+ * Qianlang Chen
+ * u1172983
+ * Fri, Sept 14, 2018
+ * 
+ */
+
+//////// INCLUDES ////////
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//////// FORWARD DECLARATIONS ////////
+
+// Forward declaration of a function.  This declares the function,
+//   but does not define it.  (Notice that there is no code, just
+//   a function header with a semicolon after it.
+
+int count_vowels(string input);
+string reverse(string input);
+bool is_palindrome(string input);
+
+//////// MAIN FUNCTION ////////
+
+/**
+ * Our main function.  This is a experiment for lab #4.
+ *
+ * Parameters:
+ *    none
+ *
+ * Return value:
+ *    0 if we complete successfully, 1 if there was an error.
+ */
+int main()
+{
+  string input;
+  
+  // Get a word from the user.
+  
+  cout << "Enter a word: ";
+  cin >> input;
+  
+  // Print out the original word.
+  
+  cout << "You entered this word: " << input << endl;
+  
+  // Count the vowels in the word.
+  
+  cout << "Number of vowels in the word: " << count_vowels(input) << endl;
+  
+  // Determine if the word is a palindrome.
+  
+  cout << "This word is " << (is_palindrome(input) ? "" : "not ")
+       << "a palindrome." << endl;
+  
+  // Print out the reverse of the word.
+  
+  cout << "Reverse of this word: " << reverse(input) << endl;
+  
+  // Done, exit the application.
+  
+  return 0;  // no error, so we return a 0.
+}
+
+//////// FUNCTIONS ////////
+
+/**
+ * This function counts the number of a, e, i, o, or u characters
+ * in a text string.
+ *
+ * Parameters:
+ *    string input -- any text string
+ *
+ * Return value:
+ *    int -- the number of vowels in the word
+ */
+int count_vowels(string input)
+{
+  int count = 0;
+  int position = 0;
+  while (position < input.length())
+  {
+    char ch;
+    ch = input[position];
+    if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+      count++;
+    position++;
+  }
+  return count;
+}
+
+/**
+ * Reverses the order of the characters in a string.
+ * 
+ * Params:
+ *   string input -- any text string.
+ * 
+ * Returns:
+ *   string -- the reverse of the original string.
+ */
+string reverse(string input)
+{
+  string output = input;
+  int position = 0, length = input.length();
+  while (position < length)
+  {
+    output[position] = input[length - position - 1];
+    position++;
+  }
+  return output;
+}
+
+/**
+ * Checks if a string is a palindrome (a string that's
+ *   the same forwards and backwards).
+ * 
+ * Params:
+ *   string input -- any text string.
+ * 
+ * Returns:
+ *   bool -- true if the string is a palindrome, or
+ *     false otherwise.
+ */
+bool is_palindrome(string input)
+{
+  return input == reverse(input);
+}

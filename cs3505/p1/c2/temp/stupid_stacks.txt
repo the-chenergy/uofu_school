@@ -1,0 +1,42 @@
+#0  asif_decode_frame (context=0x21fb840, 
+    out=0x21fc500, got_frame=0x7fffffffd288, 
+    packet=0x21fc840)
+    at libavcodec/asifdec.c:38
+#1  0x000000000084cf68 in decode_simple_internal (frame=0x21fc500, avctx=0x21fb840)
+    at libavcodec/decode.c:432
+#2  decode_simple_receive_frame (
+    frame=<optimized out>, 
+    avctx=<optimized out>)
+    at libavcodec/decode.c:629
+#3  decode_receive_frame_internal (
+    avctx=avctx@entry=0x21fb840, 
+    frame=0x21fc500)
+    at libavcodec/decode.c:647
+#4  0x000000000084db18 in avcodec_send_packet
+    (avctx=avctx@entry=0x21fb840, 
+    avpkt=avpkt@entry=0x7fffffffd350)
+    at libavcodec/decode.c:705
+#5  0x00000000007abd6d in try_decode_frame (
+    s=s@entry=0x21fa340, 
+    st=st@entry=0x21faf80, 
+    avpkt=avpkt@entry=0x21faa40, 
+--Type <RET> for more, q to quit, c to continue without paging--
+    options=<optimized out>)
+    at libavformat/utils.c:3115
+#6  0x00000000007b459a in avformat_find_stream_info (ic=0x21fa340, options=0x21fb740)
+    at libavformat/utils.c:3941
+#7  0x0000000000494ebc in open_input_file (
+    o=o@entry=0x7fffffffd7e0, 
+    filename=<optimized out>)
+    at fftools/ffmpeg_opt.c:1127
+#8  0x0000000000498e5f in open_files (
+    inout=0x1258151 "input", 
+    open_file=0x4939b0 <open_input_file>, 
+    l=<optimized out>, l=<optimized out>)
+    at fftools/ffmpeg_opt.c:3285
+#9  ffmpeg_parse_options (argc=argc@entry=3, 
+    argv=argv@entry=0x7fffffffdce8)
+    at fftools/ffmpeg_opt.c:3325
+#10 0x000000000048efed in main (argc=3, 
+    argv=0x7fffffffdce8)
+    at fftools/ffmpeg.c:4862

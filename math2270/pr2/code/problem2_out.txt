@@ -1,0 +1,18 @@
+Patient 1 gets type A:  2
+Patient 2 gets type A:  1
+Patient 5 gets type A:  3
+Patient 7 gets type A:  1
+Patient 2 gets type AB: 2
+Patient 7 gets type AB: 0
+Patient 2 gets type B:  0
+Patient 3 gets type B:  1
+Patient 6 gets type B:  2
+Patient 7 gets type B:  0
+Patient 1 gets type O:  0
+Patient 2 gets type O:  0
+Patient 3 gets type O:  0
+Patient 4 gets type O:  2
+Patient 5 gets type O:  0
+Patient 6 gets type O:  0
+Patient 7 gets type O:  0
+Total cost:             33

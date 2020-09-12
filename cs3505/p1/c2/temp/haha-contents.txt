@@ -1,0 +1,18 @@
+byte	data	format
+0	'a'	
+1	's'	
+2	'i'	
+3	'f'	
+4-7	3	le32	unsigned
+8-9	2	le16	unsigned
+10-13	5	le32	unsigned
+14	50		signed
+15	100		signed
+16	10		signed
+17	20		signed
+18	30		signed
+19	40		signed
+20	-10		signed
+21	-20		signed
+22	-30		signed
+23	-40		signed
