@@ -1,0 +1,13 @@
+
+Submit your SinglyLinkedList.java, LinkedListStack.java, and BalancedSymbolChecker.java files
+and the java files for your tester class(es). All files should be in the assign06 package.
+
+Only one student in a programming pair should submit the program files. See Assignment 2 for
+instructions on how to designate a group in Gradescope./*
+
+The auto-grader is set to run a minimal set of "pre-tests" to ensure you have included all
+required classes and methods specified above. Note that passing the "pre-tests" is worth 10 /
+70 points for the Assignment 6 program. The remaining points will be assessed after the
+assignment deadline and based on whether your code passes "post-tests", as well as how good
+your style / design and testing is. Note that Assignment 6 is 70 points for programming and
+30 points for analysis.

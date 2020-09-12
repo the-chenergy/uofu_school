@@ -1,0 +1,3 @@
+// this file contains a closing brace '}' before an opening one '{'
+}
+{

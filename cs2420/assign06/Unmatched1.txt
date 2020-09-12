@@ -1,0 +1,12 @@
+{
+    /*
+        this file contains (some) white-space-characters and an unmatched bracket: ']'
+    */
+    [(event = "flash.events.Event", type = "enterFrame")];
+    
+    [
+    
+    // ]
+    
+    /* bingo! -> */ )
+}

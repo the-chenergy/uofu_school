@@ -1,0 +1,26 @@
+/* this file contains an unmatched brace */
+SOME_CARDS[] = 
+{
+    (suit = "spade")
+    {
+        "ace",
+        "two",
+        "three",
+    },
+    {
+        "four",
+        "five",
+        "six",
+    },
+    {
+        "seven",
+        "eight",
+        "nine",
+    },
+    {
+        "ten",
+        "jack",
+        "queen",
+        "king",
+    },
+]
