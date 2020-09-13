@@ -12,5 +12,8 @@
 		"mergesort",
 		"uninvite",
 		"uninvites"
-	]
+	],
+	"files.associations": {
+		"utility": "cpp"
+	}
 }
