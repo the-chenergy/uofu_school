@@ -17,37 +17,49 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{python, include=FALSE}
+import matplotlib
+matplotlib.use("tkAgg") # fixes qt plugin errors
+```
+
 # Problem 1
 
 ## Part (a)
 
 $$
 \begin{aligned}
-  P(Y \ne 1) &= P(Y = 0)\\
-             &= P(Y = 0 \cap X = 0) + P(Y = 0 \cap X = 1)\\
-             &= 0.4 + 0.1\\
-             &= \boxed{0.5}
+  \text{Pr}(Y \ne 1) &= \text{Pr}(Y = 0)\\
+                     &= \text{Pr}(Y = 0 \cap X = 0) + \text{Pr}(Y = 0 \cap X = 1)\\
+                     &= 0.4 + 0.1\\
+                     &= \boxed{0.5}
 \end{aligned}
 $$
 
 ## Part (b)
 
-$$P(X = 1 \cap Y = 0) = \boxed{0.1}$$
+$$\text{Pr}(X = 1 \cap Y = 0) = \boxed{0.1}$$
 
 ## Part (c)
 
 $$
 \begin{aligned}
-  P(X = 1 | Y = 0) &= P(X = 1 \cap Y = 0) \div P(Y = 0)\\
-                   &= 0.1 \div 0.5\\
-                   &= \boxed{0.2}
+  \text{Pr}(X = 1 | Y = 0) &= \text{Pr}(X = 1 \cap Y = 0) \div \text{Pr}(Y = 0)\\
+                           &= 0.1 \div 0.5\\
+                           &= \boxed{0.2}
 \end{aligned}
 $$
 
 ## Part (d)
 
-Yes since the probability of X being some value does not depend on the value of Y, which is the definition of independence. For example,
-$$P(X = 1) = 0.1 + 0.1 = 0.2 = P(X = 1 | Y = 0) = P(X = 1 | Y = 1)$$
+Yes since all of these equalities hold:
+$$
+\begin{aligned}
+  \text{Pr}(X = 0 \cap Y = 0) &= 0.4 = (0.4 + 0.4) \times (0.4 + 0.1) = \text{Pr}(X = 0) \times \text{Pr}(Y = 0)\\
+  \text{Pr}(X = 1 \cap Y = 0) &= 0.1 = (0.1 + 0.1) \times (0.4 + 0.1) = \text{Pr}(X = 1) \times \text{Pr}(Y = 0)\\
+  \text{Pr}(X = 0 \cap Y = 1) &= 0.4 = (0.4 + 0.4) \times (0.4 + 0.1) = \text{Pr}(X = 0) \times \text{Pr}(Y = 1)\\
+  \text{Pr}(X = 1 \cap Y = 1) &= 0.1 = (0.1 + 0.1) \times (0.4 + 0.1) = \text{Pr}(X = 1) \times \text{Pr}(Y = 1)
+\end{aligned}
+$$
 
 \pagebreak
 # Problem 2
@@ -57,36 +69,36 @@ $$P(X = 1) = 0.1 + 0.1 = 0.2 = P(X = 1 | Y = 0) = P(X = 1 | Y = 1)$$
 For $i \in \{1, 2, \cdots, 8\}$, by linearity of expectation, we have
 $$
 \begin{aligned}
-  E(C_i) &= E[A_i \times E(M_{ji})]\\
-         &= E(A_i) \times E(M_{ji})\\
-         &= [2P(A_i = 2) + 1P(A_i = 1)] \times [1P(M_{ji} = 1) + 0P(M_ji = 0)]\\
-         &= (2 \times 0.5 + 1 \times 0.5) \times (1 \times 0.7)\\
-         &= \boxed{1.05}
+  \text{E}(C_i) &= \text{E}[A_i \times \text{E}(M_{ji})]\\
+                &= \text{E}(A_i) \times \text{E}(M_{ji})\\
+                &= [2 \times \text{Pr}(A_i = 2) + 1 \times\text{Pr}(A_i = 1)] \times [1 \times \text{Pr}(M_{ji} = 1) + 0 \times \text{Pr}(M_{ji} = 0)]\\
+                &= (2 \times 0.5 + 1 \times 0.5) \times (1 \times 0.7)\\
+                &= \boxed{1.05}
 \end{aligned}
 $$
 
 ## Part (b)
 
 Since $C_i$ is the same for every $i \in \{1, 2, \cdots, 8\}$, the answer is
-$$8 \times E(C_i) = 8 \times 1.05 = \boxed{8.4}$$
+$$8 \times \text{E}(C_i) = 8 \times 1.05 = \boxed{8.4}$$
 
 ## Part (c)
 
 For $i \in \{9, 10, 11, 12\}$, by linearity of expectation, we have
 $$
 \begin{aligned}
-  E(C_i) &= E[A_i \times E(M_{ji})]\\
-         &= E(A_i) \times E(M_{ji})\\
-         &= [2P(A_i = 2) + 1P(A_i = 1)] \times [1P(M_{ji} = 1) + 0P(M_ji = 0)]\\
-         &= (2 \times 0.5 + 1 \times 0.5) \times (1 \times 0.6)\\
-         &= \boxed{0.9}
+  \text{E}(C_i) &= \text{E}[A_i \times \text{E}(M_{ji})]\\
+                &= \text{E}(A_i) \times \text{E}(M_{ji})\\
+                &= [2 \times \text{Pr}(A_i = 2) + 1 \times \text{Pr}(A_i = 1)] \times [1 \times \text{Pr}(M_{ji} = 1) + 0 \times \text{Pr}(M_ji = 0)]\\
+                &= (2 \times 0.5 + 1 \times 0.5) \times (1 \times 0.6)\\
+                &= \boxed{0.9}
 \end{aligned}
 $$
 
 ## Part (d)
 
 Since $C_i$ is the same for every $i \in \{9, 10, 11, 12\}$, the answer is
-$$4 \times E(C_i) = 4 \times 0.9 = \boxed{3.6}$$
+$$4 \times \text{E}(C_i) = 4 \times 0.9 = \boxed{3.6}$$
 
 ## Part (e)
 
@@ -97,12 +109,12 @@ $$C_1 + C_2 + ... + C_{12} = 8.4 + 3.6 = \boxed{12}$$
 By linearity of expectation,
 $$
 \begin{aligned}
-  E(\text{Points}) &= E(3 \times \text{Field goals made})\\
-                   &= 3 \times E(\text{Field goals made})\\
-                   &= 3 \times 12\\
-                   &= \boxed{36}
+  \text{E}(\text{Points}) &= \text{E}(3 \times \text{Field goals made})\\
+                          &= 3 \times \text{E}(\text{Field goals made})\\
+                          &= 3 \times 12\\
+                          &= \boxed{36}
 \end{aligned}
-  $$
+$$
 
 
 \pagebreak
@@ -110,7 +122,13 @@ $$
 
 ## Part (a)
 
-
+For this particular case, a reasonable prior distribution could be one that is uniform between 0 and 1:
+$$
+\pi(p) = \begin{cases}
+  1, 0 \le p \le 1\\
+  0, \text{otherwise}
+\end{cases}
+$$
 
 ## Part (b)
 
@@ -119,14 +137,28 @@ $$
 \pagebreak
 # Problem 4
 
+```{python}
+import numpy
+from scipy.stats import rayleigh
+from matplotlib import pyplot
 
+# create a large number of data points evenly distributed within [-2, 4]
+x = numpy.linspace(-2, 4, 1729)
 
+# calculate pdf(x) and cdf(x) with the rayleigh library
+pdf_x = rayleigh.pdf(x)
+cdf_x = rayleigh.cdf(x)
 
+# generate plots
+figure, plots = pyplot.subplots(2)
+plots[0].set_title("Rayleigh Distribution for X in [-2, 4]")
+plots[0].set_ylabel("PDF(X)")
+plots[0].grid()
+plots[0].plot(x, pdf_x, "#268BD2")
+plots[1].set_ylabel("CDF(X)")
+plots[1].grid()
+plots[1].plot(x, cdf_x, "#D33682")
 
-
-
-
-
-
-
+# results are on the next page :)
+```
 
