@@ -132,7 +132,25 @@ $$
 
 ## Part (b)
 
+Let $x$ be the number of heads (the number of 1's in the data). By Bayes' Theorem,
+$$
+\begin{aligned}
+  \text{ Pr}(p|X)                      &\propto \text{ Pr}(X|p)\ \pi(p)\\
+  \text{argmax}_p\text{ Pr}(p|X)       &= \text{argmax}_p\text{ Pr}(X|p)\ \pi(p)\\
+                                       &= \text{argmax}_p\ p^{x}(1-p)^{10-x} \cdot 1\\
+  \text{argmax}_p\ \ln[\text{Pr}(p|X)] &= \text{argmax}_p\ \ln[p^{x}(1-p)^{10-x}]\\
+                                       &= \text{argmax}_p\ x\ln(p) + (10-x)\ln(1-p)
+\end{aligned}
+$$
+The maximum value occurs when the right-hand side's derivative equals 0:
+$$
+\begin{aligned}
+  0 &= \frac{\text{d}}{\text{d}p}[x\ln(p) + (10-x)\ln(1-p)]\\
+    &= \frac{x}{p}-\frac{10-x}{1-p} \implies \boxed{p = \frac{x}{10}}
+\end{aligned}
+$$
 
+Therefore, the best value of $p$ for the most likely model is the number of heads divided by 10, which is $\frac{8}{10} = 0.8$.
 
 \pagebreak
 # Problem 4
@@ -159,6 +177,6 @@ plots[1].set_ylabel("CDF(X)")
 plots[1].grid()
 plots[1].plot(x, cdf_x, "#D33682")
 
-# results are on the next page :)
+# results spilled to the next page :)
 ```
 
