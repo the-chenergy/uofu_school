@@ -176,7 +176,8 @@ function drawBarChart(element, data, widthScale, overColor, outColor)
   bars.attr("transform", (_d, i) => tf(i))
       .attr("width", 0) // reset first for the animation to play
       .attr("height", BAR_HEIGHT)
-      .on("mouseover", e => d3.select(e.target).style("fill", overColor))
+      .on("mouseover", e => d3.select(e.target).transition().duration(0).style(
+                           "fill", overColor))
       .on("mouseout", e => d3.select(e.target)
                                .transition()
                                .ease(d3.easeSinOut)
@@ -202,7 +203,7 @@ function drawLineChart(element, data, xScale, yScale)
 
   // animation
   let cover = d3.select("#lineChartCover");
-  cover.attr("transform", "scale(-1, 1)")
+  cover.transition().duration(0).attr("transform", "scale(-1, 1)")
   cover.transition()
       .ease(d3.easeCubicOut)
       .attr("transform", "scale(0, 1)")
@@ -217,7 +218,7 @@ function drawAreaChart(element, data, xScale, yScale)
   let chart = d3.select(element);
   chart.attr("d", gen(data));
 
-  chart.attr("transform", "scale(1, 0)");
+  chart.transition().duration(0).attr("transform", "scale(1, 0)");
   chart.transition()
       .ease(d3.easeCubicIn)
       .attr("transform", "scale(1, 1)")
@@ -270,6 +271,7 @@ function drawScatterPlot(element, xData, yData, xScale, yScale, overColor,
 //#endregion
 
 //#region OTHER FEATURES ///////////////////////////////////////////////////////
+
 /**
  * Makes the first bar chart appear as a staircase.
  *
