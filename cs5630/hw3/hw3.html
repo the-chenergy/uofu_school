@@ -26,18 +26,18 @@
       fill: rgb(79, 175, 211);
     }
 
-    .bar-chart .hovered {
+    /*.bar-chart .hovered {
       fill: #979696;
     }
 
     .scatter-plot .hovered {
       fill: #979696;
-    }
+    }*/
 
     /* style of line charts */
     .line-chart {
       stroke: rgb(79, 175, 211);
-      stroke-width: 2;
+      stroke-width: 2.5;
       fill: none;
     }
 
@@ -60,13 +60,13 @@
 
     .area-chart-x {
       stroke: #979696;
-      stroke-width: 0.05;
+      stroke-width: 0.125;
       fill: rgb(241, 151, 186);
     }
 
     .area-chart-y {
       stroke: #979696;
-      stroke-width: 0.05;
+      stroke-width: 0.125;
       fill: rgb(79, 175, 211);
     }
 
@@ -145,6 +145,11 @@
         <g class="line-chart line-chart-y" transform="translate(50,15)">
           <path id="bLineChart" />
         </g>
+        <g transform="translate(545, 12)">
+          <g id="lineChartCover" transform="scale(-1, 1)">
+            <rect width="490" height="320" fill="#FFFFFF"></rect>
+          </g>
+        </g>
       </svg>
     </div>
   </div>
@@ -170,9 +175,13 @@
       <h2>Scatterplot</h2>
       <svg class="scatter-plot" width="600" height="300">
         <g transform="translate(180, 10) " id="scatterplot-axes">
-          <g id="x-axis" transform="translate(0, 240)"></g>
-          <g id="y-axis" transform="translate(0, 0)"></g>
-          <g id="scatterplot" transform="scale(1, -1)"></g>
+          <g id="x-axis" transform="translate(0, 240)">
+            <text transform="translate(276, 6)">New Deaths</text>
+          </g>
+          <g id="y-axis" transform="translate(0, 0)">
+            <text transform="translate(36, -2)">New Cases</text>
+          </g>
+          <g id="scatterplot"></g>
         </g>
       </svg>
     </div>

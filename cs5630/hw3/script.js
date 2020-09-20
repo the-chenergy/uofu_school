@@ -61,38 +61,42 @@ function randomSubset(data)
  * re-styling extremely irritating. Like ew! */
 const BAR_CHART_WIDTH = 345, MAX_BAR_WIDTH = 240, BAR_HEIGHT = 12,
       BAR_PADDING = 2;
-const LINE_CHART_WIDTH = 540;
+const LINE_CHART_WIDTH = 510;
 const AREA_CHART_WIDTH = 295, MAX_AREA_WIDTH = 260;
 const SCATTER_PLOT_DOT_RADIUS = 6;
+
+const A_OUT_COLOR = "#f197ba", A_OVER_COLOR = "#bf7893",
+      B_OUT_COLOR = "#4fafd3", B_OVER_COLOR = "#3b85a0";
 
 /** Render the visualizations. */
 function update(data)
 {
-  // extract cases and deaths numbers from the raw data.
+  // extract cases and deaths numbers from the raw data
   let aData = data.map(d => d.cases), bData = data.map(d => d.deaths);
 
-  // set up the scales for normalizing the data into locations on screen.
+  // set up the scales for normalizing the data into locations on screen
   let aDataScale = linearScale(Math.max(...aData), 0, MAX_BAR_WIDTH);
   let bDataScale = linearScale(Math.max(...bData), 0, MAX_BAR_WIDTH);
+  let aRevDataScale = linearScale(Math.max(...aData), MAX_BAR_WIDTH, 0);
+  let bRevDataScale = linearScale(Math.max(...bData), MAX_BAR_WIDTH, 0);
 
-  // draw the axes for the charts.
-  drawAxes(data, aDataScale, bDataScale);
+  // draw the axes for the charts
+  drawAxes(data, aDataScale, bDataScale, aRevDataScale, bRevDataScale);
 
-  // draw the charts.
-  drawBarChart("#aBarChart", aData, aDataScale);
-  drawBarChart("#bBarChart", bData, bDataScale);
+  // draw the charts
+  drawBarChart("#aBarChart", aData, aDataScale, A_OVER_COLOR, A_OUT_COLOR);
+  drawBarChart("#bBarChart", bData, bDataScale, B_OVER_COLOR, B_OUT_COLOR);
 
-  let lineChartXScale = linearScale(data.length, 10, LINE_CHART_WIDTH - 20);
-  drawLineChart("#aLineChart", aData, lineChartXScale, aDataScale);
-  drawLineChart("#bLineChart", bData, lineChartXScale, bDataScale);
+  let lineChartXScale = linearScale(data.length - 1, 10, LINE_CHART_WIDTH - 20);
+  drawLineChart("#aLineChart", aData, lineChartXScale, aRevDataScale);
+  drawLineChart("#bLineChart", bData, lineChartXScale, bRevDataScale);
 
   let areaChartXScale = linearScale(data.length, 0, MAX_AREA_WIDTH);
   drawAreaChart("#aAreaChart", aData, areaChartXScale, aDataScale);
   drawAreaChart("#bAreaChart", bData, areaChartXScale, bDataScale);
 
-  drawScatterPlot("#scatterplot", bData, aData, bDataScale, aDataScale);
-
-  // ****** TODO: PART IV ******
+  drawScatterPlot("#scatterplot", bData, aData, bDataScale, aRevDataScale,
+                  A_OVER_COLOR, A_OUT_COLOR);
 }
 
 function linearScale(maxValue, mapToLow, mapToHigh)
@@ -102,7 +106,7 @@ function linearScale(maxValue, mapToLow, mapToHigh)
   ]);
 }
 
-function drawAxes(data, aDataScale, bDataScale)
+function drawAxes(data, aDataScale, bDataScale, aRevDataScale, bRevDataScale)
 {
   /* This could still be refactored to be more maintainable, but good enough for
    * now... */
@@ -129,7 +133,7 @@ function drawAxes(data, aDataScale, bDataScale)
   d3.select("#bAreaChart-axis")
       .attr("transform", "translate(5,245)")
       .call(d3.axisBottom(bDataScale).ticks(5));
-  let aAxis_line = d3.axisLeft(aDataScale).ticks(5);
+  let aAxis_line = d3.axisLeft(aRevDataScale).ticks(5);
   d3.select("#aLineChart-axis")
       .attr("transform", "translate(50,15)")
       .call(aAxis_line);
@@ -137,7 +141,7 @@ function drawAxes(data, aDataScale, bDataScale)
       .append("text")
       .text("New Cases")
       .attr("transform", "translate(50, -3)")
-  let bAxis_line = d3.axisRight(bDataScale).ticks(5);
+  let bAxis_line = d3.axisRight(bRevDataScale).ticks(5);
   d3.select("#bLineChart-axis")
       .attr("transform", "translate(550,15)")
       .call(bAxis_line);
@@ -148,30 +152,46 @@ function drawAxes(data, aDataScale, bDataScale)
 
   // scatter plot
   let scat = d3.select("#scatterplot-axes");
-  let aDataScaleRev = linearScale(d3.max(data, d => d.cases), MAX_BAR_WIDTH, 0);
-  scat.select("#y-axis").call(d3.axisLeft(aDataScaleRev).ticks(5));
-  scat.append("text")
-      .text("New Cases")
-      .attr("transform", "scale(0.6667, 0.6667)");
+  scat.select("#y-axis").call(d3.axisLeft(aRevDataScale).ticks(5));
   scat.select("#x-axis").call(d3.axisBottom(bDataScale).ticks(5));
-  scat.append("text")
-      .text("New Deaths")
-      .attr("transform", "translate(" + MAX_BAR_WIDTH + ", " + MAX_BAR_WIDTH +
-                             ") scale(0.6667, 0.6667)");
-  scat.select("#scatterplot")
-      .attr("transform", "translate(0, " + MAX_BAR_WIDTH + ") scale(1, -1)");
 }
 
-function drawBarChart(element, data, widthScale)
+function tweenColor(element, color, ease, duration)
+{
+  d3.select(element)
+      .transition()
+      .ease(ease)
+      .style("fill", color)
+      .duration(duration);
+}
+
+function drawBarChart(element, data, widthScale, overColor, outColor)
 {
   // generate transform settings string
   let tf = y => "translate(0, " + y * (BAR_HEIGHT + BAR_PADDING) + ")";
 
   let bars = d3.select(element).selectAll("rect").data(data);
+  bars.exit().remove();
   bars = bars.enter().append("rect").merge(bars);
   bars.attr("transform", (_d, i) => tf(i))
+      .attr("width", 0) // reset first for the animation to play
+      .attr("height", BAR_HEIGHT)
+      .on("mouseover", e => d3.select(e.target).style("fill", overColor))
+      .on("mouseout", e => d3.select(e.target)
+                               .transition()
+                               .ease(d3.easeSinOut)
+                               .style("fill", outColor)
+                               .duration(260));
+
+  let tooltip = bars.selectAll("title").data(d => [d]);
+  tooltip = tooltip.enter().append("title").merge(tooltip);
+  tooltip.text(d => d);
+
+  bars.transition()
+      .ease(d3.easeSinOut)
       .attr("width", d => widthScale(d))
-      .attr("height", BAR_HEIGHT);
+      .delay((_d, i) => i * 43)
+      .duration(260);
 }
 
 function drawLineChart(element, data, xScale, yScale)
@@ -179,23 +199,72 @@ function drawLineChart(element, data, xScale, yScale)
   // line generator
   let gen = d3.line().x((_d, i) => xScale(i)).y(d => yScale(d));
   d3.select(element).attr("d", gen(data));
+
+  // animation
+  let cover = d3.select("#lineChartCover");
+  cover.attr("transform", "scale(-1, 1)")
+  cover.transition()
+      .ease(d3.easeCubicOut)
+      .attr("transform", "scale(0, 1)")
+      .duration(1042);
 }
 
 function drawAreaChart(element, data, xScale, yScale)
 {
   // area generator
   let gen = d3.area().x((_d, i) => xScale(i)).y0(0).y1(d => yScale(d));
-  d3.select(element).attr("d", gen(data));
+
+  let chart = d3.select(element);
+  chart.attr("d", gen(data));
+
+  chart.attr("transform", "scale(1, 0)");
+  chart.transition()
+      .ease(d3.easeCubicIn)
+      .attr("transform", "scale(1, 1)")
+      .duration(521);
 }
 
-function drawScatterPlot(element, xData, yData, xScale, yScale)
+function drawScatterPlot(element, xData, yData, xScale, yScale, overColor,
+                         outColor)
 {
   let data = xData.map((d, i) => [d, yData[i]]);
-  let tf = d => "translate(" + xScale(d[0]) + ", " + yScale(d[1]) + ")";
+
+  function tween(e, size, color)
+  {
+    d3.select(e.target)
+        .raise()
+        .transition()
+        .ease(d3.easeExpOut)
+        .attr("r", size * SCATTER_PLOT_DOT_RADIUS)
+        .style("fill", color)
+        .duration(260);
+  }
 
   let dots = d3.select(element).selectAll("circle").data(data);
+  dots.exit().remove();
   dots = dots.enter().append("circle").merge(dots);
-  dots.attr("transform", d => tf(d)).attr("r", SCATTER_PLOT_DOT_RADIUS);
+  dots.attr("cx", d => xScale(d[0]))
+      .attr("cy", d => yScale(d[1]))
+      .attr("r", 0)
+      .on("click",
+          e => {
+            let target = d3.select(e.target);
+            console.log("X: " + target.attr("cx"));
+            console.log("Y: " + target.attr("cy"));
+          })
+      .on("mouseover", e => tween(e, 2, overColor))
+      .on("mouseout", e => tween(e, 1, outColor));
+
+  let tooltip = dots.selectAll("title").data(d => [d]);
+  tooltip = tooltip.enter().append("title").merge(tooltip);
+  tooltip.text(d => "New cases: " + d[1] + "\nNew deaths " + d[0] +
+                    "\n\nX: " + xScale(d[0]) + "\nY: " + yScale(d[1]));
+
+  dots.transition()
+      .ease(d3.easeElasticOut)
+      .attr("r", SCATTER_PLOT_DOT_RADIUS)
+      .delay((_d, i) => i * 65)
+      .duration(521);
 }
 
 //#endregion
