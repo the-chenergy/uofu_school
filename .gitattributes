@@ -1,4 +1,6 @@
 # exclude jupyter notebooks (and other generated code) from language percentages
 **/*.ipynb -linguist-detectable
 **/parsetab.py -linguist-detectable
+cs3505/p1/c2/solution/**/Makefile -linguist-detectable
+
 

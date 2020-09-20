@@ -10,12 +10,15 @@
 		"Scatterplot",
 		"covid",
 		"curr",
+		"endregion",
 		"indegree",
 		"mergesort",
 		"uninvite",
 		"uninvites"
 	],
 	"files.associations": {
-		"utility": "cpp"
+		"utility": "cpp",
+		"xstddef": "cpp",
+		"unordered_map": "cpp"
 	}
 }
