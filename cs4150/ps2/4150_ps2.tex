@@ -1,0 +1,232 @@
+\documentclass{article}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[bottom=8em]{geometry}
+\usepackage{amsmath, amssymb, amsthm, enumerate, hyperref}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage{fancyhdr,lastpage}
+\usepackage{url}
+\usepackage{tabularx}
+\usepackage{tikz}
+
+\usepackage{bold-extra}
+
+\pagestyle{fancy}
+\lhead{\footnotesize Problem Set 1}
+\chead{}
+\rhead{\footnotesize CS 4150 - Fall 2020}
+\lfoot{}
+\cfoot{\small \thepage/\pageref*{LastPage}}
+\rfoot{}
+
+
+\newcommand{\pname}[1]{\textnormal{\textsc{#1}}}
+
+\newtheorem*{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem*{lemma}{Lemma}
+
+
+\begin{document}
+
+{\it Please enter your name and uID below.}
+
+\vspace{3em}
+
+\makebox[4.3cm]{Name: Qianlang Chen}    %Enter name here
+\par
+\makebox[4.3cm]{uID: u1172983}
+\par
+
+\vfill
+
+\subsubsection*{Submission notes}
+\begin{itemize}
+  \item Due at 11:59 pm on Friday, October 2.
+  \item Solutions must be typeset using one of the template files. For each problem, your answer must fit
+    in the space provided (e.g. not spill onto the next page) *without* space-saving tricks
+    like font/margin/line spacing changes.
+  \item Upload a PDF version of your completed problem set to Gradescope.
+  \item Teaching staff reserve the right to request original source/tex files during the grading process, so please retain these until an assignment has been returned.
+  \item Please remember that for problem sets, collaboration with other students must be limited to a high-level discussion of solution strategies. If you do collaborate with other students in this way, you must identify the students and describe the nature of the collaboration. You are not allowed to create a group solution, and all work that you hand in must be written in your own words. Do not base your solution on any other written solution, regardless of the source.
+\end{itemize}
+
+\pagebreak
+
+
+\begin{enumerate}
+
+  \item (Antimicrobial Coins BT) Let's call this algorithm MNC, which stands for the minimum number of coins. The arguments it takes in are the withdrawal $W$ and the available coins with values $v_1, \cdots, v_n$:
+    $$
+      \text{MNC}(W, v_i, \cdots, v_n) = \begin{cases}
+        +\infty, \textbf{if }W < 0; \\
+        0, \textbf{if }W = 0;       \\
+        \min_{1 \le i \le n}\{\text{MNC}(W-v_i, v_1, \cdots, v_n)\} + 1, \textbf{if }W > 0
+      \end{cases}
+    $$
+
+    The principle of designing a backtracking algorithm is to reduce the problem into a smaller but the exact same problem. This algorithm does just that: the minimum number of coins needed for a given amount is exactly one more than the minimum number of coins needed for an amount that is one coin-value away. Since there are many coin choices, meaning that there are multiple amounts being one coin-value away, the amount with this lowest MNC is the best option; and since that amount was one coin away, we add one to it to get the answer. There are several edge cases though. If the amount happens to be one of the available coin-values, the amount 0 would be one coin away, giving a result of $0+1=1$, which is handled correctly by the algorithm. Or, if the amount is more than some coin-values, the recursive call would give positive infinity, which would never be chosen to be the minimum result, since there's always a coin with value 1. Therefore, this algorithm will always produce the correct result for any positive number. $\square$
+
+    \pagebreak
+
+  \item (Antimicrobial Coins DP, part a) As follows:
+
+    \begin{center}
+      \begin{minipage}{0.625\linewidth}
+        \renewcommand{\thealgocf}{}
+        \begin{algorithm}[H]
+          \caption{\tt min\_num\_coins}
+          \KwIn{\tt \textbf{int} W, \textbf{int} V[1..n]}
+          \KwOut{\tt \textbf{int}}
+
+          \texttt{\\}
+
+          \texttt{\textbf{int} answers[0..W]}
+
+          \texttt{answers[0]} $\gets$ 0
+
+          \For{\texttt{\textbf{int} w = 1} to \texttt{W}}
+          {
+            \texttt{answers[w]} $\gets +\infty$
+
+            \For{each \texttt{\textbf{int} v} in \texttt{V[1..n]}}
+            {
+              \If{\texttt{w} $\ge$ \texttt{v}}
+              {
+                \texttt{\textbf{int} ans} $\gets$ \texttt{answers[w - v]} + 1
+
+                \If{\texttt{ans} $<$ \texttt{answers[w]}}
+                {
+                  \texttt{answers[w]} $\gets$ \texttt{ans}
+                }
+              }
+            }
+          }
+
+          \Return{\tt answers[W]}
+        \end{algorithm}
+      \end{minipage}
+    \end{center}
+
+    \pagebreak
+
+    \setcounter{enumi}{1} %This is still Problem 2
+  \item (Antimicrobial Coins DP, parts b/c)
+
+    \textbf{(b)} This algorithm follows the strategy of the backtracking algorithm from the previous problem, and we made it much more efficient by using the technique of memoization. In thd DP algorithm, we use a basic array for memoizing, which is advantageous because it gives $O(1)$ run-time for both reading and writing data at any index. We want an element at index $w$ in the array to record the minimum number of coins needed for the money amount $w$. Since in the original backtracking algorithm, the recursive calls only ever involve smaller values of $W$, we calculate the results and fill in the array from 0 to the input $W$. By doing it in this order, we can guarantee that the value is valid when we do a lookup, since we only ever look up from smaller indices than the current $W$. We also added an extra cell in the head of the array to our advantage so we wouldn't get out of bounds ever when looking up. This column also represents our base case: when an amount happens to be one of the coin-values. When the algorithm finishes, the value stored at index $W$ in the memoizing array will have the final answer, the minimum number of coins needed for $W$. $\square$
+
+    \textbf{(c)} This algorithm has an $O(n \cdot W)$ run-time complexity and an $O(W)$ space complexity (easy to see and prove from the code). $\square$
+
+    \pagebreak
+
+  \item (COVID Classrooms Greedy) The algorithm is as follows. Note that the argument $n$ is the total number of students and $C$ is an array with the $m$ classrooms, each having a property called \texttt{capacity}, the value of $C_i$.
+
+    \begin{center}
+      \begin{minipage}{0.6667\linewidth}
+        \renewcommand{\thealgocf}{}
+        \begin{algorithm}[H]
+          \caption{(Greedy) \texttt{min\_cost}}
+          \KwIn{\tt \textbf{int} n, \textbf{classroom} C[1..m]}
+          \KwOut{\tt \textbf{set<classroom>}}
+
+          \texttt{\\}
+
+          Sort \texttt{C[1..m]} by \texttt{capacity} from greatest to smallest
+
+          \texttt{\textbf{set<classroom>} answer}
+
+          \texttt{\textbf{int} i} $\gets$ 1
+
+          \While{\texttt{n} $>$ 0}
+          {
+            \If{\texttt{i} $>$ \texttt{m}}
+            {
+              Report error: not enough classrooms
+            }
+
+            Add \texttt{C[i]} to \texttt{answer}
+
+            \texttt{n} $\gets$ \texttt{n - C[i].capacity}
+
+            \texttt{i} $\gets$ \texttt{i} + 1
+          }
+
+          \Return{\tt answer}
+        \end{algorithm}
+      \end{minipage}
+    \end{center}
+
+    TODO: PROVE CORRECTNESS
+
+    \pagebreak
+
+  \item (Cost-controlled COVID Classrooms BT) Let's call this algorithm MC, which stands for ``minimum cost.'' It takes three arguments: $n$ is the number of students, $C[1..m]$ is the list of capacities, and $E[1..m]$ is the list of expenses:
+    $$
+      \text{MC}(n, C[1..m], E[1..m]) = \begin{cases}
+        0, \textbf{if }n \le 0;                       \\
+        +\infty, \textbf{otherwise if }m = 0;         \\
+        \min\left\{\begin{aligned}
+           & \text{MC}(n - C[m], C[1..(m-1)], E[1..(m-1)]) + E[m], \\
+           & \text{MC}(n, C[1..(m-1)], E[1..(m-1)])
+        \end{aligned}\right\}, \\
+        \ \ \ \ \textbf{otherwise}
+      \end{cases}
+    $$
+
+    This algorithm applies the ``use it or lose it'' strategy. More specifically, it takes advantage of the fact that, for any classroom $c$, $c$ either contributes to the set of classrooms that's eventually provided to the students, or it doesn't. We let $c$ be the \textit{last} classroom in the list, which then reduces the problem size by one and creates the exact same problem. The two possible base cases are either there are no more students waiting to be assigned classrooms, which would cost no expense, or we run out of rooms to provide, which we assign a cost of infinity so it'd never be chosen as the final result (unless we don't have enough rooms to start with). Moreover, since the minimum is taken at each recursive level, the final result is definitely the minimum across all levels. Combining all these ideas, this algorithm is correct. $\square$
+
+    \pagebreak
+
+  \item (Cost-controlled COVID Classrooms DP, part a) The algorithm is as follows. Note that the argument $n$ is the total number of students and $C$ is an array with the $m$ classrooms, each having two properties called \texttt{capacity}, the value of $C_i$, and \texttt{expense}, the value of $E_i$.
+
+    \begin{center}
+      \begin{minipage}{0.875\linewidth}
+        \renewcommand{\thealgocf}{}
+        \begin{algorithm}[H]
+          \caption{(DP) \texttt{min\_cost}}
+          \KwIn{\tt \textbf{int} n, \textbf{classroom} C[1..m]}
+          \KwOut{\tt \textbf{int}}
+
+          \texttt{\\}
+
+          \texttt{\textbf{int} answers[1..n][0..m]}
+
+          \For{\texttt{\textbf{int} i = 1} to \texttt{n}}
+          {
+            \texttt{answers[i][0]} $\gets +\infty$
+          }
+
+          \For{\texttt{\textbf{int} i = 1} to \texttt{n}}
+          {
+            \For{\texttt{\textbf{int} j = 1} to \texttt{m}}
+            {
+              \texttt{\textbf{int} use\_it} $\gets$ \texttt{C[j].expense}
+
+              \If{\texttt{i} $>$ \texttt{C[j].capacity}}
+              {
+                \texttt{use\_it} $\gets$ \texttt{use\_it + answers[i - C[j].capacity][j - 1]}
+              }
+
+              \texttt{\textbf{int} lose\_it} $\gets$ \texttt{answers[i][j - 1]}
+
+              $\texttt{answers[i][j]} \gets \min(\texttt{use\_it}, \texttt{lose\_it})$
+            }
+          }
+
+          \Return{\tt answers[n][m]}
+        \end{algorithm}
+      \end{minipage}
+    \end{center}
+
+    \pagebreak
+
+    \setcounter{enumi}{4} %this is still Problem 5
+  \item (Cost-controlled COVID Classrooms DP, parts b/c)
+
+    \textbf{(b)} This algorithm follows the strategy of the backtracking algorithm from the previous problem, and we made it much more efficient by using the technique of memoization. In the DP algorithm, we use a two-dimensional array for memoizing, which is advantageous because it gives $O(1)$ run-time for both reading and writing data at any pair of indices. We want an element at indices $(i, j)$ in the array to record the minimum cost of assigning $i$ students into the classrooms in the sub-array $C[1..j]$. Since in the original backtracking algorithm, the recursive calls only ever involve smaller values of $i$ and $j$ (though they were called $n$ and $m$ in the previous problem), we calculate the results and fill in the array from smallest to greatest indices in both dimensions. By doing it in this order, we can guarantee that the value is valid when we do a lookup, since we only ever look up from smaller indices than the current $i$ and $j$. We also added an extra column in the beginning of $j$'s dimension to our advantage so we wouldn't get out of bounds when looking up column $(j-1)$. This column also represents our base case: when there are more students to assign but rooms have run out. When the algorithm finishes, the value stored at index $(n, m)$ in the memoizing array will have the final answer, the minimum cost of assigning $n$ students into classrooms in $C[1..m]$. $\square$
+
+    \textbf{(c)} This algorithm has an $O(n \cdot m)$ run-time complexity and an $O(n \cdot m)$ space complexity (easy to see and prove from the code). $\square$
+
+\end{enumerate}
+
+\end{document}
