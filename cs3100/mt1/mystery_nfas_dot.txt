@@ -1,0 +1,119 @@
+// NO_St4
+digraph {
+	graph [rankdir=LR]
+	EMPTY [label="" shape=plaintext]
+	St3 [label=St3 peripheries=1 shape=circle]
+	St7 [label=St7 peripheries=1 shape=circle]
+	St15 [label=St15 peripheries=1 shape=circle]
+	St8 [label=St8 peripheries=1 shape=circle]
+	St1 [label=St1 peripheries=1 shape=circle]
+	St10 [label=St10 peripheries=1 shape=circle]
+	St12 [label=St12 peripheries=1 shape=circle]
+	St6 [label=St6 peripheries=1 shape=circle]
+	St14 [label=St14 peripheries=1 shape=circle]
+	St2 [label=St2 peripheries=1 shape=circle]
+	St9 [label=St9 peripheries=1 shape=circle]
+	St11 [label=St11 peripheries=1 shape=circle]
+	St13 [label=St13 peripheries=1 shape=circle]
+	St5 [label=St5 peripheries=1 shape=circle]
+	St4 [label=St4 peripheries=1 shape=circle]
+	St16 [label=St16 peripheries=2 shape=circle]
+	EMPTY -> St5
+	St5 -> St6 [label="'' "]
+	St5 -> St3 [label="'' "]
+	St5 -> St1 [label="'' "]
+	St1 -> St2 [label="a "]
+	St3 -> St4 [label="b "]
+	St4 -> St5 [label="'' "]
+	St2 -> St5 [label="'' "]
+	St6 -> St7 [label="b "]
+	St8 -> St9 [label="a "]
+	St7 -> St8 [label="'' "]
+	St10 -> St11 [label="a "]
+	St9 -> St10 [label="'' "]
+	St16 -> St12 [label="'' "]
+	St16 -> St14 [label="'' "]
+	St12 -> St13 [label="a "]
+	St14 -> St15 [label="b "]
+	St13 -> St16 [label="'' "]
+	St15 -> St16 [label="'' "]
+	St11 -> St16 [label="'' "]
+} 
+
+
+
+
+
+
+// NO_St5
+digraph {
+	graph [rankdir=LR]
+	EMPTY [label="" shape=plaintext]
+	St3 [label=St3 peripheries=1 shape=circle]
+	St7 [label=St7 peripheries=1 shape=circle]
+	St6 [label=St6 peripheries=1 shape=circle]
+	St8 [label=St8 peripheries=1 shape=circle]
+	St13 [label=St13 peripheries=1 shape=circle]
+	St1 [label=St1 peripheries=1 shape=circle]
+	St2 [label=St2 peripheries=1 shape=circle]
+	St9 [label=St9 peripheries=1 shape=circle]
+	St11 [label=St11 peripheries=1 shape=circle]
+	St10 [label=St10 peripheries=1 shape=circle]
+	St12 [label=St12 peripheries=1 shape=circle]
+	St5 [label=St5 peripheries=1 shape=circle]
+	St4 [label=St4 peripheries=1 shape=circle]
+	St14 [label=St14 peripheries=2 shape=circle]
+	EMPTY -> St5
+	St5 -> St6 [label="'' "]
+	St5 -> St3 [label="'' "]
+	St5 -> St1 [label="'' "]
+	St1 -> St2 [label="a "]
+	St3 -> St4 [label="b "]
+	St4 -> St5 [label="'' "]
+	St2 -> St5 [label="'' "]
+	St6 -> St7 [label="b "]
+	St8 -> St9 [label="a "]
+	St7 -> St8 [label="'' "]
+	St14 -> St12 [label="'' "]
+	St14 -> St10 [label="'' "]
+	St10 -> St11 [label="a "]
+	St12 -> St13 [label="b "]
+	St13 -> St14 [label="'' "]
+	St11 -> St14 [label="'' "]
+	St9 -> St14 [label="'' "]
+} 
+
+
+
+
+
+
+// NO_St6
+digraph {
+	graph [rankdir=LR]
+	EMPTY [label="" shape=plaintext]
+	St3 [label=St3 peripheries=1 shape=circle]
+	St7 [label=St7 peripheries=1 shape=circle]
+	St6 [label=St6 peripheries=1 shape=circle]
+	St8 [label=St8 peripheries=1 shape=circle]
+	St1 [label=St1 peripheries=1 shape=circle]
+	St2 [label=St2 peripheries=1 shape=circle]
+	St9 [label=St9 peripheries=1 shape=circle]
+	St10 [label=St10 peripheries=1 shape=circle]
+	St5 [label=St5 peripheries=1 shape=circle]
+	St4 [label=St4 peripheries=1 shape=circle]
+	St11 [label=St11 peripheries=2 shape=circle]
+	EMPTY -> St5
+	St5 -> St6 [label="'' "]
+	St5 -> St3 [label="'' "]
+	St5 -> St1 [label="'' "]
+	St1 -> St2 [label="a "]
+	St3 -> St4 [label="b "]
+	St4 -> St5 [label="'' "]
+	St2 -> St5 [label="'' "]
+	St6 -> St7 [label="b "]
+	St8 -> St9 [label="a "]
+	St7 -> St8 [label="'' "]
+	St10 -> St11 [label="a "]
+	St9 -> St10 [label="'' "]
+}
