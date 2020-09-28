@@ -3,7 +3,7 @@ title: "Homework 2"
 author: "Qianlang Chen"
 
 # CS 3190
-# U 09/20/20
+# U 09/27/20
 
 output: pdf_document
 fontsize: 12pt
@@ -18,48 +18,106 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\newcommand{\E}[0] {\text{E}}
-\newcommand{\Var}[0] {\text{Var}}
+\newcommand{\E} {\text{E}}
+\newcommand{\Var} {\text{Var}}
+\newcommand{\inpar}[1] {\left(#1\right)}
 
 # Problem 1
 
 ## Part (a)
 
+We *can* only use Chebyshev's Inequality to calculate the upper-bound of such probability because we know the values of $\E(X)$ and $\Var(X)$, which are all what the inequality needs.
 
+We *cannot* use Markov's Inequality because we are not sure if $X \ge 0$ at all times, which is the requirement of using the Markov's Inequality. Even though the expect value of $X$ is 100 (quite big), there is no guarantee that $X$ never goes below zero.
+
+We also *cannot* use the Chernoff-Hoeffding Inequality because we don't know the bounds of the variable $X$. $X$ needs to have a defined bound to use the C-H Inequality.
 
 ## Part (b)
 
-
+Since $\E(X) = 100$ and $\Var(X) = 144$, by Chebyshev's Inequality,
+$$
+\begin{aligned}
+  \Pr(X < 75) &= \Pr(X < 100 - 25)\\
+              &= \Pr(X < \E(X) - 25)\\
+              &= \Pr(|X - \E(X)| > 25) & (\implies \varepsilon = 25)\\
+              &\le \frac{\Var(X)}{\varepsilon^2} = \frac{144}{25^2} \approx \boxed{23\%}
+\end{aligned}
+$$
 
 ## Part (c)
 
-
+An example of that could be a normal (Gaussian) distribution. A normal distribution does not have a definite bound, which is required in order to use either Markov's or Chernoff-Hoeffding Inequality.
 
 \pagebreak
 # Problem 2
 
 ## Part (a)
 
+First of all, by linearity of expectation, we have
+$$
+\begin{aligned}
+  \E(\bar{X}) &= \E(\frac{1}{n} \cdot \sum_{i=1}^n X_i)\\
+              &= \frac{1}{n} \cdot \sum_{i=1}^n \E(X_i)\\
+              &= \frac{1}{n} \cdot n \cdot 7 = 7
+\end{aligned}
+$$
 
+Moreover, since $n = 2$, we have
+$$
+\Var(\bar{X}) = \frac{\Var(X_i)}{n} = \frac{2}{2} = 1
+$$
+
+Now, by Chebyshev's Inequality,
+$$
+\begin{aligned}
+  \Pr(\bar{X} > 12) &= \Pr(\bar{X} > 7 + 5)\\
+                    &= \Pr(\bar{X} > \E(\bar{X}) + 5)\\
+                    &= \Pr(|\bar{X} - \E(\bar{X})| > 5) & (\implies \varepsilon = 5)\\
+                    &\le \frac{\Var(\bar{X})}{\varepsilon^2} = \frac{1}{5^2} = \boxed{4\%}
+\end{aligned}
+$$
 
 ## Part (b)
 
-
+Since $\Delta = t-b = 13-1 = 12$, by the Chernoff-Hoeffding Inequality (reusing values from *Part (a)*),
+$$
+\begin{aligned}
+  \Pr(\bar{X} > 12) &= \Pr(|\bar{X} - \E(\bar{X})| > 5) & (\implies \varepsilon = 5)\\
+                    &\le 2 \cdot \exp\inpar{\frac{-2\varepsilon^2n}{\Delta^2}}\\
+                    &\le 2 \cdot \exp\inpar{\frac{-2 \times 5^2 \times 2}{12^2}} \approx \boxed{99.9\%}
+\end{aligned}
+$$
 
 ## Part (c)
 
-
+Similar to *Part (a)*, by Chebyshev's Inequality,
+$$
+\begin{aligned}
+  \Pr(\bar{X} > 12) &= \Pr(\bar{X} > 7 + 5)\\
+                    &= \Pr(\bar{X} > \E(\bar{X}) + 5)\\
+                    &= \Pr(|\bar{X} - \E(\bar{X})| > 5) & (\implies \varepsilon = 5)\\
+                    &\le \frac{\Var(\bar{X})}{\varepsilon^2}\\
+                    &\le \frac{\Var(X_i)}{n\varepsilon^2} = \frac{2}{20 \times 5^2} = \boxed{0.4\%}
+\end{aligned}
+$$
 
 ## Part (d)
 
-
+Similar to *Part (b)*, by the Chernoff-Hoeffding Inequality (reusing values from *Part (c)*),
+$$
+\begin{aligned}
+  \Pr(\bar{X} > 12) &= \Pr(|\bar{X} - \E(\bar{X})| > 5) & (\implies \varepsilon = 5)\\
+                    &\le 2 \cdot \exp\inpar{\frac{-2\varepsilon^2n}{\Delta^2}}\\
+                    &\le 2 \cdot \exp\inpar{\frac{-2 \times 5^2 \times 20}{12^2}} \approx \boxed{0.2\%}
+\end{aligned}
+$$
 
 \pagebreak
 # Problem 3
 
 ## Part (a)
 
-Let $x = -1$. Now, the vectors $p$ and $q$ are linearly dependent because they are scaled versions of each other:
+Let $x = -1$. Now, the vectors $\vec{p}$ and $\vec{q}$ are linearly dependent because they are scaled versions of each other:
 $$
 \left[\begin{array}{c}
    1\\
@@ -81,7 +139,7 @@ $$
 
 ## Part (b)
 
-Let $x = 21$. Now, the vectors $p$ and $q$ are orthogonal because their dot-product is zero:
+Let $x = 21$. Now, the vectors $\vec{p}$ and $\vec{q}$ are orthogonal because their dot-product is zero:
 $$
 \begin{aligned}
   \left[\begin{array}{c}
@@ -119,7 +177,7 @@ $$
 
 $$
 \begin{aligned}
-  ||\mathbf{q}||_1 = \left|\left|\begin{array}{r}
+  ||\vec{q}||_1 = \left|\left|\begin{array}{r}
      2\\
     -4\\
      8\\
@@ -132,7 +190,7 @@ $$
 
 $$
 \begin{aligned}
-  ||\mathbf{q}||_2^2 = \left|\left|\begin{array}{r}
+  ||\vec{q}||_2^2 = \left|\left|\begin{array}{r}
      2\\
     -4\\
      8\\
@@ -276,7 +334,7 @@ $$
 
 ## Part (f)
 
-Matrix $A$ is *not* invertable because its columns are not linearly independent (one column can be written as the linear-combination between the others):
+Matrix $A$ is *not* invertable because its columns are not linearly independent (one column can be written as a linear-combination of the others):
 $$
 \left[\begin{array}{r}
      2\\
