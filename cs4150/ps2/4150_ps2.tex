@@ -131,7 +131,7 @@
 
           \texttt{\\}
 
-          Sort \texttt{C[1..m]} by \texttt{capacity} from greatest to smallest
+          Sort \texttt{C[1..m]}, by \texttt{capacity}, in decreasing order
 
           \texttt{\textbf{set<classroom>} answer}
 
@@ -156,7 +156,13 @@
       \end{minipage}
     \end{center}
 
-    TODO: PROVE CORRECTNESS
+    To prove that this greedy algorithm works, let's compare its output with some known optimal solution. Let $S_1, S_2, \cdots, S_k$ be the capacities of the classrooms from some known optimal solution for some input, sorted in decreasing order (meaning that $S_1 \ge S_2 \ge \cdots \ge S_k$). For the same input, let $G_1, G_2, \cdots, G_l$ be the capacities from our greedy algorithm's output, also sorted in decreasing order. Since we've defined $S_{1..k}$ to be optimal, we know that $k \le l$.
+
+    Now, if $S_{1..k}$ and $G_{1..l}$ are the same, then our greedy algorithm definitely works. So, let's assume that these two outputs differ, and let $i$ be the \textit{first} index where $S_i \ne G_i$; in other words, $S_x = G_x$ for all $x < i$. Since our greedy algorithm has always gone for the classroom with the biggest capacity first, it can only be the case that $G_i > S_i$. This means if we replace $S_i$ from the optimal solution with $G_i$, it would also do the job of providing a room to $S_i$ students, so this replacement wouldn't make the solution $S$ not valid. Moreover, since $S$ is sorted in decreasing order, we know that $S$ would not make use of any room with capacity $G_i$ anymore ($S_x \ne G_i$ for all $x > i$), and since $i$ is the first instance of difference, we know that there's at least one room with capacity $G_i$ unchosen by the optimal solution. These two facts show that such a replacement is always possible.
+
+    By induction, we can replace every $S_x$ with $G_x$ for $x \ge i$, and since $S_x = G_x$ for $x < i$ anyway, let's replace those also. Now, we've replaced the entire optimal solution $S_{1..k}$ with $G_{1..k}$, and at this point if $k = l$, we'd have $S = G$ entirely, telling us that our greedy algorithm works. That has to be the case though, because if those $k$ classrooms were enough for all $n$ students, our greedy output would've stopped at $G_k$ since the algorithm always stops at the first moment where all $n$ students have their classrooms provided. This means that there'd never be an element $G_{k+1}$, which indicates that $k = l$.
+
+    Therefore, our greedy algorithm always works (outputs the minimal set of classrooms enough for $n$ students). $\square$
 
     \pagebreak
 
