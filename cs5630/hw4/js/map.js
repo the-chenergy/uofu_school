@@ -5,57 +5,41 @@
  */
 class CountryData
 {
-  /**
-   * Creates a new CountryData object.
-   *
-   * @param  rawStatsData  The raw data objects contains population, etc.
-   * @param  i             The index in the rawStatsData to access the data for
-   *                       this country.
-   */
-  constructor(rawStatsData = null, i = -1)
+  constructor(id, region, type = null, geometry = null)
   {
-    if (!rawStatsData)
-    {
-      this.hasStats = false;
-      this.region = "countries";
-      return;
-    }
-
-    this.hasStats = true;
-    this.region = rawStatsData["population"][i].region;
-    this.id = rawStatsData["population"][i].geo.toUpperCase();
-    this.population = rawStatsData["population"][i];
-    this.gdp = rawStatsData["gdp"][i];
-    this.childMortality = rawStatsData["child-mortality"][i];
-    this.lifeExpectancy = rawStatsData["life-expectancy"][i];
-    this.fertilityRate = rawStatsData["fertility-rate"][i];
+    this.id = id;
+    this.region = region;
+    this.type = type;
+    this.geometry = geometry;
   }
 }
 
 /** Class representing the map view. */
 class Map
 {
-  /**
-   * Creates a Map Object.
-   *
-   * @param  countries      The array of CountryData objects.
-   * @param  updateCountry  A callback function used to notify other parts of
-   *                        the program when the selected country was updated
-   *                        (clicked).
-   */
-  constructor(countries, updateCountry)
+  constructor(data, updateCountry)
   {
     this.projection = d3.geoWinkel3().scale(140).translate([ 365, 225 ]);
     this.updateCountry = updateCountry;
-    this.countries = countries;
+
+    this.countries = {};
+    for (let i in data["population"])
+    {
+      let country = data["population"][i];
+      let id = country["geo"].toUpperCase();
+      let region = country["region"];
+
+      this.countries[id] = new CountryData(id, region);
+    }
+
+    this.drawGrids(); // draw the grids now so the users don't have to
+                      // stare at an empty space until the map loads.
   }
 
   /**
-   * Renders the map
-   *
-   * @param  activeYear  String for the activeYear
+   * Renders the map.
    */
-  drawMap(activeYear)
+  drawMap(geoData, activeYear)
   {
     // note that projection is global!
 
@@ -75,7 +59,24 @@ class Map
     // .map() We have provided a class structure for the data called CountryData
     // that you should assign the parameters to in your mapping
 
-    // draw countries
+    // add geo data to the current country data.
+    for (let feature of geoData.features)
+    {
+      let id = feature.id;
+      if (this.countries.hasOwnProperty(id))
+      {
+        let country = this.countries[id];
+        country.type = feature.type;
+        country.geometry = feature.geometry;
+      }
+      else // a country without stats data
+      {
+        this.countries[id] =
+            new CountryData(id, "countries", feature.type, feature.geometry);
+      }
+    }
+
+    // draw countries.
     let chart = d3.select("#map-chart");
     let countryFeatures = Object.values(this.countries);
     let countryPaths = chart.selectAll("path").data(countryFeatures);
@@ -83,12 +84,19 @@ class Map
     countryPaths = countryPaths.enter().append("path").merge(countryPaths);
     let geoPath = d3.geoPath().projection(this.projection);
     countryPaths.attr("class", country => country.region)
-        .attr("id", country => "country-path-" + country.id)
+        .attr("id", country => "map-" + country.id)
         .attr("d", geoPath);
 
-    // draw grids
+    // draw grids.
+    this.drawGrids();
+  }
+
+  drawGrids()
+  {
+    let chart = d3.select("#map-chart");
     let geoGraticule = d3.geoGraticule();
     let gridPath = chart.append("path").datum(geoGraticule);
+    let geoPath = d3.geoPath().projection(this.projection);
     gridPath.attr("class", "graticule").attr("d", geoPath);
     let gridBoundaryPath = chart.append("path").datum(geoGraticule.outline());
     gridBoundaryPath.attr("class", "stroke").attr("d", geoPath);

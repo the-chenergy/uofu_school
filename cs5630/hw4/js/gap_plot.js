@@ -2,23 +2,15 @@
 class PlotData
 {
   /**
-   *
-   * @param country country name from the x data object
-   * @param xVal value from the data object chosen for x at the active year
-   * @param yVal value from the data object chosen for y at the active year
+   * @param name country name from the x data object
    * @param id country id
    * @param region country region
-   * @param circleSize value for r from data object chosen for
-   * circleSizeIndicator
    */
-  constructor(country, xVal, yVal, id, region, circleSize)
+  constructor(name, id, region)
   {
-    this.country = country;
-    this.xVal = xVal;
-    this.yVal = yVal;
+    this.name = name;
     this.id = id;
     this.region = region;
-    this.circleSize = circleSize;
   }
 }
 
@@ -45,16 +37,28 @@ class GapPlot
    * program when a year was updated
    * @param activeYear the year for which the data should be drawn initially
    */
-  constructor(countries, updateCountry, updateYear, activeYear)
+  constructor(data, updateCountry, updateYear, activeYear)
   {
-    console.log("printing data in gap_plot:ctor():", countries);
-
     this.margin = {top : 20, right : 20, bottom : 60, left : 80};
     this.width = 810 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
-    this.activeYear = activeYear;
 
-    this.countries = Object.values(countries);
+    this.activeYear = activeYear;
+    this.updateCountry = updateCountry;
+    this.updateYear = updateYear;
+    this.data = data;
+
+    this.countries = [];
+    for (let i in data["gdp"])
+    {
+      let name = data["gdp"][i]["country"];
+      let id = data["gdp"][i]["geo"].toUpperCase();
+      let region = "countries";
+      if (data["population"][i])
+        region = data["population"][i]["region"];
+
+      this.countries.push(new PlotData(name, id, region));
+    }
 
     // ******* TODO: PART 3 *******
     /**
@@ -112,16 +116,22 @@ class GapPlot
     svgGroup.append("g").attr("id", "plot-x-axis").attr("transform", tf);
 
     tf = "translate(" + (this.width - 48) / 2 + ", " + (this.height - 12) + ")";
-    svgGroup.append("text").attr("class", "x-label").attr("transform", tf);
+    svgGroup.append("text")
+        .attr("class", "axis-label")
+        .attr("id", "plot-x-label")
+        .attr("transform", tf);
 
     tf = "translate(48, 0)";
     svgGroup.append("g").attr("id", "plot-y-axis").attr("transform", tf);
 
-    tf = "translate(6, " + (this.height - 144) / 2 + ") rotate(90)";
-    svgGroup.append("text").attr("class", "y-label").attr("transform", tf);
+    tf = "translate(0, " + (this.height - 144) / 2 + ") rotate(90)";
+    svgGroup.append("text")
+        .attr("class", "axis-label")
+        .attr("id", "plot-y-label")
+        .attr("transform", tf);
 
     // create the active-year background text.
-    tf = "translate(240, 240)";
+    tf = "translate(216, 240)";
     svgGroup.append("text")
         .attr("id", "plot-background-text")
         .attr("class", "activeYear-background")
@@ -130,6 +140,9 @@ class GapPlot
     // create a wrapper for the circles.
     tf = "translate(48, 0)";
     svgGroup.append("g").attr("id", "plot-contents").attr("transform", tf);
+
+    // create and draw the active-year bar.
+    this.drawYearBar();
 
     /* Below is the setup for the dropdown menu- no need to change this */
 
@@ -195,8 +208,22 @@ class GapPlot
    * @param yIndicator identifies the values to use for the y axis
    * @param circleSizeIndicator identifies the values to use for the circle size
    */
-  updatePlot(activeYear, xIndicator, yIndicator, circleSizeIndicator)
+  updatePlot(activeYear, xIndicator = null, yIndicator = null,
+             circleSizeIndicator = null)
   {
+    if (xIndicator)
+    {
+      this.xIndicator = xIndicator;
+      this.yIndicator = yIndicator;
+      this.circleSizeIndicator = circleSizeIndicator;
+    }
+    else
+    {
+      xIndicator = this.xIndicator;
+      yIndicator = this.yIndicator;
+      circleSizeIndicator = this.circleSizeIndicator;
+    }
+
     /*
     You will be updating the scatterplot from the data. hint: use the
     #chart-view div
@@ -231,22 +258,20 @@ class GapPlot
 
     let plot = d3.select("#chart-view").select(".wrapper-group");
 
+    // initialize the scales.
     let maxUnder = indicator => {
       let maxSoFar = -1;
-      for (let country of this.countries)
+      for (let i in this.data[indicator])
       {
-        if (!country.hasStats)
-          continue;
-
-        for (let year in country[indicator])
-          if (year && !isNaN(year))
-            maxSoFar = Math.max(maxSoFar, country[indicator][year]);
+        let country = this.data[indicator][i];
+        for (let year in country)
+          if (year && !isNaN(year) && country[year] > maxSoFar)
+            maxSoFar = country[year];
       }
 
       return maxSoFar;
     };
 
-    // initialize the scales.
     const AXES_WIDTH = this.width - 48, AXES_HEIGHT = this.height - 48;
     let xScale = d3.scaleLinear().domain([ 0, maxUnder(xIndicator) ]).range([
       0, AXES_WIDTH
@@ -255,11 +280,21 @@ class GapPlot
       0, AXES_HEIGHT
     ]);
 
-    const MIN_CIRCLE_RADIUS = 4, MAX_CIRCLE_RADIUS = 24;
-    let rScale =
-        d3.scaleSqrt().domain([ 0, maxUnder(circleSizeIndicator) ]).range([
-          MIN_CIRCLE_RADIUS, MAX_CIRCLE_RADIUS
-        ]);
+    const MIN_CIRCLE_RADIUS = 3, MAX_CIRCLE_RADIUS = 24;
+    let rMax = maxUnder(circleSizeIndicator);
+    let rScale = d3.scaleSqrt().domain([ 0, rMax ]).range([
+      MIN_CIRCLE_RADIUS, MAX_CIRCLE_RADIUS
+    ]);
+
+    // calculate the location and radius of the circles.
+    let setValue = (value, scale, indicator) => {
+      for (let i in this.data[indicator])
+        this.countries[i][value] = scale(this.data[indicator][i][activeYear]);
+    };
+
+    setValue("cx", xScale, xIndicator);
+    setValue("cy", yScale, yIndicator);
+    setValue("r", rScale, circleSizeIndicator);
 
     // update the x- and y- axes as well as their labels
     plot.select("#plot-x-axis")
@@ -268,31 +303,37 @@ class GapPlot
     plot.select("#plot-y-axis")
         .call(d3.axisLeft(yScale).ticks(5).tickFormat(d3.format(".2s")));
 
-    let getIndicatorLabel = l => this.countries[0][l]["indicator_name"];
-    plot.select(".x-label").text(getIndicatorLabel(xIndicator));
-    plot.select(".y-label").text(getIndicatorLabel(yIndicator));
+    let getIndicatorLabel = l =>
+        this.data[l][0]["indicator_name"].toUpperCase();
+
+    plot.select("#plot-x-label").text(getIndicatorLabel(xIndicator));
+    plot.select("#plot-y-label").text(getIndicatorLabel(yIndicator));
 
     // update the active-year background text.
     plot.select("#plot-background-text").text(activeYear);
 
-    // update the circles.
-    let data = this.countries
-                   .filter(d => d.hasStats && d[xIndicator][activeYear] &&
-                                d[yIndicator][activeYear] &&
-                                d[circleSizeIndicator][activeYear])
-                   .map(d => Object({
-                          region : d.region,
-                          cx : xScale(d[xIndicator][activeYear]),
-                          cy : yScale(d[yIndicator][activeYear]),
-                          r : rScale(d[circleSizeIndicator][activeYear]),
-                        }));
-    let circles = plot.select("#plot-contents").selectAll("circle").data(data);
+    // update the circles. (only display the countries *with actual stats* so
+    // the users don't see that some countries have life expectancy of 0)
+    let hasStats = i => this.data[xIndicator][i] && this.data[yIndicator][i] &&
+                        this.data[circleSizeIndicator][i] &&
+                        this.data[xIndicator][i][activeYear] &&
+                        this.data[yIndicator][i][activeYear] &&
+                        this.data[circleSizeIndicator][i][activeYear];
+    let circleData = this.countries.filter((_d, i) => hasStats(i));
+
+    let plotContents = plot.select("#plot-contents");
+    let circles = plotContents.selectAll("circle").data(circleData);
     circles.exit().remove();
     circles = circles.enter().append("circle").merge(circles);
     circles.attr("class", d => d.region)
+        .attr("id", d => "plot-" + d.id)
         .attr("cx", d => d.cx)
         .attr("cy", d => d.cy)
         .attr("r", d => d.r);
+
+    // create/update other elements
+    this.drawDropDown(xIndicator, yIndicator, circleSizeIndicator);
+    this.drawLegend(0, rMax);
   }
 
   /**
@@ -307,12 +348,12 @@ class GapPlot
     let dropDownWrapper = d3.select('.dropdown-wrapper');
     let dropData = [];
 
-    for (let key in this.countries)
+    for (let key in this.data)
     {
-      dropData.push({
-        indicator : key,
-        indicator_name : this.countries[key][0].indicator_name
-      });
+      let name = this.data[key][0]["indicator_name"];
+      name = name[0].toUpperCase() + name.substring(1);
+
+      dropData.push({indicator : key, indicator_name : name});
     }
 
     /* CIRCLE DROPDOWN */
@@ -436,8 +477,12 @@ class GapPlot
     sliderText.attr('x', yearScale(this.activeYear));
     sliderText.attr('y', 25);
 
-    yearSlider.on('input', function() {
-      // TODO - your code goes here -
+    yearSlider.on("input", function() {
+      let newYear = this.value;
+      
+      that.updateYear(newYear);
+      that.updatePlot(newYear);
+      sliderText.text(newYear).attr("x", yearScale(newYear));
     });
   }
 
@@ -449,8 +494,6 @@ class GapPlot
    */
   drawLegend(min, max)
   {
-    // ******* TODO: PART 2*******
-    // This has been done for you but you need to call it in updatePlot().
     // Draws the circle legend to show size based on health data
     let scale = d3.scaleSqrt().range([ 3, 20 ]).domain([ min, max ]);
 
@@ -474,8 +517,7 @@ class GapPlot
     circleGroup.select('circle').attr('r', (d) => scale(d));
     circleGroup.select('circle').attr('cx', '0');
     circleGroup.select('circle').attr('cy', '0');
-    let numText =
-        circleGroup.select('text').text(d => new Intl.NumberFormat().format(d));
+    let numText = circleGroup.select('text').text(d => d3.format(".3s")(d));
 
     numText.attr('transform', (d) => 'translate(' + ((scale(d)) + 10) + ', 0)');
   }

@@ -58,7 +58,7 @@
 
   \item (Antimicrobial Coins BT) Let's call this algorithm MNC, which stands for the minimum number of coins. The arguments it takes in are the withdrawal $W$ and the available coins with values $v_1, \cdots, v_n$:
     $$
-      \text{MNC}(W, v_i, \cdots, v_n) = \begin{cases}
+      \text{MNC}(W, v_1, \cdots, v_n) = \begin{cases}
         +\infty, \textbf{if }W < 0; \\
         0, \textbf{if }W = 0;       \\
         \min_{1 \le i \le n}\{\text{MNC}(W-v_i, v_1, \cdots, v_n)\} + 1, \textbf{if }W > 0

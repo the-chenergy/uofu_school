@@ -203,8 +203,12 @@ div.dropdown-wrapper {
 .c-label {
     display: inline-block;
     float: left;
+}
+
+.axis-label {
     text-align: center;
     font-size: 14px;
+    letter-spacing: 2px;
 }
 
 
