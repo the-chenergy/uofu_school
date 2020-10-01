@@ -1,6 +1,7 @@
 {
 	"cSpell.words": [
 		"Albers",
+		"CSVs",
 		"Calcinea",
 		"Gradescope",
 		"Nephrozoa",
@@ -11,6 +12,7 @@
 		"Scatterplot",
 		"Winkel",
 		"covid",
+		"crossorigin",
 		"curr",
 		"endregion",
 		"gridlines",
@@ -25,5 +27,8 @@
 		"utility": "cpp",
 		"xstddef": "cpp",
 		"unordered_map": "cpp"
-	}
+	},
+	"cSpell.ignoreWords": [
+		"gdppc"
+	]
 }
