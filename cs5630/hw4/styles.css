@@ -8,7 +8,7 @@
 circle {
     fill: #d9d9d9;
     stroke: gray;
-    opacity: .8;
+    opacity: .75;
 }
 
 circle.selected-region {
@@ -41,7 +41,7 @@ path.hidden {
     padding-left: 30px;
 }
 
-#country-detail .stat {
+#country-detail .stats {
     font-style: bold;
     display: block;
     width: 500px;

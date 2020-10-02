@@ -48,19 +48,25 @@ class GapPlot
     this.updateYear = updateYear;
     this.data = data;
 
-    this.countries = [];
+    this.countries = {};
     for (let i in data["gdp"])
     {
       let name = data["gdp"][i]["country"];
-      let id = data["gdp"][i]["geo"].toUpperCase();
+      let id = data["gdp"][i]["geo"];
       let region = "countries";
-      if (data["population"][i])
-        region = data["population"][i]["region"];
 
-      this.countries.push(new PlotData(name, id, region));
+      this.countries[id] = new PlotData(name, id, region);
+    }
+    for (let i in data["population"])
+    {
+      let id = data["population"][i]["geo"];
+      let region = data["population"][i]["region"];
+
+      this.countries[id].region = region;
     }
 
-    // ******* TODO: PART 3 *******
+    this.activeCountry = null;
+
     /**
      For part 4 of the homework, you will be using the other 3 parameters.
      * assign the highlightUpdate function as a variable that will be accessible
@@ -68,8 +74,6 @@ class GapPlot
      * assign the dragUpdate function as a variable that will be accessible to
      you in updatePlot()
      */
-
-    // TODO - your code goes here -
   }
 
   /**
@@ -272,6 +276,19 @@ class GapPlot
       return maxSoFar;
     };
 
+    let minUnder = indicator => {
+      let minSoFar = 1e18;
+      for (let i in this.data[indicator])
+      {
+        let country = this.data[indicator][i];
+        for (let year in country)
+          if (year && !isNaN(year) && country[year] < minSoFar)
+            minSoFar = country[year];
+      }
+
+      return minSoFar;
+    };
+
     const AXES_WIDTH = this.width - 48, AXES_HEIGHT = this.height - 48;
     let xScale = d3.scaleLinear().domain([ 0, maxUnder(xIndicator) ]).range([
       0, AXES_WIDTH
@@ -281,15 +298,19 @@ class GapPlot
     ]);
 
     const MIN_CIRCLE_RADIUS = 3, MAX_CIRCLE_RADIUS = 24;
-    let rMax = maxUnder(circleSizeIndicator);
-    let rScale = d3.scaleSqrt().domain([ 0, rMax ]).range([
+    let rMin = minUnder(circleSizeIndicator),
+        rMax = maxUnder(circleSizeIndicator);
+    let rScale = d3.scaleSqrt().domain([ rMin, rMax ]).range([
       MIN_CIRCLE_RADIUS, MAX_CIRCLE_RADIUS
     ]);
 
     // calculate the location and radius of the circles.
     let setValue = (value, scale, indicator) => {
       for (let i in this.data[indicator])
-        this.countries[i][value] = scale(this.data[indicator][i][activeYear]);
+      {
+        let id = this.data[indicator][i]["geo"];
+        this.countries[id][value] = scale(this.data[indicator][i][activeYear]);
+      }
     };
 
     setValue("cx", xScale, xIndicator);
@@ -303,8 +324,7 @@ class GapPlot
     plot.select("#plot-y-axis")
         .call(d3.axisLeft(yScale).ticks(5).tickFormat(d3.format(".2s")));
 
-    let getIndicatorLabel = l =>
-        this.data[l][0]["indicator_name"].toUpperCase();
+    let getIndicatorLabel = l => this.data[l][0]["indicator_name"];
 
     plot.select("#plot-x-label").text(getIndicatorLabel(xIndicator));
     plot.select("#plot-y-label").text(getIndicatorLabel(yIndicator));
@@ -314,26 +334,57 @@ class GapPlot
 
     // update the circles. (only display the countries *with actual stats* so
     // the users don't see that some countries have life expectancy of 0)
-    let hasStats = i => this.data[xIndicator][i] && this.data[yIndicator][i] &&
-                        this.data[circleSizeIndicator][i] &&
-                        this.data[xIndicator][i][activeYear] &&
-                        this.data[yIndicator][i][activeYear] &&
-                        this.data[circleSizeIndicator][i][activeYear];
-    let circleData = this.countries.filter((_d, i) => hasStats(i));
+    let hasStats = d => !isNaN(d.cx) && !isNaN(d.cy) && !isNaN(d.r);
+    let circleData = Object.values(this.countries).filter(d => hasStats(d));
 
     let plotContents = plot.select("#plot-contents");
     let circles = plotContents.selectAll("circle").data(circleData);
     circles.exit().remove();
     circles = circles.enter().append("circle").merge(circles);
     circles.attr("class", d => d.region)
-        .attr("id", d => "plot-" + d.id)
+        .attr("id", d => "plot-circle-" + d.id)
         .attr("cx", d => d.cx)
         .attr("cy", d => d.cy)
         .attr("r", d => d.r);
 
+    if (this.activeCountry)
+      this.updateHighlightClick(this.activeCountry);
+
+    let that = this;
+
+    function onPathCircleClick()
+    {
+      let target = d3.select(this);
+      let id = target.attr("id").substring("plot-circle-".length);
+      that.updateCountry(id);
+    }
+    circles.on("click", onPathCircleClick);
+
+    let tooltip = d3.select("#chart-view").select(".tooltip");
+    function onPathCircleMouseOver()
+    {
+      let target = d3.select(this);
+      let id = target.attr("id").substring("plot-circle-".length);
+
+      let country = that.countries[id];
+      tooltip.html(that.tooltipRender(country))
+          .style("opacity", 1)
+          .style("left", (+target.attr("cx") + 840) + "px")
+          .style("top", (+target.attr("cy") + 144) + "px");
+    }
+    circles.on("mouseover", onPathCircleMouseOver);
+
+    function onPathCircleMouseOut()
+    {
+      tooltip.style("opacity", 0)
+          .style("left", "-10000000px")
+          .style("top", "-1000000px");
+    }
+    circles.on("mouseout", onPathCircleMouseOut);
+
     // create/update other elements
     this.drawDropDown(xIndicator, yIndicator, circleSizeIndicator);
-    this.drawLegend(0, rMax);
+    this.drawLegend(rMin, rMax);
   }
 
   /**
@@ -440,7 +491,6 @@ class GapPlot
    */
   drawYearBar()
   {
-    // ******* TODO: PART 2 *******
     // The drop-down boxes are set up for you, but you have to set the slider to
     // updatePlot() on activeYear change
 
@@ -448,7 +498,7 @@ class GapPlot
     // hint: the domain should be max and min of the years (1800 - 2020); it's
     // OK to set it as numbers the plot needs to update on move of the slider
 
-    /* ******* TODO: PART 3 *******
+    /*
     You will need to call the updateYear() function passed from script.js in
     your activeYear slider
     */
@@ -477,13 +527,17 @@ class GapPlot
     sliderText.attr('x', yearScale(this.activeYear));
     sliderText.attr('y', 25);
 
-    yearSlider.on("input", function() {
+    function onYearSliderInput()
+    {
       let newYear = this.value;
-      
+
       that.updateYear(newYear);
       that.updatePlot(newYear);
+      that.activeYear = newYear;
       sliderText.text(newYear).attr("x", yearScale(newYear));
-    });
+    }
+
+    yearSlider.on("input", onYearSliderInput);
   }
 
   /**
@@ -529,7 +583,7 @@ class GapPlot
    */
   updateHighlightClick(activeCountry)
   {
-    /* ******* TODO: PART 3*******
+    /*
     //You need to assign selected class to the target country and corresponding
     region
     // Hint: If you followed our suggestion of using classes to style
@@ -538,7 +592,19 @@ class GapPlot
     // You will not be calling this directly in the gapPlot class,
     // you will need to call it from the updateHighlight function in script.js
     */
-    // TODO - your code goes here -
+
+    this.activeCountry = activeCountry;
+
+    let plot = d3.select("#plot-contents");
+
+    plot.selectAll("circle").style(
+        "opacity",
+        d => d.region == this.countries[activeCountry].region ? 0.75 : 0.125);
+
+    plot.selectAll("#plot-circle-" + activeCountry)
+        .raise()
+        .attr("class", d => d.region + " selected-country")
+        .style("opacity", 1);
   }
 
   /**
@@ -546,24 +612,32 @@ class GapPlot
    */
   clearHighlight()
   {
-    // ******* TODO: PART 3*******
     // Clear the map of any colors/markers; You can do this with inline styling
     // or by defining a class style in styles.css
 
     // Hint: If you followed our suggestion of using classes to style
     // the colors and markers for hosts/teams/winners, you can use
     // d3 selection and .classed to set these classes off here.
-    // TODO - your code goes here -
+
+    if (!this.activeCountry)
+      return;
+
+    d3.select("#plot-contents")
+        .selectAll("circle")
+        .attr("class", d => d.region)
+        .style("opacity", 0.75);
+
+    this.activeCountry = null;
   }
 
   /**
    * Returns html that can be used to render the tooltip.
-   * @param data
+   * @param country
    * @returns {string}
    */
-  tooltipRender(data)
+  tooltipRender(country)
   {
-    let text = "<h2>" + data['country'] + "</h2>";
+    let text = "<h2>" + country.name + "</h2>";
     return text;
   }
 }

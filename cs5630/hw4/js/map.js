@@ -26,11 +26,13 @@ class Map
     for (let i in data["population"])
     {
       let country = data["population"][i];
-      let id = country["geo"].toUpperCase();
+      let id = country["geo"];
       let region = country["region"];
 
       this.countries[id] = new CountryData(id, region);
     }
+
+    this.activeCountry = null;
 
     this.drawGrids(); // draw the grids now so the users don't have to
                       // stare at an empty space until the map loads.
@@ -62,7 +64,7 @@ class Map
     // add geo data to the current country data.
     for (let feature of geoData.features)
     {
-      let id = feature.id;
+      let id = feature.id.toLowerCase();
       if (this.countries.hasOwnProperty(id))
       {
         let country = this.countries[id];
@@ -76,16 +78,26 @@ class Map
       }
     }
 
-    // draw countries.
+    // draw countries and add click events.
     let chart = d3.select("#map-chart");
-    let countryFeatures = Object.values(this.countries);
-    let countryPaths = chart.selectAll("path").data(countryFeatures);
-    countryPaths.exit().remove();
-    countryPaths = countryPaths.enter().append("path").merge(countryPaths);
+    let features = Object.values(this.countries);
+    let paths = chart.selectAll("path").data(features);
+    paths.exit().remove();
+    paths = paths.enter().append("path").merge(paths);
     let geoPath = d3.geoPath().projection(this.projection);
-    countryPaths.attr("class", country => country.region)
-        .attr("id", country => "map-" + country.id)
+    paths.attr("class", d => d.region)
+        .attr("id", country => "map-path-" + country.id)
         .attr("d", geoPath);
+
+    let map = this;
+    function onCountryPathClick()
+    {
+      let id = this.id.substring("map-path-".length);
+      map.updateCountry(id);
+    }
+    paths.on("click", onCountryPathClick);
+
+    this.clearHighlight();
 
     // draw grids.
     this.drawGrids();
@@ -109,13 +121,25 @@ class Map
    */
   updateHighlightClick(activeCountry)
   {
-    // ******* TODO: PART 3 *******
     // Assign selected class to the target country and corresponding region
     // Hint: If you followed our suggestion of using classes to style
     // the colors and markers for countries/regions, you can use
     // d3 selection and .classed to set these classes on here.
 
-    // TODO - your code goes here
+    this.activeCountry = activeCountry;
+
+    let chart = d3.select("#map-chart");
+
+    chart.selectAll("[id^=map-path-]")
+        .attr("class", country => country.region)
+        .style("opacity",
+               country => country.region == this.countries[activeCountry].region
+                              ? 1
+                              : 0.3333);
+
+    chart.selectAll("#map-path-" + activeCountry)
+        .attr("class", country => country.region + " selected-country")
+        .style("opacity", 1);
   }
 
   /**
@@ -123,7 +147,6 @@ class Map
    */
   clearHighlight()
   {
-    // ******* TODO: PART 3 *******
     // Clear the map of any colors/markers; You can do this with inline styling
     // or by defining a class style in styles.css
 
@@ -131,6 +154,14 @@ class Map
     // the colors and markers for hosts/teams/winners, you can use
     // d3 selection and .classed to set these classes off here.
 
-    // TODO - your code goes here
+    if (!this.activeCountry)
+      return;
+
+    d3.select("#map-chart")
+        .selectAll("[id^=map-path-]")
+        .attr("class", country => country.region)
+        .style("opacity", 1);
+
+    this.activeCountry = null;
   }
 }

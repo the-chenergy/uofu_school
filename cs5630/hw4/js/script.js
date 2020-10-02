@@ -1,36 +1,6 @@
 loadData().then(data => {
-  // no country selected by default
   let activeCountry = null;
-  // default activeYear is 2000
   let activeYear = '2000';
-  let that = this;
-
-  // ******* TODO: PART 3 *******
-  /**
-   * Calls the functions of the views that need to react to a newly
-   * selected/highlighted country
-   *
-   * @param countryID the ID object for the newly selected country
-   */
-  function updateCountry(countryID)
-  {
-    that.activeCountry = countryID;
-
-    // TODO - your code goes here
-  }
-
-  // ******* TODO: PART 3 *******
-
-  /**
-   *  Takes the specified activeYear from the range slider in the GapPlot view.
-   *  It takes the value for the activeYear as the parameter. When the range
-   * slider is dragged, we have to update the gap plot and the info box.
-   *  @param year the new year we need to set to the other views
-   */
-  function updateYear(year)
-  {
-    that.activeYear = year;
-  }
 
   // create the world map.
   let map = new Map(data, updateCountry);
@@ -51,10 +21,57 @@ loadData().then(data => {
     map.drawMap(geoData, activeYear);
   });
 
+  /**
+   * Calls the functions of the views that need to react to a newly
+   * selected/highlighted country
+   *
+   * @param countryID the ID object for the newly selected country
+   */
+  function updateCountry(countryID)
+  {
+    activeCountry = countryID;
+
+    if (countryID)
+    {
+      map.updateHighlightClick(countryID);
+      plot.updateHighlightClick(countryID);
+      infoBox.updateTextDescription(countryID, activeYear);
+    }
+    else
+    {
+      map.clearHighlight();
+      plot.clearHighlight();
+      infoBox.clearHighlight();
+    }
+  }
+
+  /**
+   *  Takes the specified activeYear from the range slider in the GapPlot
+   * view. It takes the value for the activeYear as the parameter. When the
+   * range slider is dragged, we have to update the gap plot and the info box.
+   *  @param year the new year we need to set to the other views
+   */
+  function updateYear(year)
+  {
+    activeYear = year;
+
+    if (this.activeCountry)
+      infoBox.updateTextDescription(this.activeCountry, year);
+  }
+
   // This clears a selection by listening for a click
-  document.addEventListener("click", function(e) {
+  let exemptFromDeactivation =
+      new Set().add("slider").add("label").add("stats");
+
+  function onDocumentClick(e)
+  {
+    if (exemptFromDeactivation.has(d3.select(e.target).attr("class")))
+      return;
+
     updateCountry(null);
-  }, true);
+  }
+
+  document.addEventListener("click", onDocumentClick, true);
 });
 
 // ******* DATA LOADING *******
