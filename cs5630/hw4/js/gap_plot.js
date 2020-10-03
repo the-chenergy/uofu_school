@@ -67,6 +67,8 @@ class GapPlot
 
     this.activeCountry = null;
 
+    this.minMaxData = {max : {}, min : {}};
+
     /**
      For part 4 of the homework, you will be using the other 3 parameters.
      * assign the highlightUpdate function as a variable that will be accessible
@@ -147,6 +149,11 @@ class GapPlot
 
     // create and draw the active-year bar.
     this.drawYearBar();
+
+    // ...
+    d3.select("#chart-view")
+        .select(".tooltip")
+        .html(this.tooltipRender("test"));
 
     /* Below is the setup for the dropdown menu- no need to change this */
 
@@ -264,6 +271,9 @@ class GapPlot
 
     // initialize the scales.
     let maxUnder = indicator => {
+      if (this.minMaxData.max.hasOwnProperty(indicator))
+        return this.minMaxData.max[indicator];
+
       let maxSoFar = -1;
       for (let i in this.data[indicator])
       {
@@ -273,10 +283,14 @@ class GapPlot
             maxSoFar = country[year];
       }
 
+      this.minMaxData.max[indicator] = maxSoFar;
       return maxSoFar;
     };
 
     let minUnder = indicator => {
+      if (this.minMaxData.min.hasOwnProperty(indicator))
+        return this.minMaxData.min[indicator];
+
       let minSoFar = 1e18;
       for (let i in this.data[indicator])
       {
@@ -286,6 +300,7 @@ class GapPlot
             minSoFar = country[year];
       }
 
+      this.minMaxData.min[indicator] = minSoFar;
       return minSoFar;
     };
 
@@ -324,7 +339,8 @@ class GapPlot
     plot.select("#plot-y-axis")
         .call(d3.axisLeft(yScale).ticks(5).tickFormat(d3.format(".2s")));
 
-    let getIndicatorLabel = l => this.data[l][0]["indicator_name"];
+    let getIndicatorLabel = l =>
+        this.data[l][0]["indicator_name"].toUpperCase();
 
     plot.select("#plot-x-label").text(getIndicatorLabel(xIndicator));
     plot.select("#plot-y-label").text(getIndicatorLabel(yIndicator));
@@ -367,18 +383,16 @@ class GapPlot
       let id = target.attr("id").substring("plot-circle-".length);
 
       let country = that.countries[id];
-      tooltip.html(that.tooltipRender(country))
+      tooltip.html(that.tooltipRender(country.name))
           .style("opacity", 1)
-          .style("left", (+target.attr("cx") + 840) + "px")
-          .style("top", (+target.attr("cy") + 144) + "px");
+          .style("left", +target.attr("cx") - 24 + "px")
+          .style("top", +target.attr("cy") - 16 + "px");
     }
     circles.on("mouseover", onPathCircleMouseOver);
 
     function onPathCircleMouseOut()
     {
-      tooltip.style("opacity", 0)
-          .style("left", "-10000000px")
-          .style("top", "-1000000px");
+      tooltip.style("opacity", 0).style("left", "-1000px");
     }
     circles.on("mouseout", onPathCircleMouseOut);
 
@@ -632,12 +646,12 @@ class GapPlot
 
   /**
    * Returns html that can be used to render the tooltip.
-   * @param country
+   * @param countryName
    * @returns {string}
    */
-  tooltipRender(country)
+  tooltipRender(countryName)
   {
-    let text = "<h2>" + country.name + "</h2>";
+    let text = "<h2>" + countryName + "</h2>";
     return text;
   }
 }

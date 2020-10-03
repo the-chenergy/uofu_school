@@ -95,6 +95,10 @@ path.hidden {
     fill: #d9d9d9;
 }
 
+.countries.selected-country {
+    fill: #a9a9a9;
+}
+
 .circle-legend {
     width: 200px;
     height: 120px;
@@ -334,14 +338,14 @@ div.dropdown-wrapper {
 /*tooltip */
 
 div.tooltip {
-    position: absolute;
-    text-align: center;
-    min-width: 60px;
-    height: 28px;
-    padding: 2px;
+    position: relative;
+    text-align: right;
+    width: fit-content;
+    height: fit-content;
     background: white;
     stroke: gray;
     border-radius: 8px;
+    padding: 12px;
     pointer-events: none;
 }
 
