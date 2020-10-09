@@ -14,8 +14,7 @@ th {
     min-width: 125px;
 }
 
-th:last-of-type
-{
+th:last-of-type {
     text-align: right;
 }
 
@@ -94,16 +93,28 @@ td {
     color:black;
 }
 
+td i.fas {
+    color: #C0C0C0;
+}
+
+td i.fas.fa-caret-left {
+    opacity: 0;
+}
+
 #predictionTable td {
     line-height: 0;
 }
 
-#predictionTable tbody tr {
+#predictionTable tbody tr.forecast {
     cursor: pointer;
 }
 
-tbody tr:hover {
+tbody tr.forecast:hover {
     background-color: #efefef;
+}
+
+tbody tr:hover {
+    background-color: #F9F9F9;
 }
 
 .label{

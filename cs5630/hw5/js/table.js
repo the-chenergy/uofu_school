@@ -88,7 +88,8 @@ class Table
     let rowSelection = d3.select('#predictionTableBody')
                            .selectAll('tr')
                            .data(this.tableData)
-                           .join('tr');
+                           .join('tr')
+                           .attr('class', d => d.isForecast ? 'forecast' : '');
 
     rowSelection.on('click', (event, d) => {
       if (d.isForecast)
@@ -111,9 +112,19 @@ class Table
      */
 
     let textSelection = forecastSelection.filter(d => d.type === 'text');
-    textSelection.html(d => `${d.value}${
-                           d.isExpanded ? ' <i class="fas fa-caret-down"></i>'
-                                        : ''}`);
+    let html = d => {
+      if (!d.hasOwnProperty('isExpanded'))
+        return d.value;
+
+      let pollData = this.pollData.get(d.value);
+
+      if (!pollData || !pollData.length)
+        return `<i class="fas fa-caret-left"></i> ${d.value}</pre>`;
+
+      return `<i class="fas fa-caret-${d.isExpanded ? 'down' : 'right'}"></i> ${
+          d.value}`;
+    };
+    textSelection.html(d => html(d));
 
     let vizSelection = forecastSelection.filter(d => d.type === 'viz');
 
@@ -214,7 +225,7 @@ class Table
         .attr('class', 'sorting')
         .select('i')
         .attr('class',
-              `fas fa-caret-${this.sortingOrder == 1 ? 'down' : 'up'}`);
+              `fas fa-caret-${this.sortingOrder == 1 ? 'up' : 'down'}`);
   }
 
   sortTableData()
@@ -255,24 +266,14 @@ class Table
     // PART 3 //
     ////////////
 
-    containerSelect.selectAll('line').remove();
-
-    for (let tick of ticks)
-    {
-      let lineX = this.scaleX(tick);
-      let lines = containerSelect.append('line')
-                      .attr('x1', lineX)
-                      .attr('y1', 0)
-                      .attr('x2', lineX)
-                      .attr('y2', 30);
-
-      if (tick == 0)
-        lines.style('stroke', '#707070');
-      else if (tick < 0)
-        lines.style('stroke', '#E0E0E0');
-      else
-        lines.style('stroke', '#E0E0E0');
-    }
+    let lines = containerSelect.selectAll('line').data(ticks);
+    lines.exit().remove();
+    lines = lines.enter().append('line').merge(lines);
+    lines.attr('x1', d => this.scaleX(d))
+        .attr('y1', 0)
+        .attr('x2', d => this.scaleX(d))
+        .attr('y2', 30)
+        .style('stroke', d => d == 0 ? '#707070' : '#C0C0C0');
   }
 
   addRectangles(containerSelect)
@@ -368,13 +369,9 @@ class Table
 
     rowData.isExpanded = !rowData.isExpanded;
     if (rowData.isExpanded)
-    {
       this.tableData.splice(index + 1, 0, ...pollData);
-    }
     else
-    {
       this.tableData.splice(index + 1, pollData.length);
-    }
 
     if (!this.sortedHeader)
     {
@@ -390,8 +387,8 @@ class Table
     this.drawTable();
   }
 
-  collapseAll()
-  {
-    this.tableData = this.tableData.filter(d => d.isForecast);
-  }
+  // collapseAll()
+  // {
+  //   this.tableData = this.tableData.filter(d => d.isForecast);
+  // }
 }
