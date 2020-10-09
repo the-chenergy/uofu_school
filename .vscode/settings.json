@@ -29,9 +29,17 @@
 	"files.associations": {
 		"utility": "cpp",
 		"xstddef": "cpp",
-		"unordered_map": "cpp"
+		"unordered_map": "cpp",
+		"algorithm": "cpp",
+		"xiosbase": "cpp",
+		"vector": "cpp",
+		"xtree": "cpp"
 	},
 	"cSpell.ignoreWords": [
-		"gdppc"
+		"chal",
+		"gdppc",
+		"inc",
+		"winstate",
+		"winstate inc"
 	]
 }
