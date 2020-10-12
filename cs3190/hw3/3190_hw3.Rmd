@@ -1,0 +1,221 @@
+---
+title: "Homework 3"
+author: "Qianlang Chen"
+
+# CS 3190
+# U 10/11/20
+
+output: pdf_document
+fontsize: 12pt
+
+header-includes:
+  - \usepackage{setspace}
+  - \linespread{1.25}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{python, include=FALSE}
+import matplotlib
+matplotlib.use("tkAgg") # fixes qt plugin errors
+```
+
+# Problem 1
+
+```{python}
+import numpy
+
+# read in the data for this problem
+x = numpy.genfromtxt("data/x.csv")
+y = numpy.genfromtxt("data/y.csv")
+print(len(x), len(y))
+```
+
+## Part (a)
+
+With the help of Python, let's find out the parameters of the regression line:
+```{python}
+# line equation: y_hat = a*x + b
+(a, b) = numpy.polyfit(x, y, 1)
+print(a, b)
+```
+
+```{python}
+# plot the data and the regression line
+from matplotlib import pyplot
+pyplot.scatter(x, y, c="#C0C0C0")
+
+line_x = numpy.linspace(min(x), max(x), 1729)
+line_y = a * line_x + b
+pyplot.plot(line_x, line_y, "r-", zorder=1729)
+```
+
+According to the output, the best-fit line for this data is approximately
+$$\hat{y} = M(x) = 515.1x - 1096$$
+
+Using this model, we can then predict the values of $y$ for $x = 4$ and $x = 8.5$:
+```{python}
+# calculate and plot the predictions
+pred_x = numpy.array([4, 8.5])
+pred_y = a * pred_x + b
+print(pred_x, pred_y)
+
+pyplot.scatter(x, y, c="#C0C0C0")
+pyplot.plot(line_x, line_y, "k-")
+pyplot.scatter(pred_x, pred_y, c="r", zorder=1729)
+```
+
+The output indicates that our predictions for inputs 4 and 8.5 are about 964.9 and 3283, respectively, and as seen from the plot, they do fit the data arguably nicely.
+
+## Part (b)
+
+```{python}
+# split to get the training data and perform linear regression on it
+train_len = int(.80 * len(x))
+train_x = x[:train_len]
+train_y = y[:train_len]
+
+(train_a, train_b) = numpy.polyfit(train_x, train_y, 1)
+print(train_len, train_a, train_b)
+```
+
+The best-fit model for the training data is approximately
+$$\hat{y} = M(x) = 492.8x - 991.1$$
+
+```{python}
+# calculate and plot the predictions
+pred_x = numpy.array([4, 8.5])
+pred_y = train_a * pred_x + train_b
+print(pred_x, pred_y)
+
+line_x = numpy.linspace(min(train_x), max(train_x), 1729)
+line_y = train_a * line_x + train_b
+
+pyplot.scatter(train_x, train_y, c="#C0C0C0")
+pyplot.plot(line_x, line_y, "k-")
+pyplot.scatter(pred_x, pred_y, c="r", zorder=1729)
+```
+
+Our predictions this time were about 980.2 and 3198, which ain't too bad either.
+
+## Part (c)
+
+```{python}
+# split to get the testing data
+test_x = x[train_len:]
+test_data_y = y[train_len:]
+
+# run the tests and calculate the residuals
+test_full_y = a * test_x + b
+test_train_y = train_a * test_x + train_b
+
+res_full = test_full_y - test_data_y
+res_train = test_train_y - test_data_y
+print("Residual of the testing data using model built from the full data:",
+  res_full,
+  "L2-norm of this residual vector: "+str(numpy.linalg.norm(res_full, 2)),
+  "",
+  "Residual of the testing data using model built from the training data:",
+  res_train,
+  "L2-norm of this residual vector: "+str(numpy.linalg.norm(res_train, 2)),
+  sep="\n")
+```
+
+```{python}
+# calculate the residuals for the models built on the full data and the
+#   training data
+train_full_y = a * x + b
+train_train_y = train_a * train_x + train_b
+
+res_train_full = train_full_y - y
+res_train_train = train_train_y - train_y
+print("L2-norm of the residual vector of the model built from the full data:",
+  numpy.linalg.norm(res_train_full, 2),
+  "",
+  "L2-norm of the residual vector of the model built from the training data:",
+  numpy.linalg.norm(res_train_train, 2),
+  sep="\n")
+```
+
+## Part (d)
+
+```{python}
+# create tilde-x for a degree-3 polynomial regression
+tilde_x = numpy.matrix([[x[i]**j for j in range(4)] for i in range(train_len)])
+print("First three row of tilde-X:", tilde_x[:3], sep="\n")
+```
+
+```{python}
+# perform the polynomial regression and calculate the best-bit curve
+coeffs = (tilde_x.T * tilde_x).I * tilde_x.T * numpy.matrix([train_y]).T
+poly = numpy.poly1d(numpy.flip(numpy.squeeze(numpy.asarray(coeffs))))
+
+print(poly)
+```
+
+```{python}
+# plot the best fit line
+line_x = numpy.linspace(min(train_x), max(train_x), 1729)
+line_y = poly(line_x)
+
+pyplot.scatter(train_x, train_y, c="#C0C0C0")
+pyplot.plot(line_x, line_y, "r-")
+```
+
+The best-fit degree-3 polynomial model for the training data is
+$$\hat{y} = M_3(x) = 2.209x^3 + 22.49x^2 + 42.99x + 175.4$$
+
+```{python}
+# calculate the residuals
+res_test = poly(test_x) - test_data_y
+res_train = poly(train_x) - train_y
+
+print("L2-norm of the residual vector of the testing data:",
+  numpy.linalg.norm(res_test, 2),
+  "L2-norm of the residual vector of the training data:",
+  numpy.linalg.norm(res_train, 2),
+  sep="\n")
+```
+
+\pagebreak
+# Problem 2
+
+## Part (a)
+
+
+
+## Part (b)
+
+
+
+## Part (c)
+
+
+
+## Part (d)
+
+
+
+\pagebreak
+# Problem 3
+
+## Part (a)
+
+
+
+## Part (b)
+
+
+
+## Part (c)
+
+
+
+## Part (d)
+
+
+
+
+
