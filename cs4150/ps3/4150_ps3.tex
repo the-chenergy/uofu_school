@@ -53,6 +53,7 @@
 \begin{enumerate}
 
   \item (Choosing Candy)
+
     Let $x_1$ and $x_2$ respectively represent the number of bags of Good \& Plenty and Necco Wafers the professor should buy. Now, we can build a linear program (in canonical form) for this problem:
     $$
       \begin{aligned}
@@ -89,6 +90,7 @@
     \pagebreak
 
   \item (LP Duality)
+
     It turned out that the optimal solution occurred at buying 6 bags of each, which is located at the lower left corner of the plot. Removing the shelf-constraints would only extend the region forever to the top and to the right, and since this is a linear program, any point in the extended region cannot possibly do better than this optimal solution located at lower-left, meaning that the current optimal solution would still be an optimal solution in the new linear program.
 
     After removing the shelf-constraints, let's create the dual of the original linear program, which should have same optimal solution:
@@ -125,7 +127,8 @@
     \pagebreak
 
   \item (Complement Connectivity)
-    \textbf{Proof.} Let some disconnected graph $G = (V, E)$ be given. Let the complement of $G$ be called $\bar{G} = (V, [V^2] - E)$, and let $\bar{E} = [V^2] - E$. Note that $V$ must have at least two vertices because otherwise $G$ wouldn't be disconnected anymore. So, let any two vertices $u, v \in V$ be given. One of the following cases about $u$ and $v$ must be true:
+
+    \textbf{Proof.} Let some disconnected graph $G = (V, E)$ be given. Let the complement of $G$ be called $\bar{G} = (V, [V^2] \setminus E)$, and let $\bar{E} = [V^2] \setminus E$. Note that $V$ must have at least two vertices because otherwise $G$ wouldn't be disconnected anymore. So, let any two vertices $u, v \in V$ be given. One of the following cases about $u$ and $v$ must be true:
     \begin{itemize}
       \item \textbf{Case 1,} $u$ and $v$ are in the same connected component in $G$. Since $G$ is disconnected, $G$ must have some other connected component different from the one containing $u$ and $v$. Let some vertex $w$ from the other component be given. Since $w$ is in a different component than both $u$ and $v$, we know that $uw \notin E$ and $vw \notin E$, meaning that $uw, vw \in \bar{E}$, implying that there's a walk from $u$ to $v$ in $\bar{G}$ and that $u$ and $v$ are in the same component in $\bar{G}$.
       \item \textbf{Case 2,} $u$ and $v$ are not in the same connected component in $G$, so we know that $uv \notin E$. This immediately implies that $uv \in \bar{E}$, which means that there's a walk from $u$ to $v$ in $\bar{G}$ and that $u$ and $v$ are in the same component in $\bar{G}$.
@@ -135,18 +138,20 @@
     \pagebreak
 
   \item (Greedy Coloring, Part 1)
-    \textbf{a. Proof.} Let's assume that the algorithm \texttt{GreedyColoring} uses more than $(\Delta + 1)$ colors for some graph $G$, where $\Delta$ is the highest degree in $G$. Now, let's see why this cannot happen.
 
-    Apart from the initialization of the array \texttt{color} at line 4, the algorithm sets the color for each vertex $i$ at line 9, where $i$ gets the color equal to the minimum value in the set $V$. We know that $V$ was defined to be $S - C$, where $C$ is the set of colors that $i$'s neighbors have and $S$ is the constant set $\{1, 2, \cdots, n\}$. If the algorithm uses more than $(\Delta + 1)$ colors, there must be some vertex $i$ that's got assigned a color more than $(\Delta + 1)$ since 1 is the smallest color the algorithm uses (1 is the smallest element in $S$). By the assignment process we've just described, it means that the minimum value in $S - C$ is greater than $(\Delta + 1)$, which can only happen when $C \supseteq \{1, 2, \cdots, \Delta + 1\}$. In other words, $i$ has neighbors who are colored $\{1, 2, \cdots, \Delta + 1\}$, but this would mean that $i$ has at least $(\Delta + 1)$ neighbors, which would disagree with the fact that $\Delta$ was the highest degree in $G$. Such vertex $i$ cannot exist, and such graph $G$ cannot exist, so our assumption in the beginning must've been wrong. The algorithm \texttt{GreedyColoring} always uses at most $(\Delta + 1)$ colors for any graph. $\square$
+    \textbf{(a) Proof.} Let's assume that the algorithm \texttt{GreedyColoring} uses more than $\Delta + 1$ colors for some graph $G$, where $\Delta$ is the highest degree in $G$. Now, let's see why this cannot happen.
 
-    \textbf{b.} After all, when assigning a color for a vertex $i$, we're only interested in the minimum value in $S - C$, which is the smallest color that hasn't appeared within $i$'s neighbors. Since such smallest color can only be at most (deg($i$) + 1), we can use an array of this size to mark the appeared colors and loop again at the end to find the smallest unmarked color:
+    Apart from the initialization of the array \texttt{color} at line 4, the algorithm sets the color for each vertex $i$ at line 9, where $i$ gets the color equal to the minimum value in the set $V$. We know that $V$ was defined to be $S \setminus C$, where $C$ is the set of colors that $i$'s neighbors have and $S$ is the constant set $\{1, 2, \cdots, n\}$. If the algorithm uses more than $\Delta + 1$ colors, there must be some vertex $i$ that's got assigned a color more than $\Delta + 1$ since 1 is the smallest color the algorithm uses (1 is the smallest element in $S$). By the assignment process we've just described, it means that the minimum value in $S \setminus C$ is greater than $\Delta + 1$, which can only happen when $C \supseteq \{1, 2, \cdots, \Delta + 1\}$. In other words, $i$ has neighbors who are colored $\{1, 2, \cdots, \Delta + 1\}$, but this would mean that $i$ has at least $\Delta + 1$ neighbors, which would disagree with the fact that $\Delta$ was the highest degree in $G$. Such vertex $i$ cannot exist, and such graph $G$ cannot exist, so our assumption in the beginning must've been wrong. The algorithm \texttt{GreedyColoring} always uses at most $\Delta + 1$ colors for any graph. $\square$
+
+    \textbf{(b)} After all, when assigning a color for a vertex $i$, we're only interested in the minimum value in $S \setminus C$, which is the smallest color that hasn't appeared within $i$'s neighbors. Since such smallest color can only be at most (deg($i$) + 1), we can use an array of this size to mark the appeared colors and loop again at the end to find the smallest unmarked color:
     \begin{center}
       \begin{minipage}{0.5625\linewidth}
         \renewcommand{\thealgocf}{}
+        \SetArgSty{textrm}
         \begin{algorithm}[H]
           \caption{\texttt{GreedyColoring}}
-          \KwIn{\tt int A[1..n][]}
-          \KwOut{\tt int[]}
+          \KwIn{\tt set<int> A[1..n]}
+          \KwOut{\tt int[1..n]}
 
           {\tt int color[1..n]} $\gets$ filled with 0
 
@@ -158,7 +163,7 @@
 
               {\tt bool mark[1..deg]} $\gets$ filled with {\tt false}
 
-            \For{each {\tt int nei} in {\tt A[i]}}
+            \For{each {\tt \textbf{int} nei} in {\tt A[i]}}
             {
               \If{1 $\le$ {\tt color[nei]} $\le$ {\tt deg}}
               {
@@ -175,18 +180,41 @@
 
             {\tt color[i]} $\gets$ {\tt min}
           }
+
+          \Return{{\tt color}}
         \end{algorithm}
       \end{minipage}
     \end{center}
 
-    \textbf{c.} First of all, it's easy to see that the initialization of the array \texttt{color} (lines 3-5 from the original pseudocode) takes $O(V)$ time. Now, the main for-loop (lines 6-10) iterates exactly $V$ times, and each iteration takes $O$(deg($i$)) for vertex $i$; in total, the main for-loop takes $O$(deg(1)) + $\cdots$ + $O$(deg($V$)). Since we know for a fact that the degrees of any (undirected) graph sum to twice the number of edges, the main for-loop will take $O(V + 2 \cdot E) = O(V + E)$ time. Therefore, the entire algorithm takes $O(V + E)$.
+    \textbf{(c)} First of all, it's easy to see that the initialization of the array \texttt{color} (lines 3-5 from the original pseudocode) takes $O(V)$ time. Now, the main for-loop (lines 6-10) iterates exactly $V$ times, and each iteration takes an additional $O$(deg($i$)) for vertex $i$; in total, the main for-loop takes $O(V) + O$(deg(1)) + $O$(deg(2)) + $\cdots$ + $O$(deg($V$)). Since we know for a fact that the degrees of any (undirected) graph sum to twice the number of edges, the main for-loop will take $O(V + 2 \cdot E) = O(V + E)$ time. Therefore, the entire algorithm takes $O(V + E)$.
 
     \pagebreak
 
   \item (Greedy Coloring, Part 2)
 
-    % answer question 5 here
+    \textbf{(a)} Let's introduce the following strategy for building a bipartite graph $G_n$ with an even number of vertices $n \ge 2$:
+    \begin{itemize}
+      \item Create $n$ vertices named $1, 2, \cdots, n$.
+      \item For each odd vertex $j$ from 3 up to $n - 1$, create edges that connect $j$ to all even vertices up to $j - 1$. (For example, connect vertex 7 to vertices 2, 4, and 6.)
+      \item For each even vertex $k$ from 4 up to $n$, create edges that connect $k$ to all odd vertices up to $k - 3$. (For example, connect vertex 8 to vertices 1, 3, and 5.)
+    \end{itemize}
+    It's easy to see that this strategy will create a bipartite graph, with the even and odd numbers being the two partite sets, since we only create edges between vertices with different parities.
 
+    Now, let's see why a graph $G_n = (V_n, E_n)$ created by this strategy makes \texttt{GreedyColoring} use $n/2$ colors:
+    \begin{itemize}
+      \item \textbf{Claim.} For any even number $k$ where $2 \le k \le n$, the algorithm \texttt{GreedyColoring} uses the colors $1..(k/2)$ for all odd vertices up to $k-1$ and for all even vertices up to $k$.
+      \item \textbf{Proof.} Let's induct on $k$:
+
+        \underline{Base case:} Since the algorithm colors in vertices in numerical order, the vertices 1 and 2 will both get the color 1 because there isn't an edge between vertices 1 and 2. This shows that the claim holds for $k = 2$.
+
+        \underline{Inductive Step:} Assume that the claim holds for some $k = i$ (even), meaning that all odd vertices up to $i-1$ have $i/2$ different colors and similarly for all even vertices up to $i$. The algorithm will have to give the vertex $i+1$ the color $(i/2) + 1 = (i+2)/2$ because the vertex $i+1$ is connected to all the even vertices up to $i$ that already have the colors $1..(i/2)$. Similarly, the vertex $i+2$ will also get the color $(i+2)/2$ because it's connected to all the odd vertices up to $i-1$ that already have the colors $1..(i/2)$. This shows that the claim holds for $k = i+2$, which completes the inductive step and shows that the claim is true for $k = n$. $\square$
+    \end{itemize}
+    Since we know that a bipartite graph can be colored using at most two colors, the graph $G_n$ shows that the algorithm \texttt{GreedyColoring} doesn't always produce the optimal coloring.
+
+    \textbf{(b)} Here's an example graph $G$:
+    $$G = (V, E); V = \{1, 2, 3\}, E = \{\{1, 2\}, \{1, 3\}, \{2, 3\}\}$$
+
+    \textbf{(c)} No, there are permutations on such graphs where \texttt{PermutedGreedy} doesn't produce a suboptimal coloring. (That is, there are situations where \texttt{PermutedGreedy} will produce an optimal coloring.) Imagine a bipartite graph created with the strategy from \textit{part (a)} that has at least four vertices. Consider a permutation that lists all odd vertices before the even ones. Since there are no edges between any two vertices from the same partite set, the algorithm will give all the odd vertices the color 1 and then give all the even vertices the color 2 since 1 is the only color appeared within the neighbors of any even vertex. Only two colors are used given this permutation, which is optimal.
 
 \end{enumerate}
 
