@@ -1,25 +1,3 @@
-BasedOnStyle: LLVM
+BasedOnStyle: Google
 
-AllowShortFunctionsOnASingleLine: None
-BreakBeforeBraces: Allman
-IndentCaseLabels: true
-IndentWidth: 2
-KeepEmptyLinesAtTheStartOfBlocks: false
-TabWidth: 2
-UseTab: Never
-
----
-Language: Cpp
-
-DerivePointerAlignment: false
-NamespaceIndentation: All
-PointerAlignment: Left
-
----
-Language: Java
-
-ColumnLimit: 144
-IndentWidth: 4
-TabWidth: 4
-UseTab: Always
-
+MaxEmptyLinesToKeep: 1
