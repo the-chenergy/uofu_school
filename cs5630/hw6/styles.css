@@ -44,8 +44,8 @@ line {
 }
 
 .economy {
-  color: var(--teal);
-  fill: var(--teal);
+  color: var(--yellow);
+  fill: var(--yellow);
 }
 
 .education {
@@ -54,8 +54,8 @@ line {
 }
 
 .energy {
-  color: var(--yellow);
-  fill: var(--yellow);
+  color: var(--teal);
+  fill: var(--teal);
 }
 
 .health {
@@ -286,7 +286,7 @@ line {
 
 #phrase-table-contents {
   overflow-y: auto;
-  height: 842px;
+  height: 900px;
   display: block;
   width: 848px;
 }

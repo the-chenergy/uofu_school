@@ -9,22 +9,22 @@ class BubbleChart {
   //#region STATIC MEMBERS /////////////////////////////////////////////////////
 
   /** The maximum magnitude of margin this chart can show. */
-  static MAX_MARGIN = 55;
+  static MAX_MARGIN = 78 * 100 / 144;
 
   /** The margin steps to draw on the chart. */
   static MARGIN_STEPS = [-40, -20, 0, 20, 40];
 
   /** The radius of the bubble representing the maximum data value. */
-  static MAX_BUBBLE_RADIUS = 10;
+  static MAX_BUBBLE_RADIUS = 12;
 
   /** The radius of the bubble representing the minimum data value. */
-  static MIN_BUBBLE_RADIUS = -0.5;
+  static MIN_BUBBLE_RADIUS = 0;
 
   /** The width of the chart. */
-  static CHART_WIDTH = 900;
+  static CHART_WIDTH = 864;
 
   /** The height of each row in the chart table. */
-  static ROW_HEIGHT = 132;
+  static ROW_HEIGHT = 144;
 
   //#endregion
 
@@ -54,9 +54,9 @@ class BubbleChart {
      * @private @type {function(number):number} A scale that converts a data
      *     value into an X location in the chart.
      */
-    this.xScale = d3.scaleLinear().domain([-51, BubbleChart.MAX_MARGIN]).range([
-      0, BubbleChart.CHART_WIDTH
-    ]);
+    this.xScale = d3.scaleLinear()
+                      .domain([-BubbleChart.MAX_MARGIN, BubbleChart.MAX_MARGIN])
+                      .range([0, BubbleChart.CHART_WIDTH]);
 
     /** @private @type {*[]} The raw data array. */
     this.data = null;
@@ -118,11 +118,16 @@ class BubbleChart {
     this.initHeader();
     this.initTable();
 
+    let exemptFromClearing = new Set([
+      'bubble-chart-show-extremes-button', 'phrase-table-header-phrase',
+      'phrase-table-header-proportion', 'phrase-table-header-frequency'
+    ]);
     d3.select(document).on('mousedown', e => {
-      if (e.target.getAttribute('id') == 'bubble-chart-show-extremes-button') {
-        this.clearBrushSelections();
-        return;
-      }
+      let toCheck = [
+        e.target.getAttribute('id'), e.target.parentElement.getAttribute('id'),
+        e.target.parentElement.parentElement.getAttribute('id')
+      ];
+      if (toCheck.some(x => exemptFromClearing.has(x))) return;
 
       this.clearAll();
     });
@@ -153,6 +158,7 @@ class BubbleChart {
         .attr('id', 'bubble-chart-show-extremes-button')
         .text('Show Extremes')
         .on('click', () => {
+          this.clearBrushSelections();
           if (this.isShowingExtremes)
             this.hideExtremes();
           else
@@ -214,7 +220,7 @@ class BubbleChart {
         .attr('x1', d => this.xScale(d))
         .attr('x2', d => this.xScale(d))
         .attr('y1', 0)
-        .attr('y2', BubbleChart.ROW_HEIGHT)
+        .attr('y2', 2 * BubbleChart.ROW_HEIGHT)
         .style('opacity', 0.1667);
 
     this.contents.append('g')
@@ -226,8 +232,8 @@ class BubbleChart {
         .attr('class', d => partyClassOf(d) + '-stroke')
         .attr('x1', d => this.xScale(d))
         .attr('x2', d => this.xScale(d))
-        .attr('y1', BubbleChart.ROW_HEIGHT)
-        .attr('y2', BubbleChart.ROW_HEIGHT * this.numRows)
+        .attr('y1', 2 * BubbleChart.ROW_HEIGHT)
+        .attr('y2', this.numRows * BubbleChart.ROW_HEIGHT)
         .style('opacity', 0);
 
     // Draw category titles.
@@ -263,9 +269,18 @@ class BubbleChart {
 
       this.contents.append('g')
           .attr('id', 'bubble-chart-contents-brush-row' + i)
-          .style('display', !this.isGrouped && i > 0 ? 'none' : '')
+          .style('display', this.isGrouped ? '' : 'none')
           .call(brush);
     }
+    let brush = d3.brushX().extent(
+        [[0, 0], [BubbleChart.CHART_WIDTH, 2 * BubbleChart.ROW_HEIGHT]]);
+    brush.on('brush', e => this.updateBrushSelections(e));
+    this.brushes.push(brush);
+
+    this.contents.append('g')
+        .attr('id', 'bubble-chart-contents-brush-all')
+        .style('display', this.isGrouped ? 'none' : '')
+        .call(brush);
 
     // Draw bubbles.
     this.contents.append('g')
@@ -320,6 +335,7 @@ class BubbleChart {
     ]);
 
     // Create bubble objects and assign categories.
+    let min = 2e9, max = -2e9;
     for (let item of rawData) {
       let category = toTitleCase(item['category']);
       if (!this.bubblesByCategories.has(category))
@@ -329,15 +345,22 @@ class BubbleChart {
       this.bubblesByCategories.get(category).push(bubble);
       this.bubbles.push(bubble);
 
-      if (!this.lowExtreme || bubble.cx[false] < this.lowExtreme.cx[false])
+      let curr = +item['position'];
+      if (curr < min) {
         this.lowExtreme = bubble;
-
-      if (!this.highExtreme || bubble.cx[false] > this.highExtreme.cx[false])
+        min = curr;
+      } else if (curr > max) {
         this.highExtreme = bubble;
+        max = curr;
+      }
     }
     this.categories = Array.from(this.bubblesByCategories.keys());
     this.numRows = this.categories.length;
 
+    // Position the bubbles.
+    new BubblePositioner(this.bubblesByCategories, this.xScale);
+
+    // Draw all the contents.
     this.initContents();
   }
 
@@ -349,7 +372,7 @@ class BubbleChart {
     d3.select('#bubble-chart-contents-bubbles')
         .selectAll('circle')
         .transition()
-        .duration(260)
+        .duration(347)
         .ease(d3.easeExpOut)
         .attr('cx', d => d.cx[this.isGrouped])
         .attr('cy', d => d.cy[this.isGrouped] + BubbleChart.ROW_HEIGHT / 2);
@@ -357,14 +380,14 @@ class BubbleChart {
     d3.select('#bubble-chart-contents-other-row-lines')
         .selectAll('line')
         .transition()
-        .duration(260)
+        .duration(347)
         .ease(this.isGrouped ? d3.easeSinIn : d3.easeExpOut)
         .style('opacity', this.isGrouped * 0.1667);
 
     d3.select('#bubble-chart-contents-titles')
         .selectAll('text')
         .transition()
-        .duration(260)
+        .duration(347)
         .ease(this.isGrouped ? d3.easeSinIn : d3.easeExpOut)
         .style('opacity', this.isGrouped * 1)
         .style('user-select', this.isGrouped ? '' : 'none');
@@ -372,7 +395,7 @@ class BubbleChart {
     d3.select('#bubble-chart-contents-titles')
         .selectAll('rect')
         .transition()
-        .duration(260)
+        .duration(347)
         .ease(this.isGrouped ? d3.easeSinIn : d3.easeExpOut)
         .style('opacity', this.isGrouped * 1)
         .style('user-select', this.isGrouped ? '' : 'none');
@@ -380,8 +403,10 @@ class BubbleChart {
     this.clearBrushSelections();
     for (let i = 0; i < this.numRows; i++) {
       d3.select('#bubble-chart-contents-brush-row' + i)
-          .style('display', !this.isGrouped && i > 0 ? 'none' : '');
+          .style('display', this.isGrouped ? '' : 'none');
     }
+    d3.select('#bubble-chart-contents-brush-all')
+        .style('display', this.isGrouped ? 'none' : '');
   }
 
   /**
@@ -432,6 +457,8 @@ class BubbleChart {
       this.contents.select('#bubble-chart-contents-brush-row' + i)
           .call(this.brushes[i].clear);
     }
+    this.contents.select('#bubble-chart-contents-brush-all')
+        .call(this.brushes[this.numRows].clear);
 
     this.updateBubbleSelections(null);
     this.hasSelections = false;
@@ -541,12 +568,74 @@ class Bubble {
     this.category = categoryClassOf(rawDataItem['category']);
 
     /** @type {*} The bubble's X location on screen. */
-    this.cx = {false: rawDataItem['sourceX'], true: rawDataItem['moveX']};
+    this.cx = {};
 
     /** @type {*} The bubble's Y location on screen. */
-    this.cy = {false: rawDataItem['sourceY'], true: rawDataItem['moveY']};
+    this.cy = {};
 
     /** @type {number} The bubble's radius. */
     this.r = rScale(rawDataItem['total']);
+  }
+}
+
+/** Helps calculate the positions for the bubbles in a bubble-chart. */
+class BubblePositioner {
+  /**
+   * Creates a new BubblePositioner that calculates positions for a collection
+   * of bubbles, using D3's force simulation.
+   * @param {Map<string, Bubble[]>} bubblesByCategories The list of bubbles by
+   *     categories.
+   * @param {function(number):number} xScale The scale for the bubble's X
+   *     location.
+   */
+  constructor(bubblesByCategories, xScale) {
+    // Initialize nodes for the force simulation.
+    let nodes = [], row = 0;
+    for (let bubbles of bubblesByCategories.values()) {
+      for (let bubble of bubbles) {
+        nodes.push({
+          'bubble': bubble,
+          'row': row,
+          'targetX': xScale(+bubble.rawData['position']),
+          'targetY': BubbleChart.ROW_HEIGHT / 2,
+          'r': bubble.r + .75,  // stroke width is 1.5
+        });
+      }
+      row++;
+    }
+
+    // Simulate the un-grouped case.
+    this.simulate(nodes);
+    for (let node of nodes) {
+      node['bubble'].cx[false] = node['x'];
+      node['bubble'].cy[false] = node['y'];
+    }
+
+    // Simulate the grouped case.
+    for (let node of nodes)
+      node['targetY'] = node['row'] * BubbleChart.ROW_HEIGHT;
+    this.simulate(nodes);
+    for (let node of nodes) {
+      node['bubble'].cx[true] = node['x'];
+      node['bubble'].cy[true] = node['y'];
+    }
+  }
+
+  /**
+   * @private Runs a force simulation on a list of nodes, where the attracting X
+   *     and Y values are stored in targetX and targetY, while the collision
+   *     radius is stored in r.
+   * @param {*[]} nodes The list of nodes to run the force simulation on.
+   */
+  simulate(nodes) {
+    let simulation =
+            d3.forceSimulation(nodes)
+                .force('x', d3.forceX().x(d => d['targetX']).strength(1))
+                .force('y', d3.forceY().y(d => d['targetY']).strength(1))
+                .force('collision', d3.forceCollide().radius(d => d['r']))
+                .stop(),
+        tickLimit = Math.log(simulation.alphaMin()) /
+        Math.log(1 - simulation.alphaDecay());
+    for (let i = 0; i < tickLimit; i++) simulation.tick();
   }
 }
