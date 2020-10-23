@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = b'*Q\xa7\xdb\x12q\xd5v"\x07\x98\xb5\x9d\x82i\xb0'
+_lr_signature = b'O\xbbl\x16\xa6\x04\xe5\x8di\x96\xdb\xe5\x07\xd4\x8a|'
     
-_lr_action_items = {'NAME':([0,4,5,6,8,9,10,11,12,],[2,14,14,14,14,14,14,14,14,]),'MINUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,],[4,-11,10,4,4,4,-10,4,4,4,4,4,-7,-11,-8,10,10,-3,-4,-5,-6,-9,]),'SUCC':([0,4,5,6,8,9,10,11,12,],[5,5,5,5,5,5,5,5,5,]),'LPAREN':([0,4,5,6,8,9,10,11,12,],[6,6,6,6,6,6,6,6,6,]),'NUMBER':([0,4,5,6,8,9,10,11,12,],[7,7,7,7,7,7,7,7,7,]),'$end':([1,2,3,7,13,14,15,17,18,19,20,21,22,],[0,-11,-2,-10,-7,-11,-8,-1,-3,-4,-5,-6,-9,]),'EQUALS':([2,],[8,]),'PLUS':([2,3,7,13,14,15,16,17,18,19,20,21,22,],[-11,9,-10,-7,-11,-8,9,9,-3,-4,-5,-6,-9,]),'TIMES':([2,3,7,13,14,15,16,17,18,19,20,21,22,],[-11,11,-10,-7,-11,-8,11,11,11,11,-5,-6,-9,]),'DIVIDE':([2,3,7,13,14,15,16,17,18,19,20,21,22,],[-11,12,-10,-7,-11,-8,12,12,12,12,-5,-6,-9,]),'RPAREN':([7,13,14,15,16,18,19,20,21,22,],[-10,-7,-11,-8,22,-3,-4,-5,-6,-9,]),}
+_lr_action_items = {'error':([0,],[2,]),'DFA':([0,],[3,]),'NFA':([0,],[4,]),'PDA':([0,],[5,]),'TM':([0,],[6,]),'$end':([1,2,7,8,10,11,12,13,14,26,27,34,],[0,-1,-2,-6,-9,-3,-4,-5,-7,-10,-8,-11,]),'ID':([3,4,5,6,8,10,15,22,23,24,25,26,27,31,32,33,34,],[10,10,10,10,10,-9,19,10,19,19,19,-10,-8,10,19,19,-11,]),'COLON':([9,10,],[15,-9,]),'COMMA':([10,18,19,20,21,26,30,],[-9,24,-15,-16,-17,31,33,]),'EPS':([15,23,24,25,32,33,],[20,20,20,20,20,20,]),'BLANK':([15,23,24,25,32,33,],[21,21,21,21,21,21,]),'ARROW':([16,17,18,19,20,21,28,35,36,],[22,-12,-14,-15,-16,-17,-13,-18,-19,]),'OR':([17,18,19,20,21,35,36,],[23,-14,-15,-16,-17,-18,-19,]),'SEMICOLON':([18,19,20,21,29,],[25,-15,-16,-17,32,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,],[1,]),'expression':([0,4,5,6,8,9,10,11,12,],[3,13,15,16,17,18,19,20,21,]),}
+_lr_goto_items = {'md':([0,],[1,]),'lines':([3,4,5,6,8,],[7,11,12,13,14,]),'one_line':([3,4,5,6,8,],[8,8,8,8,8,]),'state':([3,4,5,6,8,22,31,],[9,9,9,9,9,26,26,]),'labels':([15,23,],[16,28,]),'one_label':([15,23,],[17,17,]),'ID_or_EPS_or_B':([15,23,24,25,32,33,],[18,18,29,30,35,36,]),'states':([22,31,],[27,34,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -25,16 +25,24 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> statement","S'",1,None,None,None),
-  ('statement -> NAME EQUALS expression','statement',3,'p_statement_assign','<ipython-input-7-f49b12234fbe>',54),
-  ('statement -> expression','statement',1,'p_statement_expr','<ipython-input-7-f49b12234fbe>',58),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','<ipython-input-7-f49b12234fbe>',62),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','<ipython-input-7-f49b12234fbe>',63),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','<ipython-input-7-f49b12234fbe>',64),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','<ipython-input-7-f49b12234fbe>',65),
-  ('expression -> MINUS expression','expression',2,'p_expression_uminus','<ipython-input-7-f49b12234fbe>',72),
-  ('expression -> SUCC expression','expression',2,'p_expression_succ','<ipython-input-7-f49b12234fbe>',79),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','<ipython-input-7-f49b12234fbe>',84),
-  ('expression -> NUMBER','expression',1,'p_expression_number','<ipython-input-7-f49b12234fbe>',88),
-  ('expression -> NAME','expression',1,'p_expression_name','<ipython-input-7-f49b12234fbe>',92),
+  ("S' -> md","S'",1,None,None,None),
+  ('md -> error','md',1,'p_you_are_hosed','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',462),
+  ('md -> DFA lines','md',2,'p_dfa_md','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',469),
+  ('md -> NFA lines','md',2,'p_nfa_md','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',483),
+  ('md -> PDA lines','md',2,'p_pda_md','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',489),
+  ('md -> TM lines','md',2,'p_tm_md','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',501),
+  ('lines -> one_line','lines',1,'p_lines1','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',517),
+  ('lines -> one_line lines','lines',2,'p_lines2','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',522),
+  ('one_line -> state COLON labels ARROW states','one_line',5,'p_one_line','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',529),
+  ('state -> ID','state',1,'p_state','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',549),
+  ('states -> state','states',1,'p_states1','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',554),
+  ('states -> state COMMA states','states',3,'p_states2','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',559),
+  ('labels -> one_label','labels',1,'p_labels1','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',564),
+  ('labels -> one_label OR labels','labels',3,'p_labels2','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',569),
+  ('one_label -> ID_or_EPS_or_B','one_label',1,'p_one_label1','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',587),
+  ('ID_or_EPS_or_B -> ID','ID_or_EPS_or_B',1,'p_ID_or_EPS_or_B','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',592),
+  ('ID_or_EPS_or_B -> EPS','ID_or_EPS_or_B',1,'p_ID_or_EPS_or_B','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',593),
+  ('ID_or_EPS_or_B -> BLANK','ID_or_EPS_or_B',1,'p_ID_or_EPS_or_B','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',594),
+  ('one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B','one_label',5,'p_one_label2','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',609),
+  ('one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B','one_label',5,'p_one_label3','c:\\users\\null\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\jove\\Def_md2mc_chatty.py',632),
 ]

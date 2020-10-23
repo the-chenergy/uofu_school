@@ -2,454 +2,443 @@ Created by PLY version 3.4 (http://www.dabeaz.com/ply)
 
 Grammar
 
-Rule 0     S' -> statement
-Rule 1     statement -> NAME EQUALS expression
-Rule 2     statement -> expression
-Rule 3     expression -> expression PLUS expression
-Rule 4     expression -> expression MINUS expression
-Rule 5     expression -> expression TIMES expression
-Rule 6     expression -> expression DIVIDE expression
-Rule 7     expression -> MINUS expression
-Rule 8     expression -> SUCC expression
-Rule 9     expression -> LPAREN expression RPAREN
-Rule 10    expression -> NUMBER
-Rule 11    expression -> NAME
+Rule 0     S' -> md
+Rule 1     md -> error
+Rule 2     md -> DFA lines
+Rule 3     md -> NFA lines
+Rule 4     md -> PDA lines
+Rule 5     md -> TM lines
+Rule 6     lines -> one_line
+Rule 7     lines -> one_line lines
+Rule 8     one_line -> state COLON labels ARROW states
+Rule 9     state -> ID
+Rule 10    states -> state
+Rule 11    states -> state COMMA states
+Rule 12    labels -> one_label
+Rule 13    labels -> one_label OR labels
+Rule 14    one_label -> ID_or_EPS_or_B
+Rule 15    ID_or_EPS_or_B -> ID
+Rule 16    ID_or_EPS_or_B -> EPS
+Rule 17    ID_or_EPS_or_B -> BLANK
+Rule 18    one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B
+Rule 19    one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B
 
 Terminals, with rules where they appear
 
-DIVIDE               : 6
-EQUALS               : 1
-LPAREN               : 9
-MINUS                : 4 7
-NAME                 : 1 11
-NUMBER               : 10
-PLUS                 : 3
-RPAREN               : 9
-SUCC                 : 8
-TIMES                : 5
-error                : 
+ARROW                : 8
+BLANK                : 17
+COLON                : 8
+COMMA                : 11 18 19
+DFA                  : 2
+EPS                  : 16
+ID                   : 9 15
+NFA                  : 3
+OR                   : 13
+PDA                  : 4
+SEMICOLON            : 18 19
+TM                   : 5
+error                : 1
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 3 3 4 4 5 5 6 6 7 8 9
-statement            : 0
+ID_or_EPS_or_B       : 14 18 18 18 19 19 19
+labels               : 8 13
+lines                : 2 3 4 5 7
+md                   : 0
+one_label            : 12 13
+one_line             : 6 7
+state                : 8 10 11
+states               : 8 11
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statement
-    (1) statement -> . NAME EQUALS expression
-    (2) statement -> . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (0) S' -> . md
+    (1) md -> . error
+    (2) md -> . DFA lines
+    (3) md -> . NFA lines
+    (4) md -> . PDA lines
+    (5) md -> . TM lines
 
-    NAME            shift and go to state 2
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
+    error           shift and go to state 2
+    DFA             shift and go to state 3
+    NFA             shift and go to state 4
+    PDA             shift and go to state 5
+    TM              shift and go to state 6
 
-    statement                      shift and go to state 1
-    expression                     shift and go to state 3
+    md                             shift and go to state 1
 
 state 1
 
-    (0) S' -> statement .
+    (0) S' -> md .
 
 
 
 state 2
 
-    (1) statement -> NAME . EQUALS expression
-    (11) expression -> NAME .
+    (1) md -> error .
 
-    EQUALS          shift and go to state 8
-    PLUS            reduce using rule 11 (expression -> NAME .)
-    MINUS           reduce using rule 11 (expression -> NAME .)
-    TIMES           reduce using rule 11 (expression -> NAME .)
-    DIVIDE          reduce using rule 11 (expression -> NAME .)
-    $end            reduce using rule 11 (expression -> NAME .)
+    $end            reduce using rule 1 (md -> error .)
 
 
 state 3
 
-    (2) statement -> expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (2) md -> DFA . lines
+    (6) lines -> . one_line
+    (7) lines -> . one_line lines
+    (8) one_line -> . state COLON labels ARROW states
+    (9) state -> . ID
 
-    $end            reduce using rule 2 (statement -> expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    TIMES           shift and go to state 11
-    DIVIDE          shift and go to state 12
+    ID              shift and go to state 10
 
+    lines                          shift and go to state 7
+    one_line                       shift and go to state 8
+    state                          shift and go to state 9
 
 state 4
 
-    (7) expression -> MINUS . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (3) md -> NFA . lines
+    (6) lines -> . one_line
+    (7) lines -> . one_line lines
+    (8) one_line -> . state COLON labels ARROW states
+    (9) state -> . ID
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    ID              shift and go to state 10
 
-    expression                     shift and go to state 13
+    lines                          shift and go to state 11
+    one_line                       shift and go to state 8
+    state                          shift and go to state 9
 
 state 5
 
-    (8) expression -> SUCC . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (4) md -> PDA . lines
+    (6) lines -> . one_line
+    (7) lines -> . one_line lines
+    (8) one_line -> . state COLON labels ARROW states
+    (9) state -> . ID
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    ID              shift and go to state 10
 
-    expression                     shift and go to state 15
+    lines                          shift and go to state 12
+    one_line                       shift and go to state 8
+    state                          shift and go to state 9
 
 state 6
 
-    (9) expression -> LPAREN . expression RPAREN
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (5) md -> TM . lines
+    (6) lines -> . one_line
+    (7) lines -> . one_line lines
+    (8) one_line -> . state COLON labels ARROW states
+    (9) state -> . ID
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    ID              shift and go to state 10
 
-    expression                     shift and go to state 16
+    lines                          shift and go to state 13
+    one_line                       shift and go to state 8
+    state                          shift and go to state 9
 
 state 7
 
-    (10) expression -> NUMBER .
+    (2) md -> DFA lines .
 
-    PLUS            reduce using rule 10 (expression -> NUMBER .)
-    MINUS           reduce using rule 10 (expression -> NUMBER .)
-    TIMES           reduce using rule 10 (expression -> NUMBER .)
-    DIVIDE          reduce using rule 10 (expression -> NUMBER .)
-    $end            reduce using rule 10 (expression -> NUMBER .)
-    RPAREN          reduce using rule 10 (expression -> NUMBER .)
+    $end            reduce using rule 2 (md -> DFA lines .)
 
 
 state 8
 
-    (1) statement -> NAME EQUALS . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (6) lines -> one_line .
+    (7) lines -> one_line . lines
+    (6) lines -> . one_line
+    (7) lines -> . one_line lines
+    (8) one_line -> . state COLON labels ARROW states
+    (9) state -> . ID
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    $end            reduce using rule 6 (lines -> one_line .)
+    ID              shift and go to state 10
 
-    expression                     shift and go to state 17
+    one_line                       shift and go to state 8
+    lines                          shift and go to state 14
+    state                          shift and go to state 9
 
 state 9
 
-    (3) expression -> expression PLUS . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (8) one_line -> state . COLON labels ARROW states
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    COLON           shift and go to state 15
 
-    expression                     shift and go to state 18
 
 state 10
 
-    (4) expression -> expression MINUS . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (9) state -> ID .
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    COLON           reduce using rule 9 (state -> ID .)
+    COMMA           reduce using rule 9 (state -> ID .)
+    ID              reduce using rule 9 (state -> ID .)
+    $end            reduce using rule 9 (state -> ID .)
 
-    expression                     shift and go to state 19
 
 state 11
 
-    (5) expression -> expression TIMES . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (3) md -> NFA lines .
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    $end            reduce using rule 3 (md -> NFA lines .)
 
-    expression                     shift and go to state 20
 
 state 12
 
-    (6) expression -> expression DIVIDE . expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . expression TIMES expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . MINUS expression
-    (8) expression -> . SUCC expression
-    (9) expression -> . LPAREN expression RPAREN
-    (10) expression -> . NUMBER
-    (11) expression -> . NAME
+    (4) md -> PDA lines .
 
-    MINUS           shift and go to state 4
-    SUCC            shift and go to state 5
-    LPAREN          shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 14
+    $end            reduce using rule 4 (md -> PDA lines .)
 
-    expression                     shift and go to state 21
 
 state 13
 
-    (7) expression -> MINUS expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (5) md -> TM lines .
 
-    PLUS            reduce using rule 7 (expression -> MINUS expression .)
-    MINUS           reduce using rule 7 (expression -> MINUS expression .)
-    TIMES           reduce using rule 7 (expression -> MINUS expression .)
-    DIVIDE          reduce using rule 7 (expression -> MINUS expression .)
-    $end            reduce using rule 7 (expression -> MINUS expression .)
-    RPAREN          reduce using rule 7 (expression -> MINUS expression .)
-
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
-  ! TIMES           [ shift and go to state 11 ]
-  ! DIVIDE          [ shift and go to state 12 ]
+    $end            reduce using rule 5 (md -> TM lines .)
 
 
 state 14
 
-    (11) expression -> NAME .
+    (7) lines -> one_line lines .
 
-    PLUS            reduce using rule 11 (expression -> NAME .)
-    MINUS           reduce using rule 11 (expression -> NAME .)
-    TIMES           reduce using rule 11 (expression -> NAME .)
-    DIVIDE          reduce using rule 11 (expression -> NAME .)
-    $end            reduce using rule 11 (expression -> NAME .)
-    RPAREN          reduce using rule 11 (expression -> NAME .)
+    $end            reduce using rule 7 (lines -> one_line lines .)
 
 
 state 15
 
-    (8) expression -> SUCC expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (8) one_line -> state COLON . labels ARROW states
+    (12) labels -> . one_label
+    (13) labels -> . one_label OR labels
+    (14) one_label -> . ID_or_EPS_or_B
+    (18) one_label -> . ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B
+    (19) one_label -> . ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B
+    (15) ID_or_EPS_or_B -> . ID
+    (16) ID_or_EPS_or_B -> . EPS
+    (17) ID_or_EPS_or_B -> . BLANK
 
-    PLUS            reduce using rule 8 (expression -> SUCC expression .)
-    MINUS           reduce using rule 8 (expression -> SUCC expression .)
-    TIMES           reduce using rule 8 (expression -> SUCC expression .)
-    DIVIDE          reduce using rule 8 (expression -> SUCC expression .)
-    $end            reduce using rule 8 (expression -> SUCC expression .)
-    RPAREN          reduce using rule 8 (expression -> SUCC expression .)
+    ID              shift and go to state 19
+    EPS             shift and go to state 20
+    BLANK           shift and go to state 21
 
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
-  ! TIMES           [ shift and go to state 11 ]
-  ! DIVIDE          [ shift and go to state 12 ]
-
+    labels                         shift and go to state 16
+    one_label                      shift and go to state 17
+    ID_or_EPS_or_B                 shift and go to state 18
 
 state 16
 
-    (9) expression -> LPAREN expression . RPAREN
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (8) one_line -> state COLON labels . ARROW states
 
-    RPAREN          shift and go to state 22
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    TIMES           shift and go to state 11
-    DIVIDE          shift and go to state 12
+    ARROW           shift and go to state 22
 
 
 state 17
 
-    (1) statement -> NAME EQUALS expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (12) labels -> one_label .
+    (13) labels -> one_label . OR labels
 
-    $end            reduce using rule 1 (statement -> NAME EQUALS expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
-    TIMES           shift and go to state 11
-    DIVIDE          shift and go to state 12
+    ARROW           reduce using rule 12 (labels -> one_label .)
+    OR              shift and go to state 23
 
 
 state 18
 
-    (3) expression -> expression PLUS expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (14) one_label -> ID_or_EPS_or_B .
+    (18) one_label -> ID_or_EPS_or_B . COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B
+    (19) one_label -> ID_or_EPS_or_B . SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B
 
-    PLUS            reduce using rule 3 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 3 (expression -> expression PLUS expression .)
-    $end            reduce using rule 3 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 3 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 11
-    DIVIDE          shift and go to state 12
-
-  ! TIMES           [ reduce using rule 3 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 3 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
+    OR              reduce using rule 14 (one_label -> ID_or_EPS_or_B .)
+    ARROW           reduce using rule 14 (one_label -> ID_or_EPS_or_B .)
+    COMMA           shift and go to state 24
+    SEMICOLON       shift and go to state 25
 
 
 state 19
 
-    (4) expression -> expression MINUS expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (15) ID_or_EPS_or_B -> ID .
 
-    PLUS            reduce using rule 4 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 4 (expression -> expression MINUS expression .)
-    $end            reduce using rule 4 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 4 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 11
-    DIVIDE          shift and go to state 12
-
-  ! TIMES           [ reduce using rule 4 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 4 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
+    COMMA           reduce using rule 15 (ID_or_EPS_or_B -> ID .)
+    SEMICOLON       reduce using rule 15 (ID_or_EPS_or_B -> ID .)
+    OR              reduce using rule 15 (ID_or_EPS_or_B -> ID .)
+    ARROW           reduce using rule 15 (ID_or_EPS_or_B -> ID .)
 
 
 state 20
 
-    (5) expression -> expression TIMES expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (16) ID_or_EPS_or_B -> EPS .
 
-    PLUS            reduce using rule 5 (expression -> expression TIMES expression .)
-    MINUS           reduce using rule 5 (expression -> expression TIMES expression .)
-    TIMES           reduce using rule 5 (expression -> expression TIMES expression .)
-    DIVIDE          reduce using rule 5 (expression -> expression TIMES expression .)
-    $end            reduce using rule 5 (expression -> expression TIMES expression .)
-    RPAREN          reduce using rule 5 (expression -> expression TIMES expression .)
-
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
-  ! TIMES           [ shift and go to state 11 ]
-  ! DIVIDE          [ shift and go to state 12 ]
+    COMMA           reduce using rule 16 (ID_or_EPS_or_B -> EPS .)
+    SEMICOLON       reduce using rule 16 (ID_or_EPS_or_B -> EPS .)
+    OR              reduce using rule 16 (ID_or_EPS_or_B -> EPS .)
+    ARROW           reduce using rule 16 (ID_or_EPS_or_B -> EPS .)
 
 
 state 21
 
-    (6) expression -> expression DIVIDE expression .
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
-    (5) expression -> expression . TIMES expression
-    (6) expression -> expression . DIVIDE expression
+    (17) ID_or_EPS_or_B -> BLANK .
 
-    PLUS            reduce using rule 6 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 6 (expression -> expression DIVIDE expression .)
-    TIMES           reduce using rule 6 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 6 (expression -> expression DIVIDE expression .)
-    $end            reduce using rule 6 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 6 (expression -> expression DIVIDE expression .)
-
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
-  ! TIMES           [ shift and go to state 11 ]
-  ! DIVIDE          [ shift and go to state 12 ]
+    COMMA           reduce using rule 17 (ID_or_EPS_or_B -> BLANK .)
+    SEMICOLON       reduce using rule 17 (ID_or_EPS_or_B -> BLANK .)
+    OR              reduce using rule 17 (ID_or_EPS_or_B -> BLANK .)
+    ARROW           reduce using rule 17 (ID_or_EPS_or_B -> BLANK .)
 
 
 state 22
 
-    (9) expression -> LPAREN expression RPAREN .
+    (8) one_line -> state COLON labels ARROW . states
+    (10) states -> . state
+    (11) states -> . state COMMA states
+    (9) state -> . ID
 
-    PLUS            reduce using rule 9 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 9 (expression -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 9 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 9 (expression -> LPAREN expression RPAREN .)
-    $end            reduce using rule 9 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 9 (expression -> LPAREN expression RPAREN .)
+    ID              shift and go to state 10
+
+    state                          shift and go to state 26
+    states                         shift and go to state 27
+
+state 23
+
+    (13) labels -> one_label OR . labels
+    (12) labels -> . one_label
+    (13) labels -> . one_label OR labels
+    (14) one_label -> . ID_or_EPS_or_B
+    (18) one_label -> . ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B
+    (19) one_label -> . ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B
+    (15) ID_or_EPS_or_B -> . ID
+    (16) ID_or_EPS_or_B -> . EPS
+    (17) ID_or_EPS_or_B -> . BLANK
+
+    ID              shift and go to state 19
+    EPS             shift and go to state 20
+    BLANK           shift and go to state 21
+
+    one_label                      shift and go to state 17
+    labels                         shift and go to state 28
+    ID_or_EPS_or_B                 shift and go to state 18
+
+state 24
+
+    (18) one_label -> ID_or_EPS_or_B COMMA . ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B
+    (15) ID_or_EPS_or_B -> . ID
+    (16) ID_or_EPS_or_B -> . EPS
+    (17) ID_or_EPS_or_B -> . BLANK
+
+    ID              shift and go to state 19
+    EPS             shift and go to state 20
+    BLANK           shift and go to state 21
+
+    ID_or_EPS_or_B                 shift and go to state 29
+
+state 25
+
+    (19) one_label -> ID_or_EPS_or_B SEMICOLON . ID_or_EPS_or_B COMMA ID_or_EPS_or_B
+    (15) ID_or_EPS_or_B -> . ID
+    (16) ID_or_EPS_or_B -> . EPS
+    (17) ID_or_EPS_or_B -> . BLANK
+
+    ID              shift and go to state 19
+    EPS             shift and go to state 20
+    BLANK           shift and go to state 21
+
+    ID_or_EPS_or_B                 shift and go to state 30
+
+state 26
+
+    (10) states -> state .
+    (11) states -> state . COMMA states
+
+    ID              reduce using rule 10 (states -> state .)
+    $end            reduce using rule 10 (states -> state .)
+    COMMA           shift and go to state 31
+
+
+state 27
+
+    (8) one_line -> state COLON labels ARROW states .
+
+    ID              reduce using rule 8 (one_line -> state COLON labels ARROW states .)
+    $end            reduce using rule 8 (one_line -> state COLON labels ARROW states .)
+
+
+state 28
+
+    (13) labels -> one_label OR labels .
+
+    ARROW           reduce using rule 13 (labels -> one_label OR labels .)
+
+
+state 29
+
+    (18) one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B . SEMICOLON ID_or_EPS_or_B
+
+    SEMICOLON       shift and go to state 32
+
+
+state 30
+
+    (19) one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B . COMMA ID_or_EPS_or_B
+
+    COMMA           shift and go to state 33
+
+
+state 31
+
+    (11) states -> state COMMA . states
+    (10) states -> . state
+    (11) states -> . state COMMA states
+    (9) state -> . ID
+
+    ID              shift and go to state 10
+
+    state                          shift and go to state 26
+    states                         shift and go to state 34
+
+state 32
+
+    (18) one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON . ID_or_EPS_or_B
+    (15) ID_or_EPS_or_B -> . ID
+    (16) ID_or_EPS_or_B -> . EPS
+    (17) ID_or_EPS_or_B -> . BLANK
+
+    ID              shift and go to state 19
+    EPS             shift and go to state 20
+    BLANK           shift and go to state 21
+
+    ID_or_EPS_or_B                 shift and go to state 35
+
+state 33
+
+    (19) one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA . ID_or_EPS_or_B
+    (15) ID_or_EPS_or_B -> . ID
+    (16) ID_or_EPS_or_B -> . EPS
+    (17) ID_or_EPS_or_B -> . BLANK
+
+    ID              shift and go to state 19
+    EPS             shift and go to state 20
+    BLANK           shift and go to state 21
+
+    ID_or_EPS_or_B                 shift and go to state 36
+
+state 34
+
+    (11) states -> state COMMA states .
+
+    ID              reduce using rule 11 (states -> state COMMA states .)
+    $end            reduce using rule 11 (states -> state COMMA states .)
+
+
+state 35
+
+    (18) one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B .
+
+    OR              reduce using rule 18 (one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B .)
+    ARROW           reduce using rule 18 (one_label -> ID_or_EPS_or_B COMMA ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B .)
+
+
+state 36
+
+    (19) one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B .
+
+    OR              reduce using rule 19 (one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B .)
+    ARROW           reduce using rule 19 (one_label -> ID_or_EPS_or_B SEMICOLON ID_or_EPS_or_B COMMA ID_or_EPS_or_B .)
 
