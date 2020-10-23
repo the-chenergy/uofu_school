@@ -11,6 +11,7 @@
 		"Qianlang",
 		"Scatterplot",
 		"Winkel",
+		"borderless",
 		"covid",
 		"crossorigin",
 		"curr",
@@ -33,12 +34,15 @@
 		"algorithm": "cpp",
 		"xiosbase": "cpp",
 		"vector": "cpp",
-		"xtree": "cpp"
+		"xtree": "cpp",
+		"unordered_set": "cpp",
+		"queue": "cpp"
 	},
 	"cSpell.ignoreWords": [
 		"chal",
 		"gdppc",
 		"inc",
+		"necco",
 		"winstate",
 		"winstate inc"
 	]
