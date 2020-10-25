@@ -3,7 +3,7 @@
  *
  * The State of the State of the States
  * Qianlang Chen
- * H 10/22/20
+ * A 10/24/20
  */
 class PhraseTable {
   //#region STATIC MEMBERS /////////////////////////////////////////////////////
@@ -15,16 +15,16 @@ class PhraseTable {
   static COLUMN_TITLES = ['Phrase', 'Frequency By Party', 'Total Frequency'];
 
   /** The widths of the columns. */
-  static COLUMN_WIDTHS = [216, 396, 216];
+  static COLUMN_WIDTHS = [216, 432, 216];
 
   /** The maximum proportion the proportion-column can show. */
   static MAX_PROPORTION = 100;
 
   /** The proportion steps to draw as legends the proportion-column. */
-  static PROPORTION_STEPS = [-50, 0, 50];
+  static PROPORTION_STEPS = [-75, -50, -25, 0, 25, 50, 75];
 
   /** The proportion steps to draw on the bars in the proportion-column. */
-  static PROPORTION_BAR_STEPS = [-75, -50, -25, 0, 25, 50, 75];
+  static PROPORTION_BAR_STEPS = [-100, -75, -50, -25, 0, 25, 50, 75, 100];
 
   /** The maximum frequency the frequency-column can show. */
   static MAX_FREQUENCY = 100;
@@ -33,7 +33,7 @@ class PhraseTable {
   static FREQUENCY_STEPS = [25, 50, 75];
 
   /** The frequency steps to draw on the bars in the frequency-column. */
-  static FREQUENCY_BAR_STEPS = [0, 25, 50, 75];
+  static FREQUENCY_BAR_STEPS = [0, 25, 50, 75, 100];
 
   /** The height of each row in the table. */
   static ROW_HEIGHT = 24;
@@ -72,18 +72,14 @@ class PhraseTable {
     /**
      * @private @type {Selection} The selection containing the table's header.
      */
-    this.header = element.append('table');
-    this.initTable(this.header);
-    this.header = this.header.append('thead').append('tr').attr(
+    this.header = element.append('table').append('thead').append('tr').attr(
         'id', 'phrase-table-header');
 
     /**
      * @private @type {Selection} The selection containing the table's contents.
      */
-    this.contents = element.append('table');
-    this.initTable(this.contents);
-    this.contents =
-        this.contents.append('tbody').attr('id', 'phrase-table-contents');
+    this.contents = element.append('table').append('tbody').attr(
+        'id', 'phrase-table-contents');
 
     /** @private @type {InfoPanel} The main info panel. */
     this.mainInfoPanel = null;
@@ -118,18 +114,14 @@ class PhraseTable {
     /** @private @type {number[]} The sorting function currently in use. */
     this.currentSortFunc = [0, 0];
 
+    /**
+     * @private @type {Set<number>} The IDs of the phrases selected to be
+     *     filtered.
+     */
+    this.selectedPhraseIds = null;
+
     this.initHeader();
     this.initContents();
-  }
-
-  /** @private Initializes the table's table element. */
-  initTable(table) {
-    table.append('colgroup')
-        .selectAll('col')
-        .data(PhraseTable.COLUMNS)
-        .enter()
-        .append('col')
-        .attr('id', d => 'phrase-table-column-' + d);
   }
 
   /** @private Initializes the table's header. */
@@ -139,31 +131,20 @@ class PhraseTable {
         .enter()
         .append('td')
         .attr('id', d => 'phrase-table-header-' + d)
+        .style('width', (_d, i) => PhraseTable.COLUMN_WIDTHS[i] + 'px')
         .on('click',
             (_e, d) =>
                 this.updateCurrentSortFunc(PhraseTable.COLUMNS.indexOf(d), 1))
         .append('div')
         .text((_d, i) => PhraseTable.COLUMN_TITLES[i])
-        .style('margin-top', (_d, i) => i == 1 ? '' : '-16px');
+    // .style('margin-top', (_d, i) => i > 0 ? '' : '-16px');
 
-    let phraseLegends =
-        d3.select('#phrase-table-header-phrase').style('width', '216px');
+    let phraseLegends = d3.select('#phrase-table-header-phrase');
     phraseLegends.append('div')
         .attr('class', partyClassOf(0))
         .attr('id', 'phrase-table-header-phrase-legend');
 
-    let proportionLegends =
-        d3.select('#phrase-table-header-proportion').style('width', '396px');
-    proportionLegends.append('text')
-        .attr('class', partyClassOf(-1))
-        .attr('id', 'phrase-table-header-proportion-legend-democrat')
-        .html('D')
-        .style('float', 'left');
-    proportionLegends.append('text')
-        .attr('class', partyClassOf(1))
-        .attr('id', 'phrase-table-header-proportion-legend-republican')
-        .html('R')
-        .style('float', 'right');
+    let proportionLegends = d3.select('#phrase-table-header-proportion');
     proportionLegends.append('g')
         .attr('id', 'phrase-table-header-proportion-legends')
         .selectAll('text')
@@ -171,17 +152,10 @@ class PhraseTable {
         .enter()
         .append('text')
         .attr('class', d => partyClassOf(d))
-        .style('left', d => this.proportionXScale(d) - 28 - (d != 0) * 8 + 'px')
+        .style('left', d => this.proportionXScale(d) - 12 - (d != 0) * 4 + 'px')
         .text(d => Math.abs(d) + '%');
 
-    let frequencyLegends =
-        d3.select('#phrase-table-header-frequency').style('width', '216px');
-    frequencyLegends.append('text')
-        .attr('id', 'phrase-table-header-frequency-legend-low')
-        .style('float', 'left');
-    frequencyLegends.append('text')
-        .attr('id', 'phrase-table-header-frequency-legend-high')
-        .style('float', 'right');
+    let frequencyLegends = d3.select('#phrase-table-header-frequency');
     frequencyLegends.append('g')
         .attr('id', 'phrase-table-header-frequency-legends')
         .selectAll('text')
@@ -189,7 +163,7 @@ class PhraseTable {
         .enter()
         .append('text')
         .attr('class', partyClassOf(0))
-        .style('left', d => this.frequencyXScale(d) - 12 - (d != 0) * 8 + 'px')
+        .style('left', d => this.frequencyXScale(d) - 8 - (d != 0) * 8 + 'px')
         .text(d => d + '%');
   }
 
@@ -227,6 +201,8 @@ class PhraseTable {
    * @param {Set<number>} selectedPhraseIds The IDs of the phrases to select.
    */
   selectPhrases(selectedPhraseIds) {
+    this.selectedPhraseIds = selectedPhraseIds;
+
     if (!selectedPhraseIds) {
       this.contents.selectAll('tr').style('display', '');
       return;
@@ -301,14 +277,19 @@ class PhraseTable {
     // Create new rows if necessary.
     let newRows = rows.enter().append('tr');
 
-    let phraseColumn = newRows.append('td');
-    phraseColumn.append('div').attr('id', 'phrase-table-phrase-column-text');
+    let phraseColumn = newRows.append('td').style(
+        'width', PhraseTable.COLUMN_WIDTHS[0] + 'px');
+    phraseColumn.append('div')
+        .attr('id', 'phrase-table-phrase-column-text')
+        .style('width', PhraseTable.COLUMN_WIDTHS[0] + 'px');
 
-    let proportionColumn = newRows.append('td')
-                               .append('svg')
-                               .attr('id', 'phrase-table-proportion-column-svg')
-                               .attr('width', PhraseTable.COLUMN_WIDTHS[1])
-                               .attr('height', PhraseTable.ROW_HEIGHT);
+    let proportionColumn =
+        newRows.append('td')
+            .style('width', PhraseTable.COLUMN_WIDTHS[1] + 'px')
+            .append('svg')
+            .attr('id', 'phrase-table-proportion-column-svg')
+            .attr('width', PhraseTable.COLUMN_WIDTHS[1])
+            .attr('height', PhraseTable.ROW_HEIGHT);
     proportionColumn.append('rect')
         .attr('class', 'democrat')
         .attr('id', 'phrase-table-proportion-column-bar-democrat');
@@ -320,36 +301,41 @@ class PhraseTable {
         .enter()
         .append('line')
         .style('stroke', 'white')
-        .style('stroke-width', d => (d == 0 ? 4 : 1) + 'px')
+        .style('stroke-width', d => (d % 100 == 0 ? 4 : 1) + 'px')
         .attr('x1', d => this.proportionXScale(d))
         .attr('y1', 0)
         .attr('x2', d => this.proportionXScale(d))
         .attr('y2', PhraseTable.ROW_HEIGHT);
 
-    let frequencyColumn = newRows.append('td')
-                              .append('svg')
-                              .attr('id', 'phrase-table-frequency-column-svg')
-                              .attr('width', PhraseTable.COLUMN_WIDTHS[2])
-                              .attr('height', PhraseTable.ROW_HEIGHT);
+    let frequencyColumn =
+        newRows.append('td')
+            .style('width', PhraseTable.COLUMN_WIDTHS[2] + 'px')
+            .append('svg')
+            .attr('id', 'phrase-table-frequency-column-svg')
+            .attr('width', PhraseTable.COLUMN_WIDTHS[2])
+            .attr('height', PhraseTable.ROW_HEIGHT);
     frequencyColumn.append('rect').attr(
         'id', 'phrase-table-frequency-column-bar');
-    frequencyColumn.append('text').attr(
-        'id', 'phrase-table-frequency-column-text');
     frequencyColumn.selectAll('line')
         .data(PhraseTable.FREQUENCY_BAR_STEPS)
         .enter()
         .append('line')
         .style('stroke', 'white')
-        .style('stroke-width', d => (d == 0 ? 4 : 1) + 'px')
+        .style('stroke-width', d => (d % 100 == 0 ? 4 : 1) + 'px')
         .attr('x1', d => this.frequencyXScale(d))
         .attr('y1', 0)
         .attr('x2', d => this.frequencyXScale(d))
         .attr('y2', PhraseTable.ROW_HEIGHT);
+    frequencyColumn.append('text').attr(
+        'id', 'phrase-table-frequency-column-text');
 
     rows = newRows.merge(rows);
 
     // Update the old rows.
     let i = 0, j = 0, k = 0;  // #screw_d3
+    rows.attr('phrase-id', () => this.phrasesInDisplay[i++].id);
+
+    i = 0, j = 0;
     rows.selectAll('#phrase-table-phrase-column-text')
         .text(() => truncateAt(this.phrasesInDisplay[i++].phrase, 21))
         .attr(
@@ -388,7 +374,7 @@ class PhraseTable {
         .attr(
             'x',
             () => this.phrasesInDisplay[i].frequencyBarWidth +
-                (this.phrasesInDisplay[i++].frequency > 43 ? -20 : 4))
+                (this.phrasesInDisplay[i++].frequency > 43 ? -21 : 3))
         .attr('y', 16)
         .style('font-size', 'small')
         .style(
@@ -400,6 +386,8 @@ class PhraseTable {
         .attr('phrase-id', () => i++)
         .on('mouseover', e => this.showActiveFrequencyInfo(e.target))
         .on('mouseout', () => this.mainInfoPanel.hide());
+
+    if (this.selectedPhraseIds) this.selectPhrases(this.selectedPhraseIds);
   }
 
   /**

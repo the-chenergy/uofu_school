@@ -1,6 +1,15 @@
 :root {
   --serif: 'Georgia', 'serif';
   --sans: 'Helvetica', 'Open Sans', 'sans-serif';
+  --blue: #268bd2;
+  --purple: #6c71c4;
+  --pink: #d33682;
+  --red: #dc322f;
+  --orange: #cb4b16;
+  --yellow: #b58900;
+  --green: #859900;
+  --teal: #2aa198;
+  --primary: var(--blue);
 }
 
 * {
@@ -18,8 +27,8 @@
 }
 
 .republican {
-  color: var(--red);
-  fill: var(--red);
+  color: var(--orange);
+  fill: var(--orange);
 }
 
 .democrat-stroke {
@@ -31,7 +40,7 @@
 }
 
 .republican-stroke {
-  stroke: var(--red);
+  stroke: var(--orange);
 }
 
 line {
@@ -39,8 +48,8 @@ line {
 }
 
 .crime {
-  color: var(--orange);
-  fill: var(--orange);
+  color: var(--red);
+  fill: var(--red);
 }
 
 .economy {
@@ -54,13 +63,13 @@ line {
 }
 
 .energy {
-  color: var(--teal);
-  fill: var(--teal);
+  color: var(--green);
+  fill: var(--green);
 }
 
 .health {
-  color: var(--green);
-  fill: var(--green);
+  color: var(--teal);
+  fill: var(--teal);
 }
 
 .mental {
@@ -69,9 +78,9 @@ line {
 }
 
 .unselected {
-  color: #d0d0d0;
-  fill: #d0d0d0;
-  stroke: #d0d0d0 !important;
+  color: #bfbfbf;
+  fill: #bfbfbf;
+  stroke: #bfbfbf !important;
   opacity: 0.3333;
 }
 
@@ -80,7 +89,7 @@ line {
   text-align: center;
   width: fit-content;
   height: fit-content;
-  background: #f0f0f0;
+  background: #f4f4f4;
   padding-left: 16px !important;
   padding-right: 16px !important;
   padding-top: 8px !important;
@@ -105,6 +114,10 @@ line {
   filter: brightness(0.75);
 }
 
+.container-fluid * {
+  padding: 0px;
+}
+
 #header {
   padding: 24px;
   text-align: center;
@@ -117,14 +130,12 @@ line {
 #story {
   max-width: 888px;
   font-style: italic;
-  padding-top: 24px;
-  padding-bottom: 12px;
   text-align: justify;
 }
 
 #story p::first-letter {
   float: left;
-  color: #606060;
+  color: #555555;
   font-size: 54px;
   line-height: 36px;
   padding-top: 12px;
@@ -140,15 +151,15 @@ line {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 24px;
   margin-bottom: 24px;
-}
-
-#contents * {
-  padding: 0px;
+  min-width: 1824px;
 }
 
 #bubble-chart {
-  width: 900px;
+  width: 864px;
+  margin-left: 24px;
+  margin-right: 24px;
 }
 
 #bubble-chart-group-topics-switch {
@@ -188,6 +199,11 @@ line {
   font-weight: bold;
 }
 
+#bubble-chart-contents .selection {
+  fill: black;
+  fill-opacity: 0.041667;
+}
+
 #bubble-chart-contents-bubbles circle {
   stroke: black;
   stroke-width: 1.5px;
@@ -205,33 +221,18 @@ line {
   font-size: small;
 }
 
-#vertical-space {
-  width: 36px;
-}
-
 #phrase-table {
-  width: 826px;
-  left: 72px;
+  width: 864px;
+  margin-left: 24px;
+  margin-right: 24px;
 }
 
 #phrase-table-table {
   position: absolute;
 }
 
-#phrase-table-column-phrase {
-  width: 216px;
-}
-
-#phrase-table-column-margin {
-  width: 432px;
-}
-
-#phrase-table-column-frequency {
-  width: 216px;
-}
-
 #phrase-table-header {
-  background-color: #e0e0e0;
+  background-color: #eaeaea;
   height: 72px;
 }
 
@@ -242,6 +243,7 @@ line {
   padding-right: 4px;
   user-select: none;
   cursor: pointer;
+  vertical-align: top;
 }
 
 #phrase-table-header td:first-child {
@@ -253,7 +255,7 @@ line {
 }
 
 #phrase-table-header td:hover {
-  background-color: #d0d0d0;
+  background-color: #d5d5d5;
 }
 
 #phrase-table-header div {
@@ -264,8 +266,9 @@ line {
 
 #phrase-table-header text {
   display: inline-block;
-  margin-top: 16px;
-  font-size: x-small;
+  margin-top: 18px;
+  font-size: xx-small;
+  opacity: 0.5;
 }
 
 #phrase-table-header-proportion-legends {
@@ -288,7 +291,7 @@ line {
   overflow-y: auto;
   height: 900px;
   display: block;
-  width: 848px;
+  width: fit-content;
 }
 
 #phrase-table-contents tr td:first-child {
@@ -310,7 +313,7 @@ line {
 }
 
 #phrase-table-contents tr:hover {
-  background-color: #f0f0f0;
+  background-color: #f4f4f4;
 }
 
 #phrase-table-contents tr:hover svg {

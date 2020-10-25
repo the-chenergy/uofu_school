@@ -3,7 +3,7 @@
  *
  * The State of the State of the States
  * Qianlang Chen
- * H 10/22/20
+ * A 10/24/20
  */
 class BubbleChart {
   //#region STATIC MEMBERS /////////////////////////////////////////////////////
@@ -124,8 +124,8 @@ class BubbleChart {
     ]);
     d3.select(document).on('mousedown', e => {
       let toCheck = [
-        e.target.getAttribute('id'), e.target.parentElement.getAttribute('id'),
-        e.target.parentElement.parentElement.getAttribute('id')
+        e.target.getAttribute('id'), e.target.parentElement?.getAttribute('id'),
+        e.target.parentElement?.parentElement?.getAttribute('id')
       ];
       if (toCheck.some(x => exemptFromClearing.has(x))) return;
 
@@ -329,7 +329,7 @@ class BubbleChart {
     this.data = rawData;
 
     // Create radius scale.
-    let maxTotal = Math.max(...rawData.map(d => d['total']));
+    let maxTotal = d3.max(rawData, d => +d['total']);
     this.rScale = d3.scaleSqrt().domain([0, maxTotal]).range([
       BubbleChart.MIN_BUBBLE_RADIUS, BubbleChart.MAX_BUBBLE_RADIUS
     ]);
@@ -496,7 +496,7 @@ class BubbleChart {
    * @param {Set<number>} selectedBubbleIds The IDs of the selected bubbles.
    */
   updateBubbleSelections(selectedBubbleIds) {
-    if (this.onSelectionChange) this.onSelectionChange(selectedBubbleIds);
+    this.onSelectionChange?.(selectedBubbleIds);
     this.hasSelections = false;
 
     if (!selectedBubbleIds) {
@@ -631,11 +631,11 @@ class BubblePositioner {
     let simulation =
             d3.forceSimulation(nodes)
                 .force('x', d3.forceX().x(d => d['targetX']).strength(1))
-                .force('y', d3.forceY().y(d => d['targetY']).strength(1))
+                .force('y', d3.forceY().y(d => d['targetY']).strength(.25))
                 .force('collision', d3.forceCollide().radius(d => d['r']))
                 .stop(),
         tickLimit = Math.log(simulation.alphaMin()) /
         Math.log(1 - simulation.alphaDecay());
-    for (let i = 0; i < tickLimit; i++) simulation.tick();
+    simulation.tick(tickLimit);
   }
 }
