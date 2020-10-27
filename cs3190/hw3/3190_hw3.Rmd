@@ -3,24 +3,32 @@ title: "Homework 3"
 author: "Qianlang Chen"
 
 # CS 3190
-# U 10/11/20
+# M 10/26/20
 
 output: pdf_document
 fontsize: 12pt
 
 header-includes:
-  - \usepackage{setspace}
-  - \linespread{1.25}
+    - \usepackage{setspace}
+    - \linespread{1.25}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r r_setup, include=FALSE}
+knitr::opts_chunk$set(
+    comment="", results="hold", fig.show="hold", fig.width=7.5, fig.height=4.5, fig.align="center"
+    # results="hold" is currently unsupported for Python codes :(
+)
 ```
 
-```{python, include=FALSE}
+```{python python_setup, include=FALSE}
 import matplotlib
-matplotlib.use("tkAgg") # fixes qt plugin errors
+matplotlib.use("Agg") # fixes qt plugin errors
+
+import warnings
+warnings.filterwarnings("ignore") # suppresses warnings in python chunks
 ```
+
+\newcommand{\R}[1] {\mathbb{R}^{#1}}
 
 # Problem 1
 
@@ -38,15 +46,15 @@ print(len(x), len(y))
 With the help of Python, let's find out the parameters of the regression line:
 ```{python}
 # line equation: y_hat = a*x + b
-(a, b) = numpy.polyfit(x, y, 1)
+a, b = numpy.polyfit(x, y, 1)
 print(a, b)
 ```
 
 ```{python}
 # plot the data and the regression line
 from matplotlib import pyplot
-pyplot.scatter(x, y, c="#C0C0C0")
 
+pyplot.scatter(x, y, c="#C0C0C0")
 line_x = numpy.linspace(min(x), max(x), 1729)
 line_y = a * line_x + b
 pyplot.plot(line_x, line_y, "r-", zorder=1729)
@@ -76,8 +84,7 @@ The output indicates that our predictions for inputs 4 and 8.5 are about 964.9 a
 train_len = int(.80 * len(x))
 train_x = x[:train_len]
 train_y = y[:train_len]
-
-(train_a, train_b) = numpy.polyfit(train_x, train_y, 1)
+train_a, train_b = numpy.polyfit(train_x, train_y, 1)
 print(train_len, train_a, train_b)
 ```
 
@@ -92,7 +99,6 @@ print(pred_x, pred_y)
 
 line_x = numpy.linspace(min(train_x), max(train_x), 1729)
 line_y = train_a * line_x + train_b
-
 pyplot.scatter(train_x, train_y, c="#C0C0C0")
 pyplot.plot(line_x, line_y, "k-")
 pyplot.scatter(pred_x, pred_y, c="r", zorder=1729)
@@ -100,6 +106,7 @@ pyplot.scatter(pred_x, pred_y, c="r", zorder=1729)
 
 Our predictions this time were about 980.2 and 3198, which ain't too bad either.
 
+\pagebreak
 ## Part (c)
 
 ```{python}
@@ -110,56 +117,57 @@ test_data_y = y[train_len:]
 # run the tests and calculate the residuals
 test_full_y = a * test_x + b
 test_train_y = train_a * test_x + train_b
-
 res_full = test_full_y - test_data_y
 res_train = test_train_y - test_data_y
-print("Residual of the testing data using model built from the full data:",
-  res_full,
-  "L2-norm of this residual vector: "+str(numpy.linalg.norm(res_full, 2)),
-  "",
-  "Residual of the testing data using model built from the training data:",
-  res_train,
-  "L2-norm of this residual vector: "+str(numpy.linalg.norm(res_train, 2)),
-  sep="\n")
+res_full_norm = numpy.linalg.norm(res_full, 2)
+res_train_norm = numpy.linalg.norm(res_train, 2)
+print(f"Residual of the testing data using model built from full"
+      f"data:\n"
+      f"{res_full}\n"
+      f"L2-norm of this residual vector: {res_full_norm}\n\n"
+      f"Residual of the testing data using model built from training"
+      f" data:\n"
+      f"{res_train}\n"
+      f"L2-norm of this residual vector: {res_train_norm}")
 ```
 
 ```{python}
 # calculate the residuals for the models built on the full data and the
 #   training data
-train_full_y = a * x + b
+train_full_y = a * train_x + b
 train_train_y = train_a * train_x + train_b
-
-res_train_full = train_full_y - y
+res_train_full = train_full_y - train_y
 res_train_train = train_train_y - train_y
-print("L2-norm of the residual vector of the model built from the full data:",
-  numpy.linalg.norm(res_train_full, 2),
-  "",
-  "L2-norm of the residual vector of the model built from the training data:",
-  numpy.linalg.norm(res_train_train, 2),
-  sep="\n")
+res_train_full_norm = numpy.linalg.norm(res_train_full, 2)
+res_train_train_norm = numpy.linalg.norm(res_train_train, 2)
+print(f"L2-norm of the residuals of the model built from full data:\n"
+      f"{res_train_full_norm}\n\n"
+      f"L2-norm of the residuals of the model built from training"
+      f" data:\n"
+      f"{res_train_train_norm}")
 ```
 
 ## Part (d)
 
 ```{python}
 # create tilde-x for a degree-3 polynomial regression
-tilde_x = numpy.matrix([[x[i]**j for j in range(4)] for i in range(train_len)])
-print("First three row of tilde-X:", tilde_x[:3], sep="\n")
+tilde_x = numpy.matrix([[x[i]**j for j in range(4)]
+                       for i in range(train_len)])
+print(f"First three rows of tilde-X:\n"
+      f"{tilde_x[:3]}")
 ```
 
 ```{python}
 # perform the polynomial regression and calculate the best-bit curve
 coeffs = (tilde_x.T * tilde_x).I * tilde_x.T * numpy.matrix([train_y]).T
 poly = numpy.poly1d(numpy.flip(numpy.squeeze(numpy.asarray(coeffs))))
-
 print(poly)
 ```
 
 ```{python}
-# plot the best fit line
+# plot the best-fit line
 line_x = numpy.linspace(min(train_x), max(train_x), 1729)
 line_y = poly(line_x)
-
 pyplot.scatter(train_x, train_y, c="#C0C0C0")
 pyplot.plot(line_x, line_y, "r-")
 ```
@@ -171,12 +179,11 @@ $$\hat{y} = M_3(x) = 2.209x^3 + 22.49x^2 + 42.99x + 175.4$$
 # calculate the residuals
 res_test = poly(test_x) - test_data_y
 res_train = poly(train_x) - train_y
+res_test_norm = numpy.linalg.norm(res_test, 2)
+res_train_norm = numpy.linalg.norm(res_train, 2)
 
-print("L2-norm of the residual vector of the testing data:",
-  numpy.linalg.norm(res_test, 2),
-  "L2-norm of the residual vector of the training data:",
-  numpy.linalg.norm(res_train, 2),
-  sep="\n")
+print(f"L2-norm of the residual of the testing data: {res_test_norm}\n"
+      f"L2-norm of the residual of the training data: {res_train_norm}")
 ```
 
 \pagebreak
@@ -184,38 +191,210 @@ print("L2-norm of the residual vector of the testing data:",
 
 ## Part (a)
 
-
+Yes. According to the Invertible Matrix Theorem, since the columns of $X$ are linearly independent, they span $\R{n}$.
 
 ## Part (b)
 
-
+Yes. According to the Invertible Matrix Theorem, since the columns of $X$ are linearly independent, $X$ is invertible.
 
 ## Part (c)
 
-
+The value of $||X\hat{\alpha} - y||_2^2 = 0.$ Since $X$ is invertible, Reginald definitely took the inverse of $X$ to find the solution $\alpha = \hat{\alpha}$ to the equation $X\alpha = y$ because otherwise $\hat{\alpha}$ wouldn't have been the the model that minimizes the SSE to its smallest. Therefore, the SSE is zero since $X\hat{\alpha}$ matches $y$ perfectly.
 
 ## Part (d)
 
-
+No, not necessarily. The model might be over-fitting the training data, meaning that it might be forced into weird shapes that captures no sensible patterns for the data, even if it fits the training data nicely.
 
 \pagebreak
 # Problem 3
 
+```{python}
+# define the functions we're interested in, along with their gradients
+def f1(alpha):
+    x, y = alpha[0], alpha[1]
+    return (x - y)**2 + x*y
+
+
+def grad_f1(alpha):
+    x, y = alpha[0], alpha[1]
+    return numpy.array([2*x - y, -x + 2*y])
+
+
+def f2(alpha):
+    x, y = alpha[0], alpha[1]
+    return (1 - (y - 4))**2 + 35 * ((x + 6) - (y - 4)**2)**2
+
+
+def grad_f2(alpha):
+    x, y = alpha[0], alpha[1]
+    return numpy.array([
+        -70*y**2 + 70*x + 560*y - 700,
+        140*y**3 - 140*x*y - 1680*y**2 + 560*x + 5882*y - 5610,
+    ])
+
+
+# define the gradient descent algorithm
+def grad_descent(num_iter, alpha, gamma, grad):
+    values = numpy.zeros([num_iter, len(alpha)])
+    values[0,:] = alpha
+    for i in range(1, num_iter):
+        alpha = alpha - gamma * grad(alpha)
+        values[i,:] = alpha
+    
+    return values
+
+
+# define a helper function that creates the contour lines
+def create_contour_lines(values, f, offset_x, offset_y):
+    min_x = min(values[:,0]) - offset_x
+    max_x = max(values[:,0]) + offset_x
+    min_y = min(values[:,1]) - offset_y
+    max_y = max(values[:,1]) + offset_y
+    x, y = numpy.meshgrid(numpy.linspace(min_x, max_x, 1729),
+                          numpy.linspace(min_y, max_y, 1729))
+    z = f(numpy.array([x, y]))
+    pyplot.contour(x, y, z)
+```
+
 ## Part (a)
 
+```{python}
+# define the starting location and the learning rate
+alpha = numpy.array([2, 3])
+gamma = .05
 
+# run the gradient descent algorithm
+values = grad_descent(20, alpha, gamma, grad_f1)
+print(values)
+```
+
+```{python}
+# plot the results
+create_contour_lines(values, f1, .1, .2)
+pyplot.plot(values[:,0], values[:,1], "r-")
+pyplot.plot(values[:,0], values[:,1], "bo")
+```
 
 ## Part (b)
 
+```{python}
+# define the starting location and the learning rate
+alpha = numpy.array([0, 2])
+gamma = .0015
 
+# run the gradient descent algorithm
+values = grad_descent(100, alpha, gamma, grad_f2)
+print(values)
+```
+
+```{python}
+# plot the results
+create_contour_lines(values, f2, .03, .1)
+pyplot.plot(values[:,0], values[:,1], "r-")
+pyplot.plot(values[:,0], values[:,1], "bo")
+```
+
+```{python}
+# store the final result for comparison with part (d)
+final_value_from_part_b = values[-1,:]
+```
 
 ## Part (c)
 
+```{python}
+# this gamma value seems to work the best (brings alpha closest to the
+#   true minimum after 20 iterations).
+gamma = .507265145860
 
+alpha = numpy.array([2, 3])
+values = grad_descent(20, alpha, gamma, grad_f1)
+final_value = values[-1,:]
+print(f"Alpha value after 20 iterations: {final_value}\n"
+      f"L2-norm of the above alpha value:"
+      f" {numpy.linalg.norm(final_value, 2)}")
+
+create_contour_lines(values, f1, .1, .2)
+pyplot.plot(values[:,0], values[:,1], "r-")
+pyplot.plot(values[:,0], values[:,1], "bo")
+```
 
 ## Part (d)
 
+To help reach the smallest value possible for $f_2$ within the 100-iteration limit, let's improve our gradient descent algorithm to make use of the "backtracking line search" technique, which automatically tunes the learning rate ($\gamma$) every time when the algorithm is about to make an overshooting step. As witnessed in the plot from *Part (b),* the original gradient descent algorithm was taking a lot of unnecessary overshooting steps, zigzagging its way to the minimum, which wasn't very efficient. Hopefully our improved algorithm can find its descent more directly and smoothly with the assistance of backtracking line search.
 
+Let's introduce this improved gradient descent algorithm. Note that this new algorithm is just like an ordinary gradient descent algorithm, except it ensures that no iteration will make the alpha value overshoot (i.e., go pass the minimum point) by shrinking the learning rate by some factor ($\beta$) when appropriate.
 
+```{python}
+# define a variant of the gradient descent algorithm which uses the
+#   backtracking line search technique, with the learning rate
+#   starting at 1 and the argument "beta" being the shrinking factor
+def grad_descent_w_bt_line_search(num_iter, alpha, beta, f, grad_f):
+    values = numpy.zeros([num_iter, len(alpha)])
+    values[0,:] = alpha
+    gamma = 1
+    for i in range(1, num_iter):
+        next_alpha = alpha - gamma * grad_f(alpha)
+        # backtracking: shrink learning rate (gamma) if our next step
+        #   is going to be too big
+        while (f(next_alpha) > f(alpha) - gamma / 2
+               * numpy.linalg.norm(grad_f(alpha))**2):
+            gamma *= beta
+            next_alpha = alpha - gamma * grad_f(alpha)
+        
+        alpha = next_alpha
+        values[i,:] = alpha
+    
+    return values
+```
 
+Since the shrinking factor ($\beta$) plays a big role in the efficiency of the new algorithm, we'd like to know the best value possible for $\beta$. When we're doing gradient descent for real-world applications, we're often facing large amounts of data, where running the gradient descent algorithm can take a long time. In that case, we'd just try out several different $\beta$-values to estimate the best one to use. However, for this particular problem, we're interested in being able to get to the lowest point possible in 100 iterations, with such a small data size (just the starting point), we can test-run and compare a range of values for $\beta$ to find the best one to use:
 
+```{python}
+# find the best value to use for beta (the shrinking factor) by finding
+#   the beta that gives the lowest function value after 100 iterations
+#   and zooming in the search-range to find a more precise beta value
+alpha = numpy.array([0, 2])
+best_norm = numpy.infty
+
+# for beta in numpy.linspace(.01, .80, 1001): # best: .035
+# for beta in numpy.linspace(.03, .04, 1001): # best: .03551
+# for beta in numpy.linspace(.0355, .0356, 1001): # best: .0355062
+for beta in numpy.linspace(.035506, .035507, 1001): # best: .035506209
+    values = grad_descent_w_bt_line_search(100, alpha, beta, f2,
+                                           grad_f2)
+    norm = numpy.linalg.norm(values[-1,], 2)
+    if norm < best_norm:
+        best_norm = norm
+        best_beta = beta
+
+# best_beta now contains the best value to use for beta
+print(best_beta, best_norm)
+```
+
+Now, knowing the best $\beta$-value to use, let's run the improved algorithm and see the results.
+
+```{python}
+# display and plot the results
+values = grad_descent_w_bt_line_search(100, alpha, best_beta, f2,
+                                       grad_f2)
+final_value = values[-1,:]
+print(f"Alpha value after 100 iterations: {final_value}\n"
+      f"L2-norm of the above alpha value:"
+      f" {numpy.linalg.norm(final_value, 2)}")
+
+create_contour_lines(values, f2, .005, .04)
+pyplot.plot(values[:,0], values[:,1], "r-")
+pyplot.plot(values[:,0], values[:,1], "bo")
+```
+
+As seen from the plot, there's no more zigzagging going on, which signals a more efficient descending process.
+
+```{python}
+# compare to the results from part (b)
+print(f"Results from Part (b):\n"
+      f"Alpha value after 100 iterations: {final_value_from_part_b}\n"
+      f"L2-norm of the above alpha value:"
+      f" {numpy.linalg.norm(final_value_from_part_b, 2)}")
+```
+
+So, the minimum point *Part (b)* was able to reach had a norm of 2.508, while the minimum we can now reach in *Part (d)* had a norm of only 1.579, which is about 37\% smaller. That's quite an improvement.
