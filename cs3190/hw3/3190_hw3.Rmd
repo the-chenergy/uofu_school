@@ -119,8 +119,8 @@ test_full_y = a * test_x + b
 test_train_y = train_a * test_x + train_b
 res_full = test_full_y - test_data_y
 res_train = test_train_y - test_data_y
-res_full_norm = numpy.linalg.norm(res_full, 2)
-res_train_norm = numpy.linalg.norm(res_train, 2)
+res_full_norm = numpy.linalg.norm(res_full)
+res_train_norm = numpy.linalg.norm(res_train)
 print(f"Residual of the testing data using model built from full"
       f"data:\n"
       f"{res_full}\n"
@@ -138,8 +138,8 @@ train_full_y = a * train_x + b
 train_train_y = train_a * train_x + train_b
 res_train_full = train_full_y - train_y
 res_train_train = train_train_y - train_y
-res_train_full_norm = numpy.linalg.norm(res_train_full, 2)
-res_train_train_norm = numpy.linalg.norm(res_train_train, 2)
+res_train_full_norm = numpy.linalg.norm(res_train_full)
+res_train_train_norm = numpy.linalg.norm(res_train_train)
 print(f"L2-norm of the residuals of the model built from full data:\n"
       f"{res_train_full_norm}\n\n"
       f"L2-norm of the residuals of the model built from training"
@@ -179,8 +179,8 @@ $$\hat{y} = M_3(x) = 2.209x^3 + 22.49x^2 + 42.99x + 175.4$$
 # calculate the residuals
 res_test = poly(test_x) - test_data_y
 res_train = poly(train_x) - train_y
-res_test_norm = numpy.linalg.norm(res_test, 2)
-res_train_norm = numpy.linalg.norm(res_train, 2)
+res_test_norm = numpy.linalg.norm(res_test)
+res_train_norm = numpy.linalg.norm(res_train)
 
 print(f"L2-norm of the residual of the testing data: {res_test_norm}\n"
       f"L2-norm of the residual of the training data: {res_train_norm}")
@@ -228,8 +228,8 @@ def f2(alpha):
 def grad_f2(alpha):
     x, y = alpha[0], alpha[1]
     return numpy.array([
-        -70*y**2 + 70*x + 560*y - 700,
-        140*y**3 - 140*x*y - 1680*y**2 + 560*x + 5882*y - 5610,
+        70*x - 70*(y - 4)**2 + 420,
+        2*y - 140*(y - 4)*(x - (y - 4)**2 + 6) - 10,
     ])
 
 
@@ -304,14 +304,13 @@ final_value_from_part_b = values[-1,:]
 ```{python}
 # this gamma value seems to work the best (brings alpha closest to the
 #   true minimum after 20 iterations).
-gamma = .507265145860
+gamma = .503475293845
 
 alpha = numpy.array([2, 3])
 values = grad_descent(20, alpha, gamma, grad_f1)
 final_value = values[-1,:]
 print(f"Alpha value after 20 iterations: {final_value}\n"
-      f"L2-norm of the above alpha value:"
-      f" {numpy.linalg.norm(final_value, 2)}")
+      f"\"Cost\" of the above alpha value: {f1(final_value)}")
 
 create_contour_lines(values, f1, .1, .2)
 pyplot.plot(values[:,0], values[:,1], "r-")
@@ -320,19 +319,21 @@ pyplot.plot(values[:,0], values[:,1], "bo")
 
 ## Part (d)
 
-To help reach the smallest value possible for $f_2$ within the 100-iteration limit, let's improve our gradient descent algorithm to make use of the "backtracking line search" technique, which automatically tunes the learning rate ($\gamma$) every time when the algorithm is about to make an overshooting step. As witnessed in the plot from *Part (b),* the original gradient descent algorithm was taking a lot of unnecessary overshooting steps, zigzagging its way to the minimum, which wasn't very efficient. Hopefully our improved algorithm can find its descent more directly and smoothly with the assistance of backtracking line search.
+To help reach the smallest value possible for $f_2$ within the 100-iteration limit, let's improve our gradient descent algorithm to make use of the "backtracking line search" technique, which automatically tunes the learning rate ($\gamma$) every time when the algorithm is about to make an overshooting step. As witnessed in the plot from *Part (b),* the original gradient descent algorithm wasn't very efficient: it was taking a lot of unnecessary overshooting steps when the steps are needed to be small, and overall it's only inching its way to the actual minimum, which was miles away. Hopefully our improved algorithm can find its descent more directly and smoothly with the assistance of backtracking line search.
 
-Let's introduce this improved gradient descent algorithm. Note that this new algorithm is just like an ordinary gradient descent algorithm, except it ensures that no iteration will make the alpha value overshoot (i.e., go pass the minimum point) by shrinking the learning rate by some factor ($\beta$) when appropriate.
+Let's introduce this improved gradient descent algorithm. Note that this new algorithm is just like an ordinary gradient descent algorithm, except it ensures that no iteration will make the alpha value overshoot (i.e., go pass the minimum point) by shrinking the learning rate by some factor ($\beta$) when appropriate. This allows the descending process to take a big step when it's headed in the right direction and take a small step when its direction needs adjustments.
 
 ```{python}
 # define a variant of the gradient descent algorithm which uses the
-#   backtracking line search technique, with the learning rate
-#   starting at 1 and the argument "beta" being the shrinking factor
-def grad_descent_w_bt_line_search(num_iter, alpha, beta, f, grad_f):
+#   backtracking line search technique, with shrinking rate "beta" and
+#   initial learning rate "gamma"
+def grad_descent_w_bt_line_search(num_iter, alpha, beta, gamma, f,
+                                  grad_f):
     values = numpy.zeros([num_iter, len(alpha)])
     values[0,:] = alpha
-    gamma = 1
+    gamma_0 = gamma
     for i in range(1, num_iter):
+        gamma = gamma_0
         next_alpha = alpha - gamma * grad_f(alpha)
         # backtracking: shrink learning rate (gamma) if our next step
         #   is going to be too big
@@ -347,42 +348,22 @@ def grad_descent_w_bt_line_search(num_iter, alpha, beta, f, grad_f):
     return values
 ```
 
-Since the shrinking factor ($\beta$) plays a big role in the efficiency of the new algorithm, we'd like to know the best value possible for $\beta$. When we're doing gradient descent for real-world applications, we're often facing large amounts of data, where running the gradient descent algorithm can take a long time. In that case, we'd just try out several different $\beta$-values to estimate the best one to use. However, for this particular problem, we're interested in being able to get to the lowest point possible in 100 iterations, with such a small data size (just the starting point), we can test-run and compare a range of values for $\beta$ to find the best one to use:
-
-```{python}
-# find the best value to use for beta (the shrinking factor) by finding
-#   the beta that gives the lowest function value after 100 iterations
-#   and zooming in the search-range to find a more precise beta value
-alpha = numpy.array([0, 2])
-best_norm = numpy.infty
-
-# for beta in numpy.linspace(.01, .80, 1001): # best: .035
-# for beta in numpy.linspace(.03, .04, 1001): # best: .03551
-# for beta in numpy.linspace(.0355, .0356, 1001): # best: .0355062
-for beta in numpy.linspace(.035506, .035507, 1001): # best: .035506209
-    values = grad_descent_w_bt_line_search(100, alpha, beta, f2,
-                                           grad_f2)
-    norm = numpy.linalg.norm(values[-1,], 2)
-    if norm < best_norm:
-        best_norm = norm
-        best_beta = beta
-
-# best_beta now contains the best value to use for beta
-print(best_beta, best_norm)
-```
+Since the shrinking factor ($\beta$) plays a big role in the efficiency of the new algorithm, we'd like to know the best value possible for $\beta$. When we're doing gradient descent for real-world applications, we're often facing large amounts of data, where running the gradient descent algorithm can take a long time. In that case, we'd just try out several different $\beta$-values to estimate the best one to use. After trying out several different $\beta$-values, I found that the algorithm works the best (gives the lowest cost function value after 100 iterations) when $\beta = .92$.
 
 Now, knowing the best $\beta$-value to use, let's run the improved algorithm and see the results.
 
 ```{python}
 # display and plot the results
-values = grad_descent_w_bt_line_search(100, alpha, best_beta, f2,
+alpha = numpy.array([0, 2])
+beta = .92
+gamma = 1
+values = grad_descent_w_bt_line_search(100, alpha, beta, gamma, f2,
                                        grad_f2)
 final_value = values[-1,:]
 print(f"Alpha value after 100 iterations: {final_value}\n"
-      f"L2-norm of the above alpha value:"
-      f" {numpy.linalg.norm(final_value, 2)}")
+      f"\"Cost\" of the above alpha value: {f2(final_value)}")
 
-create_contour_lines(values, f2, .005, .04)
+create_contour_lines(values, f2, .25, .4)
 pyplot.plot(values[:,0], values[:,1], "r-")
 pyplot.plot(values[:,0], values[:,1], "bo")
 ```
@@ -393,8 +374,8 @@ As seen from the plot, there's no more zigzagging going on, which signals a more
 # compare to the results from part (b)
 print(f"Results from Part (b):\n"
       f"Alpha value after 100 iterations: {final_value_from_part_b}\n"
-      f"L2-norm of the above alpha value:"
-      f" {numpy.linalg.norm(final_value_from_part_b, 2)}")
+      f"\"Cost\" of the above alpha value:"
+      f" {f2(final_value_from_part_b)}")
 ```
 
-So, the minimum point *Part (b)* was able to reach had a norm of 2.508, while the minimum we can now reach in *Part (d)* had a norm of only 1.579, which is about 37\% smaller. That's quite an improvement.
+So, the minimum point *Part (b)* was able to reach had a cost (by plugging into $f_2$) of 9.611, while the minimum we can now reach in *Part (d)* had a cost of only .003357, which is more than 2800 times smaller. That's quite an improvement!
