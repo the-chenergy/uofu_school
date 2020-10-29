@@ -36,7 +36,12 @@
 		"vector": "cpp",
 		"xtree": "cpp",
 		"unordered_set": "cpp",
-		"queue": "cpp"
+		"queue": "cpp",
+		"cstddef": "cpp",
+		"cstring": "cpp",
+		"iostream": "cpp",
+		"iosfwd": "cpp",
+		"xstring": "cpp"
 	},
 	"cSpell.ignoreWords": [
 		"chal",
