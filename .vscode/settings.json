@@ -50,5 +50,6 @@
 		"necco",
 		"winstate",
 		"winstate inc"
-	]
+	],
+	"python.pythonPath": "C:\\Python38\\python.exe"
 }
