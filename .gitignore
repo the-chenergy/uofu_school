@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 
+.ipynb_checkpoints
 indent.log
 cs3100/a*/u1172983.zip
 cs4150/**/*.exe
