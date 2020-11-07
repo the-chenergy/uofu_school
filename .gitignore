@@ -4,7 +4,11 @@
 .Ruserdata
 
 .ipynb_checkpoints
+__pycache__
 indent.log
+parser.out
+parsetab.py
+
 cs3100/a*/u1172983.zip
 cs4150/**/*.exe
 cs5630/**/hw*.zip
