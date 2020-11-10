@@ -57,10 +57,10 @@
 
     My proposed algorithm has the following features:
     \begin{itemize}
-      \item The algorithm takes inputs of (1) the adjacency list representing graph $G$ and (2) the starting vertex $s$. The adjacency list input should include the color of the incident edge for each neighbor as an integer: 1 for yellow, 2 for orange, and 3 for white.
+      \item The algorithm takes input of (1) the adjacency list representing the graph $G$ and (2) the starting vertex $s$. The adjacency list input should include the color of the incident edge for each neighbor as an integer: 1 for yellow, 2 for orange, and 3 for white.
       \item The vertices and edges in this algorithm represent the vertices and edges in the given graph $G$.
       \item The edges are directed, and each edge has an associated integer value according to its color in graph $G$.
-      \item The vertices will have an associated array of three boolean values, indexed 1, 2, and 3. The boolean at index $k$ records whether the vertex has been ``$k$-visited'', which we'll describe later.
+      \item Each vertex will have an associated array of three boolean values, indexed 1, 2, and 3. The boolean at index $k$ records whether the vertex has been ``$k$-visited'', which we'll describe later.
       \item The algorithm will output a set containing the vertices that can be reached from the starting vertex via some candy corn walk.
       \item The algorithm makes use of a Breadth-First Search with some modifications:
         \begin{itemize}
@@ -84,7 +84,7 @@
 
   \item (Graph DP)
 
-    My proposed algorithm is as follows. Note that, apart from the adjacency list representing the graph $G$, the algorithm also takes $s$ and $t$, the only source and sink, as the inputs, assuming that the user knows them beforehand. We also assume that the vertices are named and referred to with strings.
+    My proposed algorithm is as follows. Note that, apart from the adjacency list representing the graph $G$, the algorithm also takes $s$ and $t$, the only source and sink, as the input, assuming that the user knows them beforehand.
 
     \begin{center}
       \begin{minipage}{\linewidth}
@@ -92,28 +92,26 @@
         \SetArgSty{textrm}
         \begin{algorithm}[H]
           \caption{\texttt{max\_st\_weight}}
-          \KwIn{\texttt{hash\_map<string, hash\_set<string>>} $A$, \texttt{string} $s$, \texttt{string} $t$, \texttt{function} $w$}
+          \KwIn{\texttt{hash\_map<vertex, hash\_set<vertex>>} $A$, \texttt{vertex} $s$, \texttt{vertex} $t$, \texttt{function} $w$}
           \KwOut{\texttt{number}}
 
-          \texttt{int} $n \gets$ Number of keys in $A$
+          \texttt{int} $n \gets$ number of keys in $A$
 
-          \texttt{string} $L[1..n] \gets$ Topological sort $A$
+          \texttt{vertex} $L[1..n] \gets$ topological sort $A$
 
-          \texttt{hash\_map<string, number>} $M \gets \{\}$
+          \texttt{hash\_map<vertex, number>} $M \gets \{\}$
 
           $M[t] \gets 0$
 
           \For{\texttt{int} $i = n-1$ to 1}
           {
-          \texttt{string} $x \gets L[i]$
+          \texttt{vertex} $x \gets L[i]$
 
-          \For{\texttt{string} $y$ in $A[x]$}
-          {
-            $M[x] \gets \text{max}(M[x], w(x, y) + M[y])$
-            }
+          \For{each \texttt{vertex} $y$ in $A[x]$}{$M[x] \gets \text{max}(M[x], w(x, y) + M[y])$}
           }
 
           \Return{$M[s]$}
+
         \end{algorithm}
       \end{minipage}
     \end{center}
@@ -134,7 +132,7 @@
       \item Since the function value of $x$ is purely dependent on its out-neighbors, which are positioned \textit{later} in the topological order, I filled the memoization table in \textit{reverse} order (line 5), using the strategy presented in the backtracking algorithm (lines 6-8).
     \end{itemize}
 
-    Let's analyze the dynamic programming algorithm's run-time complexity. First, we know that topological sort runs in $O(n + m)$, where $n$ and $m$ are the number of vertices and edges in $G$. Assuming that the weight-function $w$ has constant running time, our ``table-filling'' portion runs in
+    Let's analyze the dynamic programming algorithm's run-time complexity. First, we know that topological sort runs in $O(n + m)$, where $n$ and $m$ are the number of vertices and edges in $G$. Assuming that the weight-function $w$ and a vertex's hash function takes constant running time, our ``table-filling'' portion runs in
     $$
       O(1 + \text{outdegree}(v_1)) + \cdots + O(1 + \text{outdegree}(v_n)) = O(n + \sum_{v \in V}\text{outdegree}(v)) = O(n + m)
     $$
@@ -145,20 +143,112 @@
 
   \item (MST Properties)
 
-    % answer question 3 here
+    \textbf{a.} Suppose that $G$ is cyclic, and consider a cycle $v_1v_2, v_2v_3, \cdots, v_nv_1$, where $v_1, \cdots, v_n$ are the vertices involved. Let $v_1v_2$ be the (unique) maximum-weight edge in this cycle. Assume that $v_1v_2$ is in a minimum spanning tree $T$ of $G$, and let's see why this cannot happen:
+    \begin{itemize}
+      \item \textbf{Claim.} We could replace the edge $v_1v_2$ in $T$ with some other edge from the cycle, and $T$ would still be a spanning tree of $G$.
+      \item \textbf{Proof.} Since $T$ is a spanning tree, we know that $T$ is connected, but removing any edge from $T$ disconnects it and results in exactly two components.
+
+        Let's remove $v_1v_2$ from $T$. After that, every vertex in $G$ is in one of two components: the one $v_1$ is in, which we'll call $C_1$, or the one with $v_2$, called $C_2$. Since then, there is at least one place in $v_{1..n}$ where two neighboring vertices $v_i$ and $v_j$ are in different components, \textit{other than $v_1$ and $v_2$}. We can guarantee this because we know that $v_1$ and $v_2$ are in different components, and every other vertex in the cycle must fall into either $C_1$ or $C_2$. If there are multiple instances of neighboring $v_i$ and $v_j$ where they're in different components, just pick any of them as long as they're not $v_1$ and $v_2$.
+
+        Now, since $v_i$ and $v_j$ are neighbors and are in different components, if we add the edge $v_iv_j$ to $T$, we'll for sure end up with a tree. Moreover, we know that the new $T$ is still a spanning tree because it has the same number of edges as before, which implies that it still includes every vertex in $G$, by the characteristic that any tree has $|V| - 1$ edges. $\square$
+    \end{itemize}
+
+    We've just shown that, if $v_1v_2$ were in an MST, we could always replace it with some other edge from the same cycle and get a spanning tree with less total weight, because $v_1v_2$ was the maximum-weight edge in the cycle. $T$ wasn't even minimum to begin with, so our assumption in the beginning must've been wrong. Therefore, the minimum spanning tree of $G$ cannot contain a maximum-weight edge from any cycle. $\square$
+
+    \textbf{b.} The following graph makes a counterexample to the statement:
+    \begin{center}
+      \includegraphics[width=.1875\linewidth]{images/q3b_1.png}
+    \end{center}
+    The minimum spanning tree of the above graph would include edges $\{ab, bd, ac\}$. The cycle $\{ac, cd, ad\}$ has $ad$ being the minimum-weight edge, which is not included in the MST.
 
     \pagebreak
 
   \item (Light-st Walk)
 
-    % answer question 4 here
+    My proposed algorithm has the following features:
+    \begin{itemize}
+      \item The algorithm takes input of (1) the adjacency list representing the graph $G$, (2) the starting vertex $s$, (3) the destination vertex $t$, and (4) the weight function $w$.
+      \item The vertices and edges in this algorithm represent the vertices and edges in the given graph $G$.
+      \item The edges are undirected and do not have associated values.
+      \item Each vertex will have three associated values: an integer recording the minimum weight from the starting vertex, a boolean recording whether the vertex has been visited, and a place to hold the vertex's predecessor. The initial minimum weight will be set to infinite, except if the vertex is $s$, which would be set to 0.
+      \item The algorithm will output a list of vertices representing the path with the minimum total weight possible to get from $s$ to $t$.
+      \item The algorithm makes use of the Nonnegative Dijkstra's Algorithm with just one small modification:
+        \begin{itemize}
+          \item The priority queue will hold a pair: the next vertex and the current weight, just like in a regular Nonnegative Dijkstra's Algorithm. \textit{We'll use a binary min-heap as the priority queue.}
+          \item The priority queue will have the pair $(s, 0)$ as a start, where $s$ is the input starting vertex.
+          \item The search will go on until the queue is empty, by default. In each iteration, let's say the algorithm pops the queue and gets the pair $(x, k)$. The algorithm will skip processing $x$ if it's already visited, or otherwise it'll now mark $x$ as visited. If $x = t$, the search ends immediately, and the algorithm returns the path by going over $x$'s predecessors.
+          \item Next, for each $x$'s neighbor $y$, the algorithm will add $(y, k + w(y))$ to the priority queue only if (1) $k + w(y)$ is less than $y$'s recorded minimum weight, and (2) $y$ hasn't been marked visited. If the algorithm ends up adding $y$ to the queue, it'll then record $x$ as $y$'s predecessor. The modification here is that the weight function is called on the next vertex instead of on the incident edge.
+        \end{itemize}
+      \item If the algorithm makes it to when the Nonnegative Dijkstra's Algorithm is over, it'll report that there isn't a path from $s$ to $t$, which might be in the form of an error.
+    \end{itemize}
+
+    Let $n$ and $m$ be the number of vertices and edges in $G$, respectively. To analyze the run-time behavior of this algorithm, let's break it down into the initialization phase and the search phase:
+    \begin{itemize}
+      \item The initialization phase assigns each vertex its three associated values. Since there are $n$ vertices, this part will take $O(n)$.
+      \item The search phase will run in $O(n + m\log m)$, just like in a regular Nonnegative Dijkstra's Algorithm, because the only modification we did was changing how each edge weight is calculated by calling a different function (the vertex-weight function, in this case). Each vertex and each edge will still be visited the same maximum number of times just like in a Nonnegative Dijkstra's Algorithm.
+    \end{itemize}
+
+    Therefore, since the most time-consuming part of the algorithm takes $O(n + m\log m)$, the entire algorithm takes $O(n + m\log m)$.
 
     \pagebreak
 
   \item (MST Updates)
 
-    % answer question 5 here
+    \textbf{a.} As follows. Note that these algorithms require the adjacency list that represent the graph $G$ as an input, assuming that the user has one; if not, it should be easy to generate one in $O(|V| + |E|)$ time.
 
+    \begin{center}
+      \begin{minipage}{\linewidth}
+        \renewcommand{\thealgocf}{}
+        \SetArgSty{textrm}
+        \begin{algorithm}[H]
+          \caption{\texttt{update\_T\_on\_decrease}}
+          \KwIn{\texttt{map<vertex, set<vertex>>} $A$, \texttt{set<edge>} $T$, \texttt{function} $w$, \texttt{edge} $e$}
+          \KwOut{\texttt{set<edge>}}
+
+          \If{$e \in T$}{\Return{$T$}}
+
+          Add $e$ to $T$
+
+          \texttt{set<edge>} $S \gets$ edges in $T$ that make a cycle, found by a Depth-First Search
+
+          \texttt{edge} $f \gets$ edge in $S$ with the greatest weight
+
+          Remove $f$ from $T$
+
+          \Return{$T$}
+
+        \end{algorithm}
+      \end{minipage}
+    \end{center}
+
+    \textbf{b.}
+
+    \begin{center}
+      \begin{minipage}{\linewidth}
+        \renewcommand{\thealgocf}{}
+        \SetArgSty{textrm}
+        \begin{algorithm}[H]
+          \caption{\texttt{update\_T\_on\_increase}}
+          \KwIn{\texttt{map<vertex, set<vertex>>} $A$, \texttt{set<edge>} $T$, \texttt{function} $w$, \texttt{edge} $e$}
+          \KwOut{\texttt{set<edge>}}
+
+          \If{$e \notin T$}{\Return{$T$}}
+
+          Remove $e$ from $T$
+
+          \texttt{set<vertex>} $R \gets$ vertices in $A$ reachable from $e[0]$ via edges in $T$, found by a Depth-First Search
+
+          \texttt{set<edge>} $S \gets$ edges in $A$ that have exactly one endpoint in $R$
+
+          \texttt{edge} $f \gets$ edge in $S$ with the least weight
+
+          Add $f$ to $T$
+
+          \Return{$T$}
+
+        \end{algorithm}
+      \end{minipage}
+    \end{center}
 
 \end{enumerate}
 
