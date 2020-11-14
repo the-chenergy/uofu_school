@@ -84,7 +84,7 @@
 
   \item (Graph DP)
 
-    My proposed algorithm is as follows. Note that, apart from the adjacency list representing the graph $G$, the algorithm also takes $s$ and $t$, the only source and sink, as the input, assuming that the user knows them beforehand.
+    My proposed algorithm is as follows, whose first argument is an adjacency list representing the graph $G$.
 
     \begin{center}
       \begin{minipage}{\linewidth}
@@ -92,52 +92,56 @@
         \SetArgSty{textrm}
         \begin{algorithm}[H]
           \caption{\texttt{max\_st\_weight}}
-          \KwIn{\texttt{hash\_map<vertex, hash\_set<vertex>>} $A$, \texttt{vertex} $s$, \texttt{vertex} $t$, \texttt{function} $w$}
+          \KwIn{\texttt{hash\_map<vertex, hash\_set<vertex>>} $A$, \texttt{int} $l$, \texttt{vertex} $s$, \texttt{vertex} $t$, \texttt{function(vertex, vertex):number} $w$}
           \KwOut{\texttt{number}}
 
           \texttt{int} $n \gets$ number of keys in $A$
 
           \texttt{vertex} $L[1..n] \gets$ topological sort $A$
 
-          \texttt{hash\_map<vertex, number>} $M \gets \{\}$
+          \texttt{hash\_map<vertex, number>} $M[0..l] \gets$ filled with $\{\}$
 
-          $M[t] \gets 0$
+          \For{\texttt{int} $k = 0$ to $l$}{$M[k][t] \gets 0$}
 
+          \For{each \texttt{vertex} $u$ in $A$'s keys}{$M[l][u] \gets -\infty$}
+
+          \For{\texttt{int} $k = l-1$ to 0}
+          {
           \For{\texttt{int} $i = n-1$ to 1}
           {
-          \texttt{vertex} $x \gets L[i]$
+            \texttt{vertex} $u \gets L[i]$
 
-          \For{each \texttt{vertex} $y$ in $A[x]$}{$M[x] \gets \text{max}(M[x], w(x, y) + M[y])$}
+            $M[k][u] \gets -\infty$
+
+            \For{each \texttt{vertex} $v$ in $A[u]$}{$M[k][u] \gets \text{max}(M[k][u], w(u, v) + M[k+1][v])$}
+            }
           }
 
-          \Return{$M[s]$}
+          \Return{$M[0][s]$}
 
         \end{algorithm}
       \end{minipage}
     \end{center}
 
-    This algorithm uses the idea of the following backtracking algorithm, which returns the maximum weight from any vertex $x$ to the only sink $t$:
+    This algorithm uses the idea of the following backtracking algorithm, which returns the maximum weight from any vertex $u$ to the only sink $t$ using at most $l$ edges when $k$ edges are used so far:
     $$
-      \text{BT}(x) = \begin{cases}
-        0,\textbf{ if }x = t \\
-        \text{max}[w(xy) + \text{BT}(y)\textbf{ for }y\text{ in out-neighborhood of }x],\textbf{ otherwise}
+      \text{BT}(k, u) = \begin{cases}
+        -\infty,\textbf{ if }k = l \\
+        0,\textbf{ else if }u = t  \\
+        \text{max}[w(u \rightarrow v) + \text{BT}(k+1, v)\textbf{ for }v\text{ in out-neighborhood of }u],\textbf{ otherwise}
       \end{cases}
     $$
 
-    The idea of the above backtracking algorithm is that, given some current vertex $x$, we have to make a choice on which edge to go down from $x$, and the maximum weight for each choice is just the chosen edge's weight plus the maximum weight after taking this edge. The maximum weight from $x$ then is the maximum across all choices, except if $x$ is already the destination vertex $t$, where there's no more edge or weight to take. Since the graph is acyclic, every step we take from $x$ \textit{will} be closer to $t$ in terms of the number of steps left, which is advantageous because then any out-neighbor of $x$ would not depend on $x$ for its maximum weight to $t$. This paved the way for our dynamic programming algorithm:
+    Since the graph is acyclic, every step we take from $u$ \textit{will} be closer to $t$ in terms of the number of steps left, which is advantageous because then any out-neighbor of $u$ would not depend on $u$ for its maximum weight to $t$. This paved the way for our dynamic programming algorithm:
     \begin{itemize}
-      \item The algorithm can use memoization to avoid calculating the same value twice. I used a hash-map for its fast lookup with vertices' names.
+      \item The algorithm can use memoization to avoid calculating the same value twice. I used a hash-map for its fast lookup when vertices are the keys.
       \item The topological sort conveniently gives us the order we need to calculate in (line 2).
-      \item The base case is when the current vertex is $t$, which has a maximum weight of zero (line 4).
-      \item Since the function value of $x$ is purely dependent on its out-neighbors, which are positioned \textit{later} in the topological order, I filled the memoization table in \textit{reverse} order (line 5), using the strategy presented in the backtracking algorithm (lines 6-8).
+      \item The two base cases are when $l$ edges are used already (lines 6-7) and when the current vertex is $t$ (lines 4-5).
+      \item I filled the memoization table in \textit{reverse} order (lines 8-9) since calculating the answer for $(k, u)$ depends on $k+1$ and $u$'s out-neighbors who come later in the topological order.
+      \item The final answer is given by ``when the current vertex is $s$ where 0 edges are used so far'' (line 14).
     \end{itemize}
 
-    Let's analyze the dynamic programming algorithm's run-time complexity. First, we know that topological sort runs in $O(n + m)$, where $n$ and $m$ are the number of vertices and edges in $G$. Assuming that the weight-function $w$ and a vertex's hash function takes constant running time, our ``table-filling'' portion runs in
-    $$
-      O(1 + \text{outdegree}(v_1)) + \cdots + O(1 + \text{outdegree}(v_n)) = O(n + \sum_{v \in V}\text{outdegree}(v)) = O(n + m)
-    $$
-
-    Therefore, the entire algorithm runs in $O(n + m)$.
+    Let's analyze the dynamic programming algorithm's run-time complexity. First, we know that topological sort runs in $O(n + m)$, where $n$ and $m$ are the number of vertices and edges in $G$. Assuming that the weight-function $w$ and a vertex's hashing both have constant running time, the ``table-filling'' portion takes $O(l \cdot (n + \sum_{v \in V}\text{outdegree}(v))) = O(l \cdot (n + m))$. Therefore, the entire algorithm runs in $O(l \cdot (n + m))$.
 
     \pagebreak
 
@@ -194,61 +198,24 @@
 
   \item (MST Updates)
 
-    \textbf{a.} As follows. Note that these algorithms require the adjacency list that represent the graph $G$ as an input, assuming that the user has one; if not, it should be easy to generate one in $O(|V| + |E|)$ time.
+    \textbf{a.} My proposed algorithm, upon receiving the input, runs as follows:
+    \begin{itemize}
+      \item If $e \in T$, since $T$ was a minimum spanning tree to start with, no further actions are needed, and the algorithm ends here.
+      \item Otherwise, add $e$ to $T$.
+      \item Now, $T$ should contain a cycle, and we can find that cycle using a Depth-First Search with the starting vertex being an endpoint of $e$. Let $S$ be the set of edges in that cycle.
+      \item Find the maximum-weight edge in $S$ and remove it from $T$.
+      \item $T$ is now the updated MST.
+    \end{itemize}
 
-    \begin{center}
-      \begin{minipage}{\linewidth}
-        \renewcommand{\thealgocf}{}
-        \SetArgSty{textrm}
-        \begin{algorithm}[H]
-          \caption{\texttt{update\_T\_on\_decrease}}
-          \KwIn{\texttt{map<vertex, set<vertex>>} $A$, \texttt{set<edge>} $T$, \texttt{function} $w$, \texttt{edge} $e$}
-          \KwOut{\texttt{set<edge>}}
-
-          \If{$e \in T$}{\Return{$T$}}
-
-          Add $e$ to $T$
-
-          \texttt{set<edge>} $S \gets$ edges in $T$ that make a cycle, found by a Depth-First Search
-
-          \texttt{edge} $f \gets$ edge in $S$ with the greatest weight
-
-          Remove $f$ from $T$
-
-          \Return{$T$}
-
-        \end{algorithm}
-      \end{minipage}
-    \end{center}
-
-    \textbf{b.}
-
-    \begin{center}
-      \begin{minipage}{\linewidth}
-        \renewcommand{\thealgocf}{}
-        \SetArgSty{textrm}
-        \begin{algorithm}[H]
-          \caption{\texttt{update\_T\_on\_increase}}
-          \KwIn{\texttt{map<vertex, set<vertex>>} $A$, \texttt{set<edge>} $T$, \texttt{function} $w$, \texttt{edge} $e$}
-          \KwOut{\texttt{set<edge>}}
-
-          \If{$e \notin T$}{\Return{$T$}}
-
-          Remove $e$ from $T$
-
-          \texttt{set<vertex>} $R \gets$ vertices in $A$ reachable from $e[0]$ via edges in $T$, found by a Depth-First Search
-
-          \texttt{set<edge>} $S \gets$ edges in $A$ that have exactly one endpoint in $R$
-
-          \texttt{edge} $f \gets$ edge in $S$ with the least weight
-
-          Add $f$ to $T$
-
-          \Return{$T$}
-
-        \end{algorithm}
-      \end{minipage}
-    \end{center}
+    \textbf{b.} My proposed algorithm, upon receiving the input, runs as follows:
+    \begin{itemize}
+      \item If $e \notin T$, since $T$ was a minimum spanning tree to start with, no further actions are needed, and the algorithm ends here.
+      \item Otherwise, remove $e$ from $T$.
+      \item Now, $T$ should be divided into two connected components. Find all the vertices that are reachable from one endpoint of $e$ with a Depth-First Search, and call that set of vertices $R$.
+      \item Let $S$ be the set of edges that have exactly one endpoint in $R$.
+      \item Find the minimum-weight edge in $S$ and add it to $T$.
+      \item $T$ is now the updated MST.
+    \end{itemize}
 
 \end{enumerate}
 
