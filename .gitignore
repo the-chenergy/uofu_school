@@ -10,8 +10,14 @@ parser.out
 parsetab.py
 
 cs3100/a*/u1172983.zip
-cs4150/**/*.exe
-cs5630/**/hw*.zip
+cs3100/a*/u1172983/nosol.txt
+cs3100/a*/u1172983/pcp.exe
+cs3100/a*/u1172983/sol.txt
+cs3100/a*/u1172983/temp.txt
+cs3100/a*/u1172983/unsol.txt
 
+cs4150/**/*.exe
+
+cs5630/**/hw*.zip
 cs5630/hw6/assets
 cs5630/hw6/figs
