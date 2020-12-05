@@ -18,6 +18,7 @@
 		"data",
 		"endregion",
 		"gridlines",
+		"heapq",
 		"indegree",
 		"mergesort",
 		"outdegree",
@@ -53,5 +54,5 @@
 		"winstate",
 		"winstate inc"
 	],
-	"python.pythonPath": "C:\\Python38\\python.exe"
+	"python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe"
 }
