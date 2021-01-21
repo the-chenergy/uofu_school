@@ -8,6 +8,7 @@ __pycache__
 indent.log
 parser.out
 parsetab.py
+__MACOSX
 
 cs3100/a*/u1172983.zip
 cs3100/a*/u1172983/nosol.txt
@@ -18,6 +19,9 @@ cs3100/a*/u1172983/unsol.txt
 
 cs4150/**/*.exe
 cs4150/a10/in.txt
+
+cs4300/**/u1172983-*.zip
+cs4300/**/u1172983-*.pdf
 
 cs5630/**/hw*.zip
 cs5630/hw6/assets
