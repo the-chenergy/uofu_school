@@ -58,7 +58,7 @@
     "iosfwd": "cpp",
     "xstring": "cpp"
   },
-  "python.pythonPath": "C:\\Users\\null\\.conda\\envs\\py36\\python.exe",
+  "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe",
   "python.analysis.extraPaths": [
     "./cs4300/p00/u1172983-Proj0",
     "./cs4300/p01/u1172983-Proj1",
