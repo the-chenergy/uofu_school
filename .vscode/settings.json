@@ -25,6 +25,8 @@
     "crossorigin",
     "curr",
     "data",
+    "dests",
+    "dists",
     "endregion",
     "gridlines",
     "heapq",
@@ -40,7 +42,9 @@
     "uninvites"
   ],
   "code-runner.executorMap": {
-    "python": "pyAG"
+    // "python": "python autograder.py -q q5"
+    // "python": "python autograder.py --no-graphics -q q5"
+    // "python": "pyAG"
   },
   "files.associations": {
     "utility": "cpp",
@@ -58,7 +62,7 @@
     "iosfwd": "cpp",
     "xstring": "cpp"
   },
-  "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe",
+  "python.pythonPath": "C:\\Users\\null\\.conda\\envs\\py36\\python.exe",
   "python.analysis.extraPaths": [
     "./cs4300/p00/u1172983-Proj0",
     "./cs4300/p01/u1172983-Proj1",
