@@ -1,0 +1,8 @@
+{
+  "cSpell.words": ["probs"],
+  "code-runner.executorMap": {
+    "python": "pyAG"
+  },
+  "python.analysis.extraPaths": ["u1172983-Proj3"],
+  "python.pythonPath": "C:\\Users\\null\\.conda\\envs\\py36\\python.exe"
+}
