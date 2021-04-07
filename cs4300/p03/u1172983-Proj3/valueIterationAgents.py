@@ -24,11 +24,12 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
+from typing import no_type_check_decorator
 import mdp, util
 
 from learningAgents import ValueEstimationAgent
-import collections
 from gridworld import Gridworld
+from collections import defaultdict
 
 class ValueIterationAgent(ValueEstimationAgent):
     """
@@ -60,7 +61,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.runValueIteration()
     
     def runValueIteration(self):
-        for i in range(self.iterations):
+        for iteration in range(self.iterations):
             newValues = self.values.copy()
             states = self.mdp.getStates()
             for state in states:
@@ -147,7 +148,12 @@ class AsynchronousValueIterationAgent(ValueIterationAgent):
         ValueIterationAgent.__init__(self, mdp, discount, iterations)
     
     def runValueIteration(self):
-        "*** YOUR CODE HERE ***"
+        allStates = self.mdp.getStates()
+        numStates = len(allStates)
+        for iteration in range(self.iterations):
+            state = allStates[iteration % numStates]
+            bestAction = self.getAction(state)
+            self.values[state] = self.getQValue(state, bestAction)
 
 class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
     """
@@ -168,4 +174,34 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
         ValueIterationAgent.__init__(self, mdp, discount, iterations)
     
     def runValueIteration(self):
-        "*** YOUR CODE HERE ***"
+        allStates = self.mdp.getStates()
+        
+        # Generate a predecessor map: state s -> set of predecessors of s
+        preds = defaultdict(set)
+        for state in allStates:
+            legalActions = self.mdp.getPossibleActions(state)
+            for action in legalActions:
+                nextStates = self.mdp.getTransitionStatesAndProbs(state, action)
+                for nextState, prob in nextStates:
+                    if prob > 0: preds[nextState].add(state)
+        
+        # Initialize the priority queue
+        pq = util.PriorityQueue()
+        for state in allStates:
+            if self.mdp.isTerminal(state): continue
+            bestAction = self.getAction(state)
+            bestQ = self.getQValue(state, bestAction)
+            diff = abs(self.values[state] - bestQ)
+            pq.push(state, -diff) # greatest diff first
+        
+        # Run the actual value iteration
+        for iteration in range(self.iterations):
+            if pq.isEmpty(): break
+            state = pq.pop()
+            bestAction = self.getAction(state)
+            self.values[state] = self.getQValue(state, bestAction)
+            for pred in preds[state]:
+                bestAction = self.getAction(pred)
+                bestQ = self.getQValue(pred, bestAction)
+                diff = abs(self.values[pred] - bestQ)
+                if diff > self.theta: pq.update(pred, -diff)

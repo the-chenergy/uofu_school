@@ -1,7 +1,7 @@
 {
-  "cSpell.words": ["probs"],
+  "cSpell.words": ["preds", "probs"],
   "code-runner.executorMap": {
-    "python": "pyAG"
+    "python": "ca py36; cd $dir; pyag -q q10"
   },
   "python.analysis.extraPaths": ["u1172983-Proj3"],
   "python.pythonPath": "C:\\Users\\null\\.conda\\envs\\py36\\python.exe"
