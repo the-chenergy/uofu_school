@@ -4,12 +4,13 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-#
+# 
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
+
 
 ######################
 # ANALYSIS QUESTIONS #
@@ -20,50 +21,49 @@
 
 def question2():
     answerDiscount = 0.9
-    answerNoise = 0
+    answerNoise = 0.0
     return answerDiscount, answerNoise
 
 def question3a():
-    answerDiscount = 0.1
+    answerDiscount = 0.11
     answerNoise = 0
-    answerLivingReward = -1
+    answerLivingReward = -0.5
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 def question3b():
     answerDiscount = 0.3
     answerNoise = 0.3
-    answerLivingReward = -1
+    answerLivingReward = -0.3
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 def question3c():
-    answerDiscount = 1
+    answerDiscount = 0.9
     answerNoise = 0
-    answerLivingReward = -1
+    answerLivingReward = -0.5
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 def question3d():
-    answerDiscount = 1
+    answerDiscount = 0.9
     answerNoise = 0.3
-    answerLivingReward = -1
+    answerLivingReward = -0.5
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 def question3e():
-    answerDiscount = 0
-    answerNoise = 0
-    answerLivingReward = 1
+    answerDiscount = 0.1
+    answerNoise = 0.3
+    answerLivingReward = 55
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 def question8():
-    # answerEpsilon = 0
-    # answerLearningRate = 0.2
-    # return answerEpsilon, answerLearningRate
-    return "NOT POSSIBLE"
-    # If not possible, return 'NOT POSSIBLE'
+    answerEpsilon = None
+    answerLearningRate = None
+    #return answerEpsilon, answerLearningRate
+    return 'NOT POSSIBLE'
 
 if __name__ == '__main__':
     print('Answers to analysis questions:')

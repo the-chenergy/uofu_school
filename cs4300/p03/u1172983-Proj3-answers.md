@@ -2,80 +2,50 @@
 
 ### Written Answers
 
-**3.1:**
+### Qianlang Chen's Answers:
 
-  * We never considered "Stop" to be a good option unless all other options are bad.
-  
-  * If the Pacman ever gets too close (<= 1 unit away) from any ghost, we will reject whatever action Pacman took to reach such a state.
-  
-  * Otherwise, we're going for the closest food combined with the number of foods left:
-  
-    * *-minDistanceToFood / (newFood.width + newFood.height) - ( numFoods - 1) * minDistanceBetweenFoods*
+1. What was the hardest part of the assignment for you?
 
-**3.2:**
+- Definitely getting the project started--we spent 4 hours on _Question 1,_ and only about 4 more hours on the rest.
 
-  When Pacman realizes that his death is unavoidable, he will try to maximize his score, which in this case, is to rush to the closest ghost so that score penalty is the lowest:
-  
-  * Pacman dies after 1 move: (-500) + 1 * (-1) = -501 points
-  
-  * Pacman dies after 2 moves: (-500) + 2 * (-1) = -502 points
-  
-  So, it is better to die sooner than later if death is inevitable.
+2. What was the easiest part of the assignment for you?
 
-**3.4:**
+- _Question 2_ and _Question 4._ _Question 5_ was also comparatively easy since the pseudo-code was already given.
 
-  The Expectimax algorithm is not compatible with the concept of pruning from the *AlphaBetaAgent*. The pruning of the *ExpectimaxAgent* will reduce the valuable information for the agent, since the algorithm cannot be certain about what happens exactly in the pruned paths. And pruning without understanding the gravity of reducing such information can create negative outcome.
+3. What problem(s) helped further your understanding of the course material?
 
-**3.5:**
+- All of them. The project is the only place we get to put theory into practice in this class, and I wouldn't trade such an opportunity for anything.
 
-  * If there's a ghost that's "chasable" (having a longer scared-time than the time Pacman needs to catch it), then go for such a ghost with the minimum distance to the Pacman.
-  
-  * If the Pacman ever gets too close (<= 1 unit away) from any "un-chasable" ghost, we will reject whatever action Pacman took to reach such a state.
-  
-  * Otherwise, we're going for the closest food combined with the number of foods left, as in *Problem 1*:
-  
-    * *-minDistanceToFood / (newFood.width + newFood.height) - ( numFoods - 1) * minDistanceBetweenFoods*
+4. Did you feel any problems were tedious and not helpful to your understanding of the material?
 
-### Kevin's Answers:
+- No.
 
-**4.1:**
+5. What other feedback do you have about this homework?
 
-  The hardest part of the assignment for me is to figure out what the context of the project is. Specifically, I was trying to understand the problem, what each field does. Given the little instruction we received, we had trouble understanding what functions we should call and what type of fields there are available to us. 
+- More instructions, but honestly, I realize that there's never a time we have "enough instructions." Maybe more documentation of functions in _Question 1_ since that's where we're getting started and not yet used to any of the existing code structures. It'd also help very to include more documentation on the arguments and return values, especially for questions toward the beginning of the project. Same could be applied to all the projects we've done so far.
 
-**4.2:**
+###
 
-  The easiest part of the assignment is to implement the Expectimax and Alpha-Beta Pruning. These two code implementations are easy because we can just use Minimax and added some extension and edge cases to make them work. 
+3.2 Self Analysis (5 pts)
 
-**4.3:**
+### Kevin Song's Answers:
 
-  All of the problems are highly effective at helping me understand the material. The trial and errors and discussions I had with my partner definitely strengthened my understanding of the course materials. 
+1. What was the hardest part of the assignment for you?
 
-**4.4:**
+The hardest part was the 3.1.1 Value Iteration. Specifically, I had a really hard time trying to figure out what the value iteration really is. And we need to figure out a way to encapsulate the algorithm into the different methods that have been provided.
 
-  No, all of problems are very interesting and helpful to my understanding of the material. 
+2. What was the easiest part of the assignment for you?
 
-**4.5:**
+The easiest part was the 3.1.2 and 3.1.8. These analysis questions are easy to complete once we understand what noise, discount factor and learning rate do to the overall policy.
 
-  I would say that the project is good overall but need some clarifications on the instructions. 
+3. What problem(s) helped further your understanding of the course material?
 
-### Qianlang's Answers:
+All of the problems helped further my understanding of the course because we have to implement the algorithm ourselves. And we have to understand the algorithm to effectively implement them.
 
-**4.1:**
+4. Did you feel any problems were tedious and not helpful to your understanding of the material?
 
-  The hardest part was to know what to do from the vague instructions given in the code. Especially for *Problem 2*, where the comments was obscuring which agent's Minimax action we're supposed to return. Writing print-statements to try and investigate what exactly was going on in the background was fun, though.
+No, all of the problems are fun and challenging, and they are extremely effective on helping me understand the material.
 
-**4.2:**
+5. What other feedback do you have about this homework?
 
-  Getting the Alpha-Beta and Expectimax to work after finishing Minimax.
-
-**4.3:**
-
-  All of them. These problems all demonstrated how to put theory into practice since being able to program these clever algorithms was quite different than simply knowing the concepts behind them.
-
-**4.4:**
-
-  No.
-
-**4.5:**
-
-  Just more instructions, please.
+I think we should have better instructions, especially the first problem. Maybe putting more documentations and comments on the methods of the first problem: the type of the parameters, what they do and so on. But overall, its a solid homework that has helped me understand the Value Iteration, Q-Learning, and many other reinforcement learning concepts and techniques.
