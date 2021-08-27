@@ -70,11 +70,6 @@ int main(int argc, char** argv) {
   instruction_t* instructions =
       decode_instructions(instruction_bytes, num_instructions);
 
-  // Optionally print the decoded instructions for debugging
-  // Will not work until you implement decode_instructions
-  // Do not call this function in your submitted final version
-  //  print_instructions(instructions, num_instructions);
-
   // Allocate and initialize registers
   int* registers = malloc(sizeof(int) * NUM_REGS);
   for (int i = 0; i < NUM_REGS; i++) registers[i] = 0;
@@ -125,110 +120,95 @@ unsigned int execute_instruction(unsigned int program_counter,
   // program_counter is a byte address, but instructions are 4 bytes each
   // divide by 4 to get the index into the instructions array
   instruction_t instr = instructions[program_counter / 4];
-  double unsigned_res, signed_res;
 
-  //  printf("pc%i op%u ra%u rb%u im%i\n", program_counter, instr.opcode,
-  //  instr.first_register, instr.second_register, instr.immediate);
+  program_counter += 4;
+
+#define MEM(x) *(int*)(memory + x)
+#define ESP registers[6]
+#define EFLAGS registers[16]
+#define REG1 registers[instr.first_register]
+#define REG2 registers[instr.second_register]
+#define IMM instr.immediate
 
   switch (instr.opcode) {
     case subl:
-      registers[instr.first_register] =
-          registers[instr.first_register] - instr.immediate;
+      REG1 = REG1 - IMM;
       break;
     case addl_reg_reg:
-      registers[instr.second_register] =
-          registers[instr.first_register] + registers[instr.second_register];
+      REG2 = REG1 + REG2;
       break;
     case addl_imm_reg:
-      registers[instr.first_register] =
-          registers[instr.first_register] + instr.immediate;
+      REG1 = REG1 + IMM;
       break;
     case imull:
-      registers[instr.second_register] =
-          registers[instr.first_register] * registers[instr.second_register];
+      REG2 = REG1 * REG2;
       break;
     case shrl:
-      registers[instr.first_register] =
-          (unsigned int)registers[instr.first_register] >> 1;
+      REG1 = (unsigned int)REG1 >> 1;
       break;
     case movl_reg_reg:
-      registers[instr.second_register] = registers[instr.first_register];
+      REG2 = REG1;
       break;
     case movl_deref_reg:
-      registers[instr.second_register] =
-          *(int*)(memory + registers[instr.first_register] + instr.immediate);
+      REG2 = MEM(REG1 + IMM);
       break;
     case movl_reg_deref:
-      *(int*)(memory + registers[instr.second_register] + instr.immediate) =
-          registers[instr.first_register];
+      MEM(REG2 + IMM) = REG1;
       break;
     case movl_imm_reg:
-      registers[instr.first_register] = (int)instr.immediate;
+      REG1 = (int)IMM;
       break;
     case cmpl:
-      unsigned_res = (unsigned int)registers[instr.second_register] * 1. -
-                     (unsigned int)registers[instr.first_register];
-      signed_res = registers[instr.second_register] * 1. -
-                   registers[instr.first_register];
-      registers[16] &= ~(1 | 1 << 6 | 1 << 7 | 1 << 11);  // clear CZSO
-      registers[16] |= unsigned_res < 0 || unsigned_res > 4294967295.;
-      registers[16] |= (unsigned_res == 0) << 6;
-      registers[16] |= (((unsigned int)unsigned_res & 1 << 31) > 0) << 7;
-      registers[16] |= (signed_res < -2147483648. || signed_res > 2147483647.)
-                       << 11;
+      EFLAGS &= ~(1 << 0 | 1 << 6 | 1 << 7 | 1 << 11);  // clear CZSO
+      EFLAGS |= ((unsigned int)REG1 > (unsigned int)REG2) << 0;
+      EFLAGS |= (REG1 == REG2) << 6;
+      EFLAGS |= ((unsigned int)REG2 - (unsigned int)REG1 >> 31 & 1) << 7;
+      EFLAGS |= (REG2 < 0 ? REG1 > REG2 - (1 << 31) : REG1 < REG2 - ~(1 << 31))
+                << 11;
       break;
     case je:
-      if (registers[16] >> 6 & 1) return program_counter + 4 + instr.immediate;
+      if (EFLAGS >> 6 & 1) return program_counter + IMM;
       break;
     case jl:
-      if ((registers[16] >> 7 & 1) ^ (registers[16] >> 11 & 1))
-        return program_counter + 4 + instr.immediate;
+      if ((EFLAGS >> 7 & 1) ^ (EFLAGS >> 11 & 1)) return program_counter + IMM;
       break;
     case jle:
-      if ((registers[16] >> 7 & 1) ^ (registers[16] >> 11 & 1) ||
-          registers[16] >> 6 & 1)
-        return program_counter + 4 + instr.immediate;
+      if ((EFLAGS >> 7 & 1) ^ (EFLAGS >> 11 & 1) || EFLAGS >> 6 & 1)
+        return program_counter + IMM;
       break;
     case jge:
-      if (!((registers[16] >> 7 & 1) ^ (registers[16] >> 11 & 1)))
-        return program_counter + 4 + instr.immediate;
+      if (!(EFLAGS >> 7 & 1) ^ (EFLAGS >> 11 & 1)) return program_counter + IMM;
       break;
     case jbe:
-      if (registers[16] & 1 || registers[16] >> 6 & 1)
-        return program_counter + 4 + instr.immediate;
+      if (EFLAGS >> 0 & 1 || EFLAGS >> 6 & 1) return program_counter + IMM;
       break;
     case jmp:
-      return program_counter + 4 + instr.immediate;
-      break;
+      return program_counter + IMM;
     case call:
-      registers[6] -= 4;
-      *(int*)(memory + registers[6]) = program_counter + 4;
-      return program_counter + 4 + instr.immediate;
-      break;
+      ESP -= 4;
+      MEM(ESP) = program_counter;
+      return program_counter + IMM;
     case ret:
-      if (registers[6] == STACK_SIZE) exit(0);
-      registers[6] += 4;
-      return *(int*)(memory + registers[6] - 4);
-      break;
+      if (ESP == STACK_SIZE) exit(0);
+      ESP += 4;
+      return MEM(ESP - 4);
     case pushl:
-      registers[6] -= 4;
-      *(int*)(memory + registers[6]) = registers[instr.first_register];
+      ESP -= 4;
+      MEM(ESP) = REG1;
       break;
     case popl:
-      registers[instr.first_register] = *(int*)(memory + registers[6]);
-      registers[6] += 4;
+      REG1 = MEM(ESP);
+      ESP += 4;
       break;
     case printr:
-      printf("%d (0x%x)\n", registers[instr.first_register],
-             registers[instr.first_register]);
+      printf("%d (0x%x)\n", REG1, REG1);
       break;
     case readr:
-      scanf("%d", &(registers[instr.first_register]));
+      scanf("%d", &REG1);
       break;
   }
 
-  // program_counter + 4 represents the subsequent instruction
-  return program_counter + 4;
+  return program_counter;
 }
 
 /*********************************************/
