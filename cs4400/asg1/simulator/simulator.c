@@ -25,13 +25,10 @@
 // Forward declarations for helper functions
 unsigned int get_file_size(int file_descriptor);
 unsigned int* load_file(int file_descriptor, unsigned int size);
-instruction_t* decode_instructions(unsigned int* bytes,
-                                   unsigned int num_instructions);
-unsigned int execute_instruction(unsigned int program_counter,
-                                 instruction_t* instructions, int* registers,
-                                 unsigned char* memory);
-void print_instructions(instruction_t* instructions,
-                        unsigned int num_instructions);
+instruction_t* decode_instructions(unsigned int* bytes, unsigned int num_instructions);
+unsigned int execute_instruction(unsigned int program_counter, instruction_t* instructions,
+                                 int* registers, unsigned char* memory);
+void print_instructions(instruction_t* instructions, unsigned int num_instructions);
 void error_exit(const char* message);
 
 // 17 registers
@@ -41,8 +38,7 @@ void error_exit(const char* message);
 
 int main(int argc, char** argv) {
   // Make sure we have enough arguments
-  if (argc < 2)
-    error_exit("must provide an argument specifying a binary file to execute");
+  if (argc < 2) error_exit("must provide an argument specifying a binary file to execute");
 
   // Open the binary file
   int file_descriptor = open(argv[1], O_RDONLY);
@@ -50,8 +46,8 @@ int main(int argc, char** argv) {
 
   // Get the size of the file
   unsigned int file_size = get_file_size(file_descriptor);
-  // Make sure the file size is a multiple of 4 bytes
-  // since machine code instructions are 4 bytes each
+  // Make sure the file size is a multiple of 4 bytes since machine code instructions are 4
+  // bytes each
   if (file_size % 4 != 0) error_exit("invalid input file");
 
   // Load the file into memory
@@ -67,8 +63,7 @@ int main(int argc, char** argv) {
   /****************************************/
 
   // Allocate and decode instructions (left for you to fill in)
-  instruction_t* instructions =
-      decode_instructions(instruction_bytes, num_instructions);
+  instruction_t* instructions = decode_instructions(instruction_bytes, num_instructions);
 
   // Allocate and initialize registers
   int* registers = malloc(sizeof(int) * NUM_REGS);
@@ -81,11 +76,10 @@ int main(int argc, char** argv) {
   // Run the simulation
   unsigned int program_counter = 0;
 
-  // program_counter is a byte address, so we must multiply num_instructions by
-  // 4 to get the address past the last instruction
+  // program_counter is a byte address, so we must multiply num_instructions by 4 to get the
+  // address past the last instruction
   while (program_counter != num_instructions * 4) {
-    program_counter =
-        execute_instruction(program_counter, instructions, registers, memory);
+    program_counter = execute_instruction(program_counter, instructions, registers, memory);
   }
 
   return 0;
@@ -95,8 +89,7 @@ int main(int argc, char** argv) {
  * Decodes the array of raw instruction bytes into an array of instruction_t
  * Each raw instruction is encoded as a 4-byte unsigned int
  */
-instruction_t* decode_instructions(unsigned int* bytes,
-                                   unsigned int num_instructions) {
+instruction_t* decode_instructions(unsigned int* bytes, unsigned int num_instructions) {
   instruction_t* retval = malloc(sizeof(instruction_t) * num_instructions);
 
   for (int i = 0; i < num_instructions; i++) {
@@ -114,9 +107,8 @@ instruction_t* decode_instructions(unsigned int* bytes,
 /*
  * Executes a single instruction and returns the next program counter
  */
-unsigned int execute_instruction(unsigned int program_counter,
-                                 instruction_t* instructions, int* registers,
-                                 unsigned char* memory) {
+unsigned int execute_instruction(unsigned int program_counter, instruction_t* instructions,
+                                 int* registers, unsigned char* memory) {
   // program_counter is a byte address, but instructions are 4 bytes each
   // divide by 4 to get the index into the instructions array
   instruction_t instr = instructions[program_counter / 4];
@@ -163,8 +155,7 @@ unsigned int execute_instruction(unsigned int program_counter,
       EFLAGS |= ((unsigned int)REG1 > (unsigned int)REG2) << 0;
       EFLAGS |= (REG1 == REG2) << 6;
       EFLAGS |= ((unsigned int)REG2 - (unsigned int)REG1 >> 31 & 1) << 7;
-      EFLAGS |= (REG2 < 0 ? REG1 > REG2 - (1 << 31) : REG1 < REG2 - ~(1 << 31))
-                << 11;
+      EFLAGS |= (REG2 < 0 ? REG1 > REG2 - (1 << 31) : REG1 < REG2 - ~(1 << 31)) << 11;
       break;
     case je:
       if (EFLAGS >> 6 & 1) return program_counter + IMM;
@@ -216,8 +207,7 @@ unsigned int execute_instruction(unsigned int program_counter,
 /*********************************************/
 
 /*
- * Returns the file size in bytes of the file referred to by the given
- * descriptor
+ * Returns the file size in bytes of the file referred to by the given descriptor
  */
 unsigned int get_file_size(int file_descriptor) {
   struct stat file_stat;
@@ -237,18 +227,16 @@ unsigned int* load_file(int file_descriptor, unsigned int size) {
 
   int num_read = read(file_descriptor, raw_instruction_bytes, size);
 
-  if (num_read != size)
-    error_exit("unable to read file (something went really wrong)");
+  if (num_read != size) error_exit("unable to read file (something went really wrong)");
 
   return raw_instruction_bytes;
 }
 
 /*
- * Prints the opcode, register IDs, and immediate of every instruction,
- * assuming they have been decoded into the instructions array
+ * Prints the opcode, register IDs, and immediate of every instruction, assuming they have been
+ * decoded into the instructions array
  */
-void print_instructions(instruction_t* instructions,
-                        unsigned int num_instructions) {
+void print_instructions(instruction_t* instructions, unsigned int num_instructions) {
   printf("instructions: \n");
   unsigned int i;
   for (i = 0; i < num_instructions; i++) {
