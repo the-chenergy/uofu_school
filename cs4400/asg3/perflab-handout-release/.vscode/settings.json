@@ -1,0 +1,5 @@
+{
+  "code-runner.executorMap": {
+    "c": "clear; clear; make driver && ./driver -g",
+  }
+}
