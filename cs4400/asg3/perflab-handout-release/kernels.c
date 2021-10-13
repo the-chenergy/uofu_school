@@ -51,16 +51,19 @@ void naive_complex(int dim, pixel* src, pixel* dest) {
  * IMPORTANT: This is the version you will be graded on
  */
 char complex_descr[] = "complex: Current working version";
-void complex(int dim, pixel* src, pixel* dest) {
-  const int stride = 16;
-  for (int i = 0; i < dim; i += stride) {
-    for (int j = 0; j < dim; j += stride) {
-      for (int ii = i; ii < i + stride; ii++) {
-        for (int jj = j; jj < j + stride; jj++) {
-          pixel p = src[RIDX(ii, jj, dim)];
+void complex(int dim, pixel* src, pixel* dst) {
+  /* Strategy: go row-wise with blocking */
+  const int block_dim = 8;
+
+  for (int block_y = 0; block_y < dim; block_y += block_dim) {
+    for (int block_x = 0; block_x < dim; block_x += block_dim) {
+      /* Process block starting at (block_y, block_x) */
+      for (int y = block_y; y < block_y + block_dim; y++) {
+        for (int x = block_x; x < block_x + block_dim; x++) {
+          pixel p = src[RIDX(y, x, dim)];
           unsigned short gray = ((unsigned int)p.red + p.green + p.blue) / 3;
           p.red = p.green = p.blue = gray;
-          dest[RIDX(dim - 1 - jj, dim - 1 - ii, dim)] = p;
+          dst[RIDX(dim - 1 - x, dim - 1 - y, dim)] = p;
         }
       }
     }
@@ -116,6 +119,33 @@ static pixel weighted_combo(int dim, int i, int j, pixel* src) {
   return current_pixel;
 }
 
+/* Adds to (when mult=1) or subtracts from (when mult=-1) the running sums a region of RGB
+ * values starting at (y, x) with size dy*dx */
+#define READ(mult, y, x, dy, dx)                                                       \
+  for (int sy = y; sy < y + dy; sy++) {                                                \
+    for (int sx = x; sx < x + dx; sx++) {                                              \
+      pixel p = src[sy * dim + sx];                                                    \
+      red_sum += mult * p.red, green_sum += mult * p.green, blue_sum += mult * p.blue; \
+    }                                                                                  \
+  }
+
+/* Checks and prints whether the red value at (y, x) matches the naive solution. Exits the
+ * program if they don't match. */
+#define CHECK(log, y, x)                                                     \
+  unsigned short expected = weighted_combo(dim, y, x, src).red,              \
+                 actual = dst[RIDX(y, x, dim)].red;                          \
+  if (actual != expected) {                                                  \
+    printf("## FAIL %s @ (%i, %i) %i != %i\n", log, y, x, actual, expected); \
+    exit(1);                                                                 \
+  }                                                                          \
+  printf("## pass %s @ (%i, %i)\n", log, y, x);
+
+/* Divides the running sums by count and writes the results to dst at (y, x) */
+#define WRITE(count, y, x)                                                               \
+  pixel p;                                                                               \
+  p.red = red_sum / (count), p.green = green_sum / (count), p.blue = blue_sum / (count); \
+  dst[RIDX(y, x, dim)] = p;
+
 /******************************************************
  * Your different versions of the motion kernel go here
  ******************************************************/
@@ -131,335 +161,64 @@ void naive_motion(int dim, pixel* src, pixel* dst) {
     for (j = 0; j < dim; j++) dst[RIDX(i, j, dim)] = weighted_combo(dim, i, j, src);
 }
 
-#define CHECK(t, i, j)                                                     \
-  {                                                                        \
-    naive_motion(n, src, dest);                                            \
-    if (dest[RIDX(i, j, n)].red != p.red) {                                \
-      printf("\n\n\nFAIL!! t=%i, i=%i, j=%i, e=%i, a=%i\n\n\n\n", t, i, j, \
-             dest[RIDX(i, j, n)].red, p.red);                              \
-      sr += *(int*)NULL;                                                   \
-    }                                                                      \
-    /* printf("pass t=%i, i=%i, j=%i\n", t, i, j); */                      \
-  }
-
 /*
  * motion - Your current working version of motion.
  * IMPORTANT: This is the version you will be graded on
  */
 char motion_descr[] = "motion: Current working version";
-void motion(int n, pixel* src, pixel* dest) {
-  const int d = 16;
-  unsigned int sr, sg, sb;
-  pixel p;
-  for (int i = 0; i < n - d; i += d) {
-    for (int j = 0; j < n - d; j += d) {
-      sr = sg = sb = 0;
-      for (int ii = i; ii < i + 2; ii++) {
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-      }
-      for (int ii = i; ii < i + d; ii += 2) {
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii + 2, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-        // CHECK(0, ii, j);
-        dest[RIDX(ii, j, n)] = p;
-        for (int jj = j + 1; jj < j + d; jj++) {
-          for (int iii = ii; iii < ii + 3; iii++) {
-            p = src[RIDX(iii, jj - 1, n)];
-            sr -= p.red, sg -= p.green, sb -= p.blue;
-            p = src[RIDX(iii, jj + 2, n)];
-            sr += p.red, sg += p.green, sb += p.blue;
-          }
-          p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-          // CHECK(1, ii, jj);
-          dest[RIDX(ii, jj, n)] = p;
-        }
-        for (int jj = j + d - 1; jj < j + d + 2; jj++) {
-          p = src[RIDX(ii, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(ii + 3, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-        // CHECK(2, ii + 1, j + d - 1);
-        dest[RIDX(ii + 1, j + d - 1, n)] = p;
-        for (int jj = j + d - 2; jj >= j; jj--) {
-          for (int iii = ii + 1; iii < ii + 4; iii++) {
-            p = src[RIDX(iii, jj + 3, n)];
-            sr -= p.red, sg -= p.green, sb -= p.blue;
-            p = src[RIDX(iii, jj, n)];
-            sr += p.red, sg += p.green, sb += p.blue;
-          }
-          p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-          // CHECK(3, ii + 1, jj);
-          dest[RIDX(ii + 1, jj, n)] = p;
-        }
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii + 1, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-        }
-      }
+void motion(int dim, pixel* src, pixel* dst) {
+  /* Strategy: go row-wise with running sums */
+
+  /* Prepare for the top row by summing the first 2*3 window */
+  unsigned int red_sum = 0, green_sum = 0, blue_sum = 0;
+  READ(1, 0, 0, 2, 3);
+
+  /* Handle down to the bottom 2 rows */
+  for (int y = 0; y < dim - 2; y++) {
+    /* Handle the leftmost column by expanding the window bottom */
+    READ(1, y + 2, 0, 1, 3);
+    WRITE(9, y, 0);
+    unsigned int red_sum_top = red_sum, green_sum_top = green_sum, blue_sum_top = blue_sum;
+
+    /* Handle the rest of columns by sliding the window right; take extra care of the 2
+     * rightmost columns */
+    for (int x = 1; x < dim - 2; x++) {
+      READ(-1, y, x - 1, 3, 1);
+      READ(1, y, x + 2, 3, 1);
+      WRITE(9, y, x);
     }
+    for (int dx = 2; dx > 0; dx--) {
+      READ(-1, y, dim - dx - 1, 3, 1);
+      WRITE(dx * 3, y, dim - dx);
+    }
+
+    /* Prepare for moving down by shrinking the window top */
+    red_sum = red_sum_top, green_sum = green_sum_top, blue_sum = blue_sum_top;
+    READ(-1, y, 0, 1, 3);
   }
-  {
-    int i = n - d;
-    for (int j = 0; j < n - d; j += d) {
-      sr = sg = sb = 0;
-      for (int ii = i - 1; ii < i + 2; ii++) {
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-      }
-      for (int ii = i; ii < i + d - 2; ii += 2) {
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii - 1, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(ii + 2, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-        // CHECK(5, ii, j);
-        dest[RIDX(ii, j, n)] = p;
-        for (int jj = j + 1; jj < j + d; jj++) {
-          for (int iii = ii; iii < ii + 3; iii++) {
-            p = src[RIDX(iii, jj - 1, n)];
-            sr -= p.red, sg -= p.green, sb -= p.blue;
-            p = src[RIDX(iii, jj + 2, n)];
-            sr += p.red, sg += p.green, sb += p.blue;
-          }
-          p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-          // CHECK(6, ii, jj);
-          dest[RIDX(ii, jj, n)] = p;
-        }
-        for (int jj = j + d - 1; jj < j + d + 2; jj++) {
-          p = src[RIDX(ii, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(ii + 3, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-        // CHECK(7, ii + 1, j + d - 1);
-        dest[RIDX(ii + 1, j + d - 1, n)] = p;
-        for (int jj = j + d - 2; jj >= j; jj--) {
-          for (int iii = ii + 1; iii < ii + 4; iii++) {
-            p = src[RIDX(iii, jj + 3, n)];
-            sr -= p.red, sg -= p.green, sb -= p.blue;
-            p = src[RIDX(iii, jj, n)];
-            sr += p.red, sg += p.green, sb += p.blue;
-          }
-          p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-          // CHECK(8, ii + 1, jj);
-          dest[RIDX(ii + 1, jj, n)] = p;
-        }
-      }
-      {
-        int ii = i + d - 2;
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii - 1, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-        }
-        p.red = sr / 6, p.green = sg / 6, p.blue = sb / 6;
-        // CHECK(9, ii, j);
-        dest[RIDX(ii, j, n)] = p;
-        for (int jj = j + 1; jj < j + d; jj++) {
-          for (int iii = ii; iii < ii + 2; iii++) {
-            p = src[RIDX(iii, jj - 1, n)];
-            sr -= p.red, sg -= p.green, sb -= p.blue;
-            p = src[RIDX(iii, jj + 2, n)];
-            sr += p.red, sg += p.green, sb += p.blue;
-          }
-          p.red = sr / 6, p.green = sg / 6, p.blue = sb / 6;
-          // CHECK(10, ii, jj);
-          dest[RIDX(ii, jj, n)] = p;
-        }
-        for (int jj = j + d - 1; jj < j + d + 2; jj++) {
-          p = src[RIDX(ii, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-        }
-        p.red = sr / 3, p.green = sg / 3, p.blue = sb / 3;
-        // CHECK(11, ii + 1, j + d - 1);
-        dest[RIDX(ii + 1, j + d - 1, n)] = p;
-        for (int jj = j + d - 2; jj >= j; jj--) {
-          p = src[RIDX(ii + 1, jj + 3, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(ii + 1, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-          p.red = sr / 3, p.green = sg / 3, p.blue = sb / 3;
-          // CHECK(12, ii + 1, jj);
-          dest[RIDX(ii + 1, jj, n)] = p;
-        }
-      }
+
+  /* Handle the bottom two rows */
+  for (int dy = 2; dy > 0; dy--) {
+    /* Handle the leftmost column (withot expanding bottom) */
+    WRITE(3 * dy, dim - dy, 0);
+    unsigned int red_sum_top = red_sum, green_sum_top = green_sum, blue_sum_top = blue_sum;
+
+    /* Handle the rest of columns by sliding the window right; take extra care of the 2
+     * rightmost columns */
+    for (int x = 0 + 1; x < dim - 2; x++) {
+      READ(-1, dim - dy, x - 1, dy, 1);
+      READ(1, dim - dy, x + 2, dy, 1);
+      WRITE(dy * 3, dim - dy, x);
     }
+    for (int dx = 2; dx > 0; dx--) {
+      READ(-1, dim - dy, dim - dx - 1, dy, 1);
+      WRITE(dy * dx, dim - dy, dim - dx);
+    }
+
+    /* Prepare for moving down by shrinking the window top */
+    red_sum = red_sum_top, green_sum = green_sum_top, blue_sum = blue_sum_top;
+    READ(-1, dim - dy, 0, 1, 3);
   }
-  for (int i = 0; i < n - d; i += d) {
-    int j = n - d;
-    sr = sg = sb = 0;
-    for (int ii = i; ii < i + 2; ii++) {
-      for (int jj = j; jj < j + 3; jj++) {
-        p = src[RIDX(ii, jj, n)];
-        sr += p.red, sg += p.green, sb += p.blue;
-      }
-    }
-    for (int ii = i; ii < i + d; ii += 2) {
-      for (int jj = j; jj < j + 3; jj++) {
-        p = src[RIDX(ii + 2, jj, n)];
-        sr += p.red, sg += p.green, sb += p.blue;
-      }
-      p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-      // CHECK(13, ii, j);
-      dest[RIDX(ii, j, n)] = p;
-      for (int jj = j + 1; jj < j + d - 2; jj++) {
-        for (int iii = ii; iii < ii + 3; iii++) {
-          p = src[RIDX(iii, jj - 1, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(iii, jj + 2, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-        // CHECK(14, ii, jj);
-        dest[RIDX(ii, jj, n)] = p;
-      }
-      for (int jj = j + d - 2, jjx = 6; jjx >= 3; jj++, jjx -= 3) {
-        for (int iii = ii; iii < ii + 3; iii++) {
-          p = src[RIDX(iii, jj - 1, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-        }
-        p.red = sr / jjx, p.green = sg / jjx, p.blue = sb / jjx;
-        // CHECK(15, ii, jj);
-        dest[RIDX(ii, jj, n)] = p;
-      }
-      {
-        int jj = j + d - 1;
-        p = src[RIDX(ii, jj, n)];
-        sr -= p.red, sg -= p.green, sb -= p.blue;
-        p = src[RIDX(ii + 3, jj, n)];
-        sr += p.red, sg += p.green, sb += p.blue;
-      }
-      p.red = sr / 3, p.green = sg / 3, p.blue = sb / 3;
-      // CHECK(16, ii + 1, j + d - 1);
-      dest[RIDX(ii + 1, j + d - 1, n)] = p;
-      for (int jj = j + d - 2, jjx = 6; jjx <= 9; jj--, jjx += 3) {
-        for (int iii = ii + 1; iii < ii + 4; iii++) {
-          p = src[RIDX(iii, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / jjx, p.green = sg / jjx, p.blue = sb / jjx;
-        // CHECK(17, ii + 1, jj);
-        dest[RIDX(ii + 1, jj, n)] = p;
-      }
-      for (int jj = j + d - 4; jj >= j; jj--) {
-        for (int iii = ii + 1; iii < ii + 4; iii++) {
-          p = src[RIDX(iii, jj + 3, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(iii, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / 9, p.green = sg / 9, p.blue = sb / 9;
-        // CHECK(18, ii + 1, jj);
-        dest[RIDX(ii + 1, jj, n)] = p;
-      }
-      for (int jj = j; jj < j + 3; jj++) {
-        p = src[RIDX(ii + 1, jj, n)];
-        sr -= p.red, sg -= p.green, sb -= p.blue;
-      }
-    }
-  }
-  {
-    int i = n - d;
-    int j = n - d;
-    int c = 0;
-    sr = sg = sb = 0;
-    for (int ii = i; ii < i + 2; ii++) {
-      for (int jj = j; jj < j + 3; jj++) {
-        p = src[RIDX(ii, jj, n)];
-        sr += p.red, sg += p.green, sb += p.blue;
-        c++;
-      }
-    }
-    for (int ii = i; ii < i + d; ii += 2) {
-      if (ii + 2 < n) {
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii + 2, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-          c++;
-        }
-      }
-      p.red = sr / c, p.green = sg / c, p.blue = sb / c;
-      // CHECK(19, ii, j);
-      dest[RIDX(ii, j, n)] = p;
-      for (int jj = j + 1; jj < j + d - 2; jj++) {
-        for (int iii = ii, iiil = ii + 3 < n ? ii + 3 : n; iii < iiil; iii++) {
-          p = src[RIDX(iii, jj - 1, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(iii, jj + 2, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / c, p.green = sg / c, p.blue = sb / c;
-        // CHECK(20, ii, jj);
-        dest[RIDX(ii, jj, n)] = p;
-      }
-      for (int jj = j + d - 2, jjx = 6; jjx >= 3; jj++, jjx -= 3) {
-        for (int iii = ii, iiil = ii + 3 < n ? ii + 3 : n; iii < iiil; iii++) {
-          p = src[RIDX(iii, jj - 1, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          c--;
-        }
-        p.red = sr / c, p.green = sg / c, p.blue = sb / c;
-        // CHECK(21, ii, jj);
-        dest[RIDX(ii, jj, n)] = p;
-      }
-      {
-        int jj = j + d - 1;
-        p = src[RIDX(ii, jj, n)];
-        sr -= p.red, sg -= p.green, sb -= p.blue;
-        c--;
-        if (ii + 3 < n) {
-          p = src[RIDX(ii + 3, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-          c++;
-        }
-      }
-      p.red = sr / c, p.green = sg / c, p.blue = sb / c;
-      // CHECK(22, ii + 1, j + d - 1);
-      dest[RIDX(ii + 1, j + d - 1, n)] = p;
-      for (int jj = j + d - 2, jjx = 6; jjx <= 9; jj--, jjx += 3) {
-        for (int iii = ii + 1, iiil = ii + 4 < n ? ii + 4 : n; iii < iiil; iii++) {
-          p = src[RIDX(iii, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-          c++;
-        }
-        p.red = sr / c, p.green = sg / c, p.blue = sb / c;
-        // CHECK(23, ii + 1, jj);
-        dest[RIDX(ii + 1, jj, n)] = p;
-      }
-      for (int jj = j + d - 4; jj >= j; jj--) {
-        for (int iii = ii + 1, iiil = ii + 4 < n ? ii + 4 : n; iii < iiil; iii++) {
-          p = src[RIDX(iii, jj + 3, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          p = src[RIDX(iii, jj, n)];
-          sr += p.red, sg += p.green, sb += p.blue;
-        }
-        p.red = sr / c, p.green = sg / c, p.blue = sb / c;
-        // CHECK(24, ii + 1, jj);
-        dest[RIDX(ii + 1, jj, n)] = p;
-      }
-      if (ii + 1 < n) {
-        for (int jj = j; jj < j + 3; jj++) {
-          p = src[RIDX(ii + 1, jj, n)];
-          sr -= p.red, sg -= p.green, sb -= p.blue;
-          c--;
-        }
-      }
-    }
-  }
-  // printf("\n\n######## END ########\n\n\n");
-  // dest[0].red += *(int*)NULL;
 }
 
 /*********************************************************************
