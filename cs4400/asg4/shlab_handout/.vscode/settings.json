@@ -1,0 +1,5 @@
+{
+  "code-runner.executorMap": {
+    "c": "clear; clear; echo 'Running test01...'; make && make test01 > .t.txt && make rtest01 > .r.txt && sed -e '/#.*/d' -re 's/[0-9]{6}//' -e 's/make test//' -e 's/.\\/tsh//' .t.txt > .tt.txt && sed -e '/#.*/d' -re 's/[0-9]{6}//' -e 's/make rtest//' -e 's/.\\/tshref//' .r.txt > .rr.txt && echo '------------------------------------------------' && diff .tt.txt .rr.txt && echo 'Passed test01!'; ls $dir > /dev/null",
+  }
+}
