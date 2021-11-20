@@ -1,0 +1,9 @@
+{
+  "code-runner.executorMap": {
+    "c": "clear; clear; make && ./mdriver -l; echo $dirName >> /dev/null"
+  },
+  "files.associations": {
+    "*.tcc": "c",
+    "random": "c"
+  }
+}
