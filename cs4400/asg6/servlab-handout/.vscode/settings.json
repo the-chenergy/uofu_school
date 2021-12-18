@@ -1,0 +1,5 @@
+{
+  "code-runner.executorMap": {
+    "c": "clear; clear; make && ulimit -v 20971520 && ./friendlist 2120 & && sleep .1 && racket simple.rkt --multi --introduce localhost 2120; sleep .1; pkill -INT friendlist; ls > /dev/null"
+  }
+}
