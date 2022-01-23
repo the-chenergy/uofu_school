@@ -477,84 +477,71 @@
 \hypertarget{diagram-2}{%
 \subsection{Diagram 2}\label{diagram-2}}
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{ }{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Persons}\PY{p}{(}
-  \PY{n}{ssn} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{name} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{ssn}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
+\begin{verbatim}
+CREATE TABLE Persons(
+  ssn INT,
+  name VARCHAR(255),
+  PRIMARY KEY (ssn)
+);
+CREATE TABLE Attends(
+  ssn INT,
+  roomNum INT,
+  startTime INT,
+  PRIMARY KEY (ssn, roomNum, startTime),
+  FOREIGN KEY (ssn) REFERENCES Persons(ssn),
+  FOREIGN KEY (roomNum, startTime) REFERENCES Meetings(roomNum, startTime)
+);
+CREATE TABLE Meetings(
+  roomNum INT,
+  startTime INT,
+  agenda INT,
+  PRIMARY KEY (roomNum, startTime),
+  FOREIGN KEY (roomNum) REFERENCES Rooms(roomNum)
+);
+CREATE TABLE Rooms(
+  roomNum INT,
+  capacity INT,
+  dID INT NOT NULL,
+  PRIMARY KEY (roomNum),
+  FOREIGN KEY (roomNum) REFERENCES Departments(roomNum)
+);
+CREATE TABLE Departments(
+  dID INT,
+  name INT,
+  PRIMARY KEY (dID)
+);
+\end{verbatim}
 
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Attends}\PY{p}{(}
-  \PY{n}{ssn} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{roomNum} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{startTime} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{ssn}\PY{p}{,} \PY{n}{roomNum}\PY{p}{,} \PY{n}{startTime}\PY{p}{)}\PY{p}{,}
-  \PY{n}{FOREIGN} \PY{n}{KEY} \PY{p}{(}\PY{n}{ssn}\PY{p}{)} \PY{n}{REFERENCES} \PY{n}{Persons}\PY{p}{(}\PY{n}{ssn}\PY{p}{)}\PY{p}{,}
-  \PY{n}{FOREIGN} \PY{n}{KEY} \PY{p}{(}\PY{n}{roomNum}\PY{p}{,} \PY{n}{startTime}\PY{p}{)}
-    \PY{n}{REFERENCES} \PY{n}{Meetings}\PY{p}{(}\PY{n}{roomNum}\PY{p}{,} \PY{n}{startTime}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
+    \hypertarget{diagram-3}{%
+\subsection{Diagram 3}\label{diagram-3}}
 
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Meetings}\PY{p}{(}
-  \PY{n}{roomNum} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{startTime} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{agenda} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{roomNum}\PY{p}{,} \PY{n}{startTime}\PY{p}{)}\PY{p}{,}
-  \PY{n}{FOREIGN} \PY{n}{KEY} \PY{p}{(}\PY{n}{roomNum}\PY{p}{)} \PY{n}{REFERENCES} \PY{n}{Rooms}\PY{p}{(}\PY{n}{roomNum}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
-
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Rooms}\PY{p}{(}
-  \PY{n}{roomNum} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{capacity} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{dID} \PY{n}{INT} \PY{n}{NOT} \PY{n}{NULL}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{roomNum}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
-
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Departments}\PY{p}{(}
-  \PY{n}{dID} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{name} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{dID}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \(\pagebreak\)
-
-\hypertarget{diagram-3}{%
-\section{Diagram 3}\label{diagram-3}}
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{ }{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Players}\PY{p}{(}
-  \PY{n}{name} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{rating} \PY{n}{FLOAT}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{name}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
-
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Events}\PY{p}{(}
-  \PY{n}{name} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{site} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{date} \PY{n}{DATE}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{name}\PY{p}{,} \PY{n}{site}\PY{p}{,} \PY{n}{date}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
-
-\PY{n}{CREATE} \PY{n}{TABLE} \PY{n}{Games}\PY{p}{(}
-  \PY{n}{eventName} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{site} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{date} \PY{n}{DATE}\PY{p}{,}
-  \PY{n+nb}{round} \PY{n}{INT}\PY{p}{,}
-  \PY{n}{whiteName} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{blackName} \PY{n}{VARCHAR}\PY{p}{(}\PY{l+m+mi}{255}\PY{p}{)}\PY{p}{,}
-  \PY{n}{PRIMARY} \PY{n}{KEY} \PY{p}{(}\PY{n}{eventName}\PY{p}{,} \PY{n}{site}\PY{p}{,} \PY{n}{date}\PY{p}{,} \PY{n+nb}{round}\PY{p}{,} \PY{n}{whiteName}\PY{p}{,} \PY{n}{blackName}\PY{p}{)}\PY{p}{,}
-  \PY{n}{FOREIGN} \PY{n}{KEY} \PY{p}{(}\PY{n}{eventName}\PY{p}{,} \PY{n}{site}\PY{p}{,} \PY{n}{date}\PY{p}{)}
-    \PY{n}{REFERENCES} \PY{n}{Events}\PY{p}{(}\PY{n}{name}\PY{p}{,} \PY{n}{site}\PY{p}{,} \PY{n}{date}\PY{p}{)}\PY{p}{,}
-  \PY{n}{FOREIGN} \PY{n}{KEY} \PY{p}{(}\PY{n}{whiteName}\PY{p}{)} \PY{n}{REFERENCES} \PY{n}{Players}\PY{p}{(}\PY{n}{name}\PY{p}{)}\PY{p}{,}
-  \PY{n}{FOREIGN} \PY{n}{KEY} \PY{p}{(}\PY{n}{blackName}\PY{p}{)} \PY{n}{REFERENCES} \PY{n}{Players}\PY{p}{(}\PY{n}{name}\PY{p}{)}
-\PY{p}{)}\PY{p}{;}
-\end{Verbatim}
-\end{tcolorbox}
+\begin{verbatim}
+CREATE TABLE Players(
+  name VARCHAR(255),
+  rating FLOAT,
+  PRIMARY KEY (name)
+);
+CREATE TABLE Events(
+  name VARCHAR(255),
+  site VARCHAR(255),
+  date DATE,
+  PRIMARY KEY (name, site, date)
+);
+CREATE TABLE Games(
+  eventName VARCHAR(255),
+  site VARCHAR(255),
+  date DATE,
+  round INT,
+  whiteName VARCHAR(255),
+  blackName VARCHAR(255),
+  result CHAR(1),
+  moves VARCHAR(1000),
+  PRIMARY KEY (eventName, site, date, round, whiteName, blackName),
+  FOREIGN KEY (eventName, site, date) REFERENCES Events(name, site, date),
+  FOREIGN KEY (whiteName) REFERENCES Players(name),
+  FOREIGN KEY (blackName) REFERENCES Players(name)
+);
+\end{verbatim}
 
 
     % Add a bibliography block to the postdoc
