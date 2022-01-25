@@ -1,0 +1,122 @@
+graph G {
+    Users [shape=rect fontsize=24]
+    userId [label=<<u>userId</u>>]
+    userId -- Users
+    firstName -- Users
+    lastName -- Users
+    dob -- Users
+    type -- Users
+    
+    ExtendsUsers [label="" shape=triangle]
+    
+    Administrators [shape=rect fontsize=24]
+    
+    Students [shape=rect fontsize=24]
+    
+    Professors [shape=rect fontsize=24]
+    
+    Users -- ExtendsUsers
+    ExtendsUsers -- Administrators
+    ExtendsUsers -- Students
+    ExtendsUsers -- Professors
+    
+    Departments [shape=rect fontsize=24]
+    subject [label=<<u>subject</u>>]
+    subject -- Departments
+    departmentName [label="name"]
+    departmentName -- Departments
+    
+    Majoring [shape=diamond fontsize=20]
+    Students -- Majoring [color="black:black" label="M"]
+    Majoring -- Departments [label="1"]
+    
+    Working [shape=diamond fontsize=20]
+    Professors -- Working [color="black:black" label="M"]
+    Working -- Departments [label="1"]
+    
+    Courses [peripheries=2 shape=rect fontsize=24]
+    number [label=<<u>n</u>u<u>m</u>b<u>e</u>r>]
+    number -- Courses
+    courseName [label="name"]
+    courseName -- Courses
+    
+    CourseListing [
+        label="Course\nListing"
+        peripheries=2
+        shape=diamond
+        fontsize=20
+    ]
+    Departments -- CourseListing [label="1"]
+    CourseListing -- Courses [
+        color="black:black" label="M"]
+    
+    Classes [shape=rect peripheries=2 fontsize=24]
+    semester [
+        label=<<u>s</u>e<u>m</u>e<u>s</u>t<u>e</u>r>]
+    Classes -- semester
+    Classes -- location
+    Classes -- startTime
+    Classes -- endTime
+    
+    Offering [shape=diamond peripheries=2 fontsize=20]
+    Courses -- Offering [label="1"]
+    Offering -- Classes [
+        color="black:black" label="M"]
+    
+    Enrollment [shape=diamond fontsize=20]
+    Students -- Enrollment [label="M"]
+    Enrollment -- Classes [label="M"]
+    Enrollment -- grade
+    
+    Teaching [shape=diamond fontsize=20]
+    Professors -- Teaching [label="1"]
+    Teaching -- Classes [
+        color="black:black" label="M"]
+    
+    AssignmentCategories [
+        label="Assignment\nCategories"
+        peripheries=2
+        shape=rect
+        fontsize=24
+    ]
+    assignmentCategoryName [label=<<u>n</u>a<u>m</u>e>]
+    assignmentCategoryName -- AssignmentCategories
+    weight -- AssignmentCategories
+    
+    AssignmentCategorization [
+        label="Assignment\nCategorization"
+        peripheries=2
+        shape=diamond
+        fontsize=20
+    ]
+    AssignmentCategories -- AssignmentCategorization [
+        color="black:black" label="M"]
+    AssignmentCategorization -- Classes [label="1"]
+    
+    Assignments [shape=rect peripheries=2 fontsize=24]
+    assignmentName [label=<<u>n</u>a<u>m</u>e>]
+    assignmentName -- Assignments
+    totalScore -- Assignments
+    assignmentContents [label="contents"]
+    assignmentContents -- Assignments
+    dueTime -- Assignments
+    
+    AssignmentListing [
+        label="Assignment\nListing"
+        peripheries=2
+        shape=diamond
+        fontsize=20
+    ]
+    Assignments -- AssignmentListing [
+        color="black:black" label="M"]
+    AssignmentListing -- AssignmentCategories [
+        label="1"]
+    
+    Submission [shape=diamond fontsize=20]
+    Students -- Submission [label="M"]
+    Submission -- Assignments [label="M"]
+    submissionContents [label="contents"]
+    submissionContents -- Submission
+    submitTime -- Submission
+    score -- Submission
+}
