@@ -87,8 +87,7 @@ namespace ChessBrowser {
 					conn.Open();
 
 					// Parse the search parameters the user entered.
-					SearchGamesParams searchParams = new SearchGamesParams()
-					{
+					SearchGamesParams searchParams = new SearchGamesParams() {
 						White = white,
 						Black = black,
 						OpeningMoves = opening,

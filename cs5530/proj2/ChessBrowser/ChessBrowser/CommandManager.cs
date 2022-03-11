@@ -71,9 +71,19 @@ namespace ChessBrowser {
 		);
 
 		/// <summary>The parameters used in an upload-game command.</summary>
-		private static readonly string[] uploadGameCommandParams =
-			"@event @site @date @round @white @whiteElo @black @blackElo @result @moves"
-				.Split(' ');
+		private static readonly IReadOnlyList<(MySqlDbType, string)> uploadGameCommandParams =
+			new List<(MySqlDbType, string)>() {
+				(MySqlDbType.VarChar, "event"),
+				(MySqlDbType.VarChar, "site"),
+				(MySqlDbType.VarChar, "date"),
+				(MySqlDbType.VarChar, "round"),
+				(MySqlDbType.VarChar, "white"),
+				(MySqlDbType.UInt32, "whiteElo"),
+				(MySqlDbType.VarChar, "black"),
+				(MySqlDbType.UInt32, "blackElo"),
+				(MySqlDbType.VarChar, "result"),
+				(MySqlDbType.VarChar, "moves"),
+			};
 
 		/// <summary>
 		/// Creates and prepares a <see cref="MySqlCommand"/> that can be reused search chess
@@ -112,8 +122,7 @@ namespace ChessBrowser {
 			// Read and parse each row in the result into a Game object.
 			using (MySqlDataReader reader = command.ExecuteReader()) {
 				while (reader.Read()) {
-					Game game = new Game()
-					{
+					Game game = new Game() {
 						Event = reader.GetString("Event"),
 						Site = reader.GetString("Site"),
 						EventDate = reader.GetMySqlDateTime("EventDate").ToString(),
@@ -160,17 +169,28 @@ namespace ChessBrowser {
 		}
 
 		/// <summary>The parameters used in a search-games command.</summary>
-		private static readonly string[] searchGamesCommandParams =
-			"@white @black @moves @result @start @end".Split(' ');
+		private static readonly IReadOnlyList<(MySqlDbType, string)>
+			searchGamesCommandParams = new List<(MySqlDbType, string)>() {
+				(MySqlDbType.VarChar, "@white"),
+				(MySqlDbType.VarChar, "@black"),
+				(MySqlDbType.VarChar, "@moves"),
+				(MySqlDbType.VarChar, "@result"),
+				(MySqlDbType.VarChar, "@start"),
+				(MySqlDbType.VarChar, "@end"),
+			};
 
 		/// <summary>
 		/// Prepares a command and assigns it default values for its parameters.
 		/// </summary>
 		private static void PrepareCommand(
-				MySqlCommand command, string commandText, string[] commandParams) {
+				MySqlCommand command,
+				string commandText,
+				IReadOnlyList<(MySqlDbType, string)> commandParams
+			) {
 			command.CommandText = commandText;
-			// MySQL requires all parameters to be added with initial values to be set in the future.
-			foreach (string param in commandParams) command.Parameters.AddWithValue(param, null);
+			foreach ((MySqlDbType type, string name) in commandParams) {
+				command.Parameters.Add(name, type);
+			}
 			command.Prepare();
 		}
 
@@ -178,9 +198,13 @@ namespace ChessBrowser {
 		/// Parametrizes a command and assigns it <paramref name="values"/> for its parameters.
 		/// </summary>
 		private static void ParametrizeCommand(
-				MySqlCommand command, string[] commandParams, params object[] values) {
-			for (int i = 0; i < values.Length; i++)
-				command.Parameters[commandParams[i]].Value = values[i];
+				MySqlCommand command,
+				IReadOnlyList<(MySqlDbType, string)> commandParams,
+				params object[] values
+			) {
+			for (int i = 0; i < values.Length; i++) {
+				command.Parameters[commandParams[i].Item2].Value = values[i];
+			}
 		}
 	}
 }

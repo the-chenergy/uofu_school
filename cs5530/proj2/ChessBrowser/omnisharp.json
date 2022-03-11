@@ -1,6 +1,8 @@
 {
   "FormattingOptions": {
+    "EnableEditorConfigSupport": true,
     "UseTabs": true,
+    "NewLinesForBracesInObjectCollectionArrayInitializers": false,
     "NewLinesForBracesInLambdaExpressionBody": false,
     "NewLinesForBracesInAnonymousMethods": false,
     "NewLinesForBracesInAnonymousTypes": false,
