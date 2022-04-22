@@ -441,14 +441,14 @@ namespace LMS.Controllers {
 					db.Professors.Add(professor);
 					break;
 				case "Student":
-					Students students = new Students {
+					Students student = new Students {
 						FName = fName,
 						LName = lName,
 						Dob = DOB,
 						UId = nextUId,
 						DepartmentId = GetDepartmentIdBySubjectAbbrev(SubjectAbbrev)
 					};
-					db.Students.Add(students);
+					db.Students.Add(student);
 					break;
 			}
 

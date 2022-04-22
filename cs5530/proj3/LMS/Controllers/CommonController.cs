@@ -119,6 +119,7 @@ namespace LMS.Controllers {
 		/// <param name="number">The course number, as in 5530</param>
 		/// <returns>The JSON array</returns>
 		public IActionResult GetClassOfferings(string subject, int number) {
+			Debug.Write("GetClassOfferings");
 			var classes =
 				from classData in db.Classes
 				join course in db.Courses

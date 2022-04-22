@@ -12173,27 +12173,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\null\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Users\\70444\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\null\\Pictures\\Skool\\Git Repos\\uofu_school\\cs5530\\proj3\\LMS\\LMS.csproj",
+      "projectUniqueName": "E:\\Academics\\phase3\\uofu_school\\cs5530\\proj3\\LMS\\LMS.csproj",
       "projectName": "LMS",
-      "projectPath": "C:\\Users\\null\\Pictures\\Skool\\Git Repos\\uofu_school\\cs5530\\proj3\\LMS\\LMS.csproj",
-      "packagesPath": "C:\\Users\\null\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\null\\Pictures\\Skool\\Git Repos\\uofu_school\\cs5530\\proj3\\LMS\\obj\\",
+      "projectPath": "E:\\Academics\\phase3\\uofu_school\\cs5530\\proj3\\LMS\\LMS.csproj",
+      "packagesPath": "C:\\Users\\70444\\.nuget\\packages\\",
+      "outputPath": "E:\\Academics\\phase3\\uofu_school\\cs5530\\proj3\\LMS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\null\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\70444\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"
@@ -12250,7 +12250,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
       }
     }
   }
