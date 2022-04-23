@@ -47,9 +47,6 @@ namespace LMS.Controllers {
 			return View();
 		}
 
-
-		/*******Begin code to modify********/
-
 		/// <summary>
 		/// Returns a JSON array of the classes the given student is enrolled in.
 		/// Each object in the array should have the following fields:
@@ -97,21 +94,6 @@ namespace LMS.Controllers {
 		/// <param name="uid"></param>
 		/// <returns>The JSON array</returns>
 		public IActionResult GetAssignmentsInClass(string subject, int num, string season, int year, string uid) {
-			var targetSubmissions =
-				from assignment in db.Assignments
-				join category in db.AssignmentCategories
-					on assignment.AssignmentCategoryId equals category.AssignmentCategoryId
-				join classData in db.Classes on category.ClassId equals classData.ClassId
-				join course in db.Courses on classData.CourseId equals course.CourseId
-				join department in db.Departments on course.DepartmentId equals department.DepartmentId
-				join enrollment in db.Enrolled on classData.ClassId equals enrollment.ClassId
-				join student in db.Students on enrollment.StudentId equals student.StudentId
-				join submission in db.Submission on assignment.AssignmentId equals submission.AssignmentId
-				where department.Subject == subject && course.Num == num && classData.SemesterSeason == season
-					&& classData.SemesterYear == year && student.UId == uid && submission.StudentId == student.StudentId
-				select submission;
-			var targetSubmission = targetSubmissions.FirstOrDefault();
-
 			var assignments =
 				from assignment in db.Assignments
 				join category in db.AssignmentCategories
@@ -127,7 +109,11 @@ namespace LMS.Controllers {
 					aname = assignment.Name,
 					cname = category.Name,
 					due = assignment.Due,
-					score = targetSubmission == null ? null : (int?)targetSubmission.Score
+					score = (
+							from submission in db.Submission
+							where submission.AssignmentId == assignment.AssignmentId
+							select submission.Score
+						).FirstOrDefault()
 				};
 
 			return Json(assignments.ToArray());
@@ -260,11 +246,41 @@ namespace LMS.Controllers {
 		/// <param name="uid">The uid of the student</param>
 		/// <returns>A JSON object containing a single field called "gpa" with the number value</returns>
 		public IActionResult GetGPA(string uid) {
+			/*
+			 * GPA = total grade points / number of classes
+			 * grade point for one class = {A => 4.0, A- => 3.7, ...}
+			 */
+			var gradesStudentHas =
+				from enrollment in db.Enrolled
+				where enrollment.Student.UId == uid
+				select enrollment.Grade;
+			double totalGradePoints = 0;
+			int numGradedClasses = 0;
+			foreach (string grade in gradesStudentHas) {
+				if (grade != null) {
+					totalGradePoints += GetGradePointByGrade(grade);
+					numGradedClasses++;
+				}
+			}
+			double gpa = numGradedClasses > 0 ? totalGradePoints / numGradedClasses : 0;
 
-			return Json(null);
+			return Json(new { gpa });
 		}
 
-		/*******End code to modify********/
+		private double GetGradePointByGrade(string grade) {
+			if (grade == "A") return 4.0;
+			if (grade == "A-") return 3.7;
+			if (grade == "B+") return 3.3;
+			if (grade == "B") return 3.0;
+			if (grade == "B-") return 2.7;
+			if (grade == "C+") return 2.3;
+			if (grade == "C") return 2.0;
+			if (grade == "C-") return 1.7;
+			if (grade == "D+") return 1.3;
+			if (grade == "D") return 1.0;
+			if (grade == "D-") return 0.7;
+			return 0.0;
+		}
 
 	}
 }

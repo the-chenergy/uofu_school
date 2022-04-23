@@ -12,26 +12,11 @@ using Microsoft.EntityFrameworkCore;
 namespace LMS.Controllers {
 	public class CommonController : Controller {
 
-		/*******Begin code to modify********/
-
-		// TODO: Uncomment and change 'X' after you have scaffoled
-
-
 		protected Team120LMSContext db;
 
 		public CommonController() {
 			db = new Team120LMSContext();
 		}
-
-
-		/*
-		 * WARNING: This is the quick and easy way to make the controller
-		 *          use a different LibraryContext - good enough for our purposes.
-		 *          The "right" way is through Dependency Injection via the constructor 
-		 *          (look this up if interested).
-		*/
-
-		// TODO: Uncomment and change 'X' after you have scaffoled
 
 		public void UseLMSContext(Team120LMSContext ctx) {
 			db = ctx;
@@ -211,7 +196,7 @@ namespace LMS.Controllers {
 				select submission;
 			var targetSubmission = targetSubmissions.FirstOrDefault();
 
-			return Content(targetSubmission.Contents);
+			return Content(targetSubmission?.Contents ?? "");
 		}
 
 
@@ -274,9 +259,6 @@ namespace LMS.Controllers {
 
 			return Json(new { success = false });
 		}
-
-
-		/*******End code to modify********/
 
 	}
 }
