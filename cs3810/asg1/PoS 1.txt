@@ -1,0 +1,173 @@
+Proof of Study 1
+Qianlang Chen
+U1172983
+
+Problem 1
+The following table shows two different processors with identical clock frequencies
+(clock rates) and very different relative performance scores. In fact, one processor has nearly
+twice the performance over the other.
+Processor Name
+
+Frequency
+
+Relative Performance
+
+Intel Core i9-9900K (Faster)
+
+3.60GHz
+
+2,898
+
+Intel Core i5-680 (Slower)
+
+3.60GHz
+
+1,550
+
+What is causing this dramatic difference between the performance? According to the
+equations of performance and execution time, frequency is not the only factor. Assuming that the
+numbers of instructions are the same for both processors when running the testing program, the
+CPI (cycles per instruction) makes all the difference.
+
+E xecution time =
+
+Instructions [I] × Cycles per instruction [CP I]
+F requency
+
+P erf ormance =
+
+1
+Execution time
+
+Therefore,
+
+P erf ormance =
+
+F requency
+I × CP I
+
+According to the table, assuming that the base processor (which the processors’ performance
+scores are relative to) has a performance of 1s-1, for each processor,
+
+2, 898s−1 =
+
+3.6×109 Hz
+I × CP I F aster
+
+1, 550s−1 =
+
+3.6×109 Hz
+I × CP I Slower
+
+Therefore, assuming the numbers of instructions are the same for both processors,
+CP I F aster
+CP I Slower
+
+=
+
+3.6×109 Hz ÷ (2,898s−1 × I)
+9
+
+3.6×10 Hz ÷ (1,550s−1 × I)
+
+=
+
+1,550s−1
+2,898s−1
+
+≈ 0.535
+
+Meaning that the faster processor (Intel Core i9-9900K) has a CPI that is about 53.5% of the
+CPI that the slower processor (Intel Core i5-680) has.
+
+Problem 2
+The following table provides two processors of the same family that have different
+frequencies.
+Processor Name
+
+Frequency
+
+Relative Performance
+
+Intel Core i9-9900K (Faster)
+
+3.60GHz
+
+2,898
+
+Intel Core i9-7960X (Slower)
+
+2.80GHz
+
+2,337
+
+What is the difference between their CPIs? From the previous problem:
+
+P erf ormance =
+
+F requency
+I × CP I
+
+Therefore, for each of the processors (with the assumption that the base processor has a
+performance score of 1s-1),
+
+2, 898s−1 =
+
+3.6×109 Hz
+I × CP I F aster
+
+2, 337s−1 =
+
+2.8×109 Hz
+I × CP I Slower
+
+And assuming that they have the same number of instructions,
+CP I F aster
+CP I Slower
+
+=
+
+3.6×109 Hz ÷ (2,898s−1 × I)
+9
+
+2.8×10 Hz ÷ (2,337s−1 × I)
+
+=
+
+3.6×109 Hz × 2,337s−1
+9
+
+2.8×10 Hz × 2,898s−1
+
+≈ 1.04
+
+Meaning that the faster processor (Intel Core i9-9900K) has a CPI that is about 104% of the
+CPI that the slower processor (Intel Core i5-680) has. It may sound surprising that the slower
+processor has a lower CPI, but it makes sense if we take the ratios into account. The frequency of
+the faster processor is about 129% (3.6GHz / 2.8GHz) of the slower processor, but the faster
+processor’s performance score is only 124% (2,898 / 2,337) of the slower. The slower processor
+performs relatively better than expected, therefore, its CPI must make up for it and be less than
+the faster processor’s CPI (assuming the same number of instructions, of course).
+
+Problem 3
+According to the equation of yield,
+
+Y ield ≈
+
+1
+[1 + (Def ects per area ×
+
+Die area 2
+)]
+2
+
+The number of defects per area is not the only factor of yield. A smaller die area can
+compensate for the increase in defects per area and even increase the yield.
+
+Problem 4
+● The program responds with 469,193 to my student number 1,172,983.
+● The program responds to 2,932,458 with my student number 1,172,983.
+● The program always responds to the input with int(input / 2.5) (if the input is positive, or
+0 if it is negative).
+
+
